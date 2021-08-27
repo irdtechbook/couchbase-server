@@ -1,0 +1,23 @@
+PREDEF:
+  - prescript.re
+
+CHAPS:
+  - prologue.re
+  - foreword.re
+  - overview.re
+  - get-started.re
+  - data.re
+  - query-and-index.re
+  - architecture.re
+  - cluster.re
+  - management.re
+  - security.re
+  - operation.re
+  - components.re
+  - configuration.re
+  - integration.re
+  - cean.re
+
+APPENDIX:
+  - nosql-benchmark.re
+POSTDEF:
