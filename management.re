@@ -4,40 +4,29 @@
 
 == 監視
 
-Couchbase Serverにおける監視手法について見ていきます。
-
-はじめに、Couchbase Serverの監視機能について説明します。その後、外部の監視システムとの連携の例として、PrometheusおよびGrafanaとの連携について紹介します。
-
-=== Couchbase Server 監視機能
-
-==== 監視対象
+Couchbase Serverにおける監視について見ていきます。
 
 Couchbase Serverの監視機能の対象は、CPU・メモリ利用量などハードウェア情報に関するノード（サーバー）レベルの監視と、データ量やアクセス状況などデータベースに関するクラスターやバケットレベルの監視の両方を含んでいます。
 
-==== Webコンソール
 
-Couchbase ServerのWebコンソールには、様々な情報を期間やレベルを変えながら表示することのできるダッシュボードを備えています。
-//image[web_console_monitoring][web console monitoring]{
+=== Webコンソール
+
+Couchbase ServerのWebコンソールは、様々な情報を期間やレベルを変えながら表示することのできるダッシュボードを備えています。
+//image[web_console_monitoring][]{
 //}
 
-Couchbase公式ドキュメント Monitoring with UI@<fn>{ui-monitoring-statistics}
 
-//footnote[ui-monitoring-statistics][https://docs.couchbase.com/server/current/manage/monitor/ui-monitoring-statistics.html]
-
-==== Eメールアラート
+=== Eメールアラート
 
 Couchbase Serverは、（自動フェールオーバー等）特定の状況が発生した際に、Eメールを送付する機能を持っており、Webコンソール画面またはCLI、REST APIから設定することが可能です。
 
-
-=== 外部監視システム連携
-
-==== Rest APIとCLI
+=== Rest APIとCLI
 
 外部システムとの汎用的な連携をサポートするために、Couchbase Serverは、Rest APIとCLIによる監視情報へのアクセスを提供しています。
 Webコンソールで公開されている監視情報は、全てRest APIを使って取得することが可能です。
 監視システムとの連携の手法として、（エージェント型監視ツールを典型として）CLI(コマンドラインインターフェイス)　が必要とされるケースもあります。Couchbase Serverは用途に応じた各種CLIツールを備えていますが、監視情報取得の用途として@<tt>{cbstats}があります。
 
-==== Prometheus
+=== Prometheus連携
 
 Prometheusは、監視対象にアクセスしてデータを収集するPull型アーキテクチャに基づいています。そして、監視対象サーバーは、Exporterと呼ばれるアクセスポイントを公開します。下記で、公開されているExporterのリストを見ることができます。
 
@@ -56,19 +45,20 @@ Couchbase Exporterは、監視するCouchbase Serverクラスターに対して�
 ./couchbase-exporter --couchbase.username Administrator --couchbase.password password --web.listen-address=":9420" --couchbase.url="http://example.host.a:8091"
 //}
 
-==== Grafana
+また、Prometeusで収集したデータを可視化するための、Grafanaのダッシュボード定義のサンプル@<fn>{GrafanaDashboard}が公開されています。
 
-Grafanaのダッシュボード定義のサンプルが下記で公開されています。
-
-Couchbaselabs GrafanaDashboard.json@<fn>{GrafanaDashboard}
 
 //footnote[GrafanaDashboard][https://github.com/couchbaselabs/blog-source-code/blob/master/Meliani/GrafanaDashboard.json]
 
 
-//image[grafana][grafana]{
+//image[grafana][]{
 //}
 
-==== 参考情報
+=== 参考情報
+
+Couchbase公式ドキュメント Monitoring with UI@<fn>{ui-monitoring-statistics}
+
+//footnote[ui-monitoring-statistics][https://docs.couchbase.com/server/current/manage/monitor/ui-monitoring-statistics.html]
 
 Couchbaseブログ Couchbase Monitoring@<fn>{monitoring-couchbase-cluster}
 
@@ -80,7 +70,7 @@ Couchbaseブログ Couchbase Monitoring Integration with Prometheus and Grafana@
 
 
 
-== バックアップ: @<tt>{cbbackupmgr}
+== バックアップ
 
 どんなデータベースにとっても、バックアップは必須の機能です。
 
@@ -391,7 +381,7 @@ Backup repository `cluster` deleted successfully from archive `/data/backup`
 ここで@<tt>{list}サブコマンドを実行すると、「cluster」バックアップリポジトリが存在しなくなっていることがわかります。
 
 
-==== 参考情報
+=== 参考情報
 
 Couchbase公式ドキュメント cbbackupmgr tutorial@<fn>{cbbackupmgr-tutorial}
 

@@ -52,82 +52,128 @@ Couchbase Serverを選択することで、開発者は、SQLの知識を活用�
 
 == キーバリュー操作
 
-他の箇所で、N1QLによるクエリについてRDBとの相違点を中心に解説しました。Couchbase Serverでは、クエリが唯一のインターフェイスではなく、キーバリューストア同様にキー指定によるドキュメントの操作を行うことが可能です。
+N1QLによるクエリについて、他の章で、RDBとの相違点を中心に解説しました。
+Couchbase Serverでは、クエリが唯一のインターフェイスではなく、キーバリューストアのように、キー指定によるデータ(ドキュメント)の操作を行うことが可能です。
 
 === CRUD操作
 
-キーバリューの基本的な操作について、プログラミング例を参考として示します。詳細についてはドキュメント@<fn>{kv-operations}を参照ください。
+キーバリュー操作の基本について、プログラミング例を用いて紹介します。詳細についてはドキュメント@<fn>{kv-operations}を参照ください。
 
-==== CREATE
+//blankline
+
+@<strong>{生成}(@<tt>{CREATE})
 
 //emlist[][js]{
 const result = await collection.insert(key, document);
 //}
 
-==== READ
+@<strong>{読み取り}(@<tt>{READ})
 
 //emlist[][js]{
 const result = await collection.get(key);
 document = result.value;
 //}
 
-==== UPDATE
+@<strong>{更新}(@<tt>{UPDATE})
+
 
 //emlist[][js]{
 let result = await collection.replace(key, document);
 //}
 
-==== UPSERT
 
-//emlist[][js]{
-let result = await collection.upsert(key, document);
-//}
-
-==== DELETE
+@<strong>{削除}(@<tt>{DELETE})
 
 //emlist[][js]{
 const result = await collection.remove(key);
 //}
 
+@<strong>{生成または更新}(@<tt>{UPSERT})
+
+（同一のキーを持つ）データが存在しなければ、生成（@<tt>{CREATE/INSERT}}）を行い、既に（同一のキーを持つ）データが存在している場合は更新（@<tt>{UPDATE/REPLACE}}）を行う。
+
+//emlist[][js]{
+let result = await collection.upsert(key, document);
+//}
 
 //footnote[kv-operations][https://docs.couchbase.com/nodejs-sdk/current/howtos/kv-operations.html]
 
 === サブドキュメント操作
 
-純粋なキーバリューストアと異なり、JSONデータベースを利用している場合、アプリケーションはJSONドキュメントの特定の箇所のみを取得すれば十分な場合があります。
-あるいは、アプリケーションでデータの更新を行う場合に、ドキュメント全体を取得し、その一部を編集した後に、ドキュメントをデータベースに対して更新するのではなく、データベースに対してドキュメントの指定箇所の更新を指示できることが重要です。このような操作は、N1QLを利用しても行うことができますが、それは唯一の方法ではありません。
+アプリケーションはJSONドキュメント全体ではなく、ドキュメントの特定の箇所のみを参照すれば十分な場合があります。
+あるいは、アプリケーションでデータの更新を行う場合に、ドキュメントを取得し、必要な箇所を編集した後に、そのドキュメントをデータベースに対して更新するのは分かりやすい操作ですが、
+データベースに対してドキュメントの指定箇所の更新を指示すれば十分な場合があります。このような操作は、N1QLを利用しても行うことができますが、他の方法でも行うことができます。
 Couchbase Serverでは、DataサービスAPIを用いて、JSONデータの一部の取得・更新を行うことができます。これをサブドキュメント操作と呼びます。
 
-サブドキュメント操作の基本について、プログラミング例を参考として示します。詳細についてはドキュメント@<fn>{subdocument-operations}を参照ください。
+サブドキュメント操作の基本について、プログラミング例を用いて紹介します。
 
-//footnote[subdocument-operations][https://docs.couchbase.com/nodejs-sdk/current/howtos/subdocument-operations.html]
-
-==== READ
+@<strong>{生成}(@<tt>{CREATE})
 
 //emlist[][js]{
- var result = await collection.lookupIn("customer123", [
+  await collection.mutateIn(key, [
+    couchbase.MutateInSpec.insert("purchases.complete", [42, true, "None"]),
+  ]);
+
+//}
+
+@<strong>{読み取り}(@<tt>{READ})
+
+//emlist[][js]{
+ var result = await collection.lookupIn(key, [
     couchbase.LookupInSpec.get("addresses.delivery.country"),
   ]);
   var country = result.content[0].value; //'United Kingdom'
 //}
 
-==== EXISTS
 
-サブドキュメントを実際に取得しなくても、指定したパスのサブドキュメントを存在するかどうかを確認することが可能です。
+@<strong>{更新}(@<tt>{UPDATE})
 
 //emlist[][js]{
-  var result = await collection.lookupIn("customer123", [
+  await collection.mutateIn(key, [
+    couchbase.MutateInSpec.replace("email", "dougr96@hotmail.com"),
+  ]);
+//}
+
+
+@<strong>{削除}(@<tt>{DELETE})
+
+//emlist[][js]{
+  await collection.mutateIn(key, [
+    couchbase.MutateInSpec.remove("addresses.billing"),
+  ]);
+//}
+
+@<strong>{生成または更新}(@<tt>{UPSERT})
+
+指定したフィールドが存在しなければ追加し、既にフィールドが存在している場合はその値を更新します。
+
+//emlist[][js]{
+  await collection.mutateIn(key, [
+    couchbase.MutateInSpec.upsert("fax", "311-555-0151"),
+  ]);
+//}
+
+
+@<strong>{データの存在確認}
+
+データを実際に取得するのではなく、指定したパスが存在するかどうかを確認することが可能です。
+
+//emlist[][js]{
+  var result = await collection.lookupIn(key, [
     couchbase.LookupInSpec.exists("purchases.pending[-1]"),
   ]);
   console.log("Path exists? ", result.content[0].value);
 
 //} 
 
-==== 複数操作の同時実行
+@<strong>{複数操作の同時実行}
+
+上掲のコードを見れば分かるとおり、サブドキュメント操作は、配列型の引数で与えられています。
+（上掲のコードは要素が１つの配列が使われていますが）下記のように複数の操作を一度に与えることが可能です。
 
 //emlist[][js]{
 
-  var result = await collection.lookupIn("customer123", [
+  var result = await collection.lookupIn(key, [
     couchbase.LookupInSpec.get("addresses.delivery.country"),
     couchbase.LookupInSpec.exists("purchases.pending[-1]"),
   ]);
@@ -137,40 +183,14 @@ Couchbase Serverでは、DataサービスAPIを用いて、JSONデータの一�
 
 //}
 
-==== CREATE
 
-//emlist[][js]{
-  await collection.mutateIn("customer123", [
-    couchbase.MutateInSpec.insert("purchases.complete", [42, true, "None"]),
-  ]);
+ここでは、CRUD操作を中心に紹介いたしました。Couchbase Serverのサブドキュメント操作の範囲は上記に留まるものではありません。
+例えば、JSONドキュメントは、値を配列として持つことができますが、配列値に対する値の追加・挿入をサブドキュメント操作として実行することが可能です。
+また、値を数値として持つフィールドに対して、一旦値を取得した後に、増減した値で更新するのではなく、直接値の変更幅を指定するカウンター操作も用意されています。
+その他、詳細についてはドキュメント@<fn>{subdocument-operations}を参照ください。
 
-//}
+//footnote[subdocument-operations][https://docs.couchbase.com/nodejs-sdk/current/howtos/subdocument-operations.html]
 
-
-
-==== UPDATE
-
-//emlist[][js]{
-  await collection.mutateIn("customer123", [
-    couchbase.MutateInSpec.replace("email", "dougr96@hotmail.com"),
-  ]);
-//}
-
-==== UPSERT
-
-//emlist[][js]{
-  await collection.mutateIn("customer123", [
-    couchbase.MutateInSpec.upsert("fax", "311-555-0151"),
-  ]);
-//}
-
-==== DELETE
-
-//emlist[][js]{
-  await collection.mutateIn("customer123", [
-    couchbase.MutateInSpec.remove("addresses.billing"),
-  ]);
-//}
 
 == データ一貫性(Consistency)
 
@@ -182,7 +202,7 @@ Couchbase ServerとRDBMSとの違いとして、メモリーファーストア�
 このDCPは、レプリカのためのみではなく、クラスター内部でデータの変更を他のノードやサービスに反映するために広く利用されます。（Dataサービスにおける）データ変更のインデックスへの反映もその一つです。
 
 
-=== インデックス更新から見るRDBとの違い
+=== インデックス更新から見たRDBとの違い
 
 
 Couchbase ServerとRDBとの違いをこの観点から見ることができます。データを更新する際には、関係するインデックスの更新が行われるのは、Couchbase ServerとRDBとで共通です。ただし、RDBでは、ユーザーが、いつどのように、データへアクセスしたとしても、データの一貫性が保たれていることを保証するため、クライアントからのデータ更新処理リクエストに対して、成功のステータスが返されるのは、インデックスの更新が完了した後になります。これは、データ一貫性の保証という要件面に加え、RDBがモノリシックなアークテクチャーからなっているという、技術的な面から見ても自然な挙動と言えるかもしれません。一方で、Couchbase Serverは、分散アーキテクチャーという性格を持ち、データの更新処理を司るDataサービスと、インデックスを管理するIndexサービスとは、コンポーネントとして独立しており、異なるサーバーに配置されるのが一般的です。Couchbase Servevrでは、インデックスの更新は、永続化装置への反映や、複製の作成と同様、DCPプロトコルを介した、キュー（非同期）のメカニズムで実現されています。
@@ -212,19 +232,12 @@ RDBにとって、SQLがクライアントにとって共通のインターフ�
 === 一貫性を保証するためのオプション
 
 
-データ更新時にインデックス更新の同期を強制するオプションが存在しない代わりに、N1QLクエリ実行時に、インデックス更新状況に対して、リクエストの挙動を変えることのできる複数のオプションがあります。
-
-
-
-次のオプションを使用できます。
+データ更新時にインデックス更新の同期を強制するオプションが存在しない代わりに、N1QLクエリ実行時に、インデックス更新状況に対して、リクエストの挙動を変えることのできるオプションがあります。
+次の3つのオプションがあります。オプションを指定しない場合のデフォルトは@<tt>{not_bounded}です。
 
  * @<strong>{not_bounded}：クエリの一貫性を必要とせずに、クエリをすぐに実行します。インデックスの更新に遅延がある場合は、古い結果が返されることがあります。
  * @<strong>{at_plus}：インデックスが@<strong>{最新の更新のタイムスタンプ}まで更新されている事を保証します。インデックスの更新に遅延がある場合は、更新を待ちます。
  * @<strong>{request_plus}：インデックスが、@<strong>{クエリリクエストのタイムスタンプ}まで更新されている事を保証して、クエリを実行します。インデックスの更新状況に遅延がある場合は、更新を待ちます。
-
-
-
-デフォルトの整合性は@<tt>{not_bounded}です。
 
 
 上記のオプション表記は、概念を説明するためのものであり、SDK/プログラム言語によって実際の表記が変わることにご注意ください。以下は、Node.js SDK/JavaScriptでの上記オプションの利用例です。
@@ -239,7 +252,7 @@ const result = await cluster.query(
   });
 //}
 
-==== 参考情報
+@<strong>{参考情報}
 
 
 Couchbase公式ドキュメント Index Consistency@<fn>{b930f71470cfae6ed97d314e1717fbee}
@@ -258,44 +271,49 @@ Couchbase公式ドキュメント Index Consistency@<fn>{b930f71470cfae6ed97d314
 
 //blankline
 
-== CEANスタック
+=== CEANスタック
 
 ここで、用いているCEANスタックとは、下記の技術要素からなります。
 
  * C: Couchbase Server (NoSQLドキュメント指向データベース)
- * E: Express (Webアプリケーション・フレームワーク）
- * A: Angular (フロントエンド・フレームワーク）
- * N: Node.js (サーバサイドJavaScript実行環境）
+ * E: Express@<fn>{expressjs} (Webアプリケーションフレームワーク）
+ * A: Angular@<fn>{angular} (フロントエンドフレームワーク）
+ * N: Node.js@<fn>{nodejs} (サーバサイドJavaScript実行環境）
 
 類似のものとして、MEANスタックという言葉を聞いたことがある方もいるのではないかと思います。この場合のMは、MongoDBを指します。MongoDBは、Couchbase同様、JSONデータを扱うNoSQLデータベースです。
 
+//footnote[expressjs][http://expressjs.com/]
 
-== アプリケーション概要
+//footnote[angular][https://angular.io/]
 
-サンプルアプリケーションは、下記の画面を見ていただきさえすれば、特にそれ以上の説明を必要としないであろう、最小限の機能からなるシンプルなものとなっています。
+//footnote[nodejs][https://nodejs.org/]
+
+=== アプリケーション概要
+
+サンプルアプリケーションは、最小限の機能からなるシンプルなものとなっています。下記の画面を見ていただきさえすれば、特にそれ以上の説明は必要ないと思われます。
 
 
-//image[sample_app_screen][sample app screen]{
+//image[sample_app_screen][]{
   
 //}
 
 === アプリケーション利用方法
 
-==== Couchbase Server事前準備
+@<strong>{1. Couchbase Server事前準備}
 
 このアプリケーションでは、バケット名として@<tt>{node_app}を使っています。バケットは事前に作成されている必要があります。
 
 
 また、下記のインデックスを作成しておく必要があります。
 
-//emlist[][shell]{
+//emlist[][sql]{
 CREATE INDEX idx_node_app_user ON node_app.scp.user;
 //}
 
 
-==== コードの取得
+@<strong>{2. ファイル取得}
 
-上記のリポジトリから、コードを取得します。
+リポジトリから、ファイルを取得します。
 
 
 //emlist[][shell]{
@@ -303,9 +321,7 @@ $ git clone https://github.com/YoshiyukiKono/couchbase_step-by-step_node_jp.git
 $ cd couchbase_step-by-step_node_jp
 //}
 
-==== プログラム依存関係
-
-その中に含まれる、@<tt>{package.json}には、下記の依存関係が定義されています。
+中に含まれる、@<tt>{package.json}には、下記の依存関係が定義されています。
 
 
 //emlist[][json]{
@@ -315,7 +331,7 @@ $ cd couchbase_step-by-step_node_jp
   }
 //}
 
-==== 実行
+@<strong>{3. アプリケーション実行}
 
 このアプリケーションでは、実行の際に、下記のように、@<tt>{server.js}を使います。
 
@@ -331,7 +347,7 @@ Server up: http://localhost:80
 
 === プログラム解説
 
-==== ユーザーリスト表示
+@<strong>{ユーザーリスト表示}
 
 
 @<tt>{routes.js}を見ると、画面のリスト表示のために、下記のようなクエリが使われているのが分かります。
@@ -380,7 +396,7 @@ var getData = function() {
 </tr>
 //}
 
-==== 新規ユーザー追加
+@<strong>{新規ユーザー追加}
 
 @<tt>{routes.js}中のデータ（ドメインオブジェクト）の表現と、そのデータをデータベースへの保存する部分は、下記のようなものです。
 
@@ -408,7 +424,7 @@ const upsertDocument = async (doc) => {
 //}
 
 
-==== ユーザー削除
+@<strong>{ユーザー削除}
 
 ドキュメントの削除は、キー指定により行われます。
 
@@ -424,13 +440,26 @@ const removeUser = async (id) => {
 //}
 
 
-== ODM(オブジェクトデータモデラー): Ottoman.js
+== ODMフレームワーク Ottoman.js
+
+=== Ottoman.jsとは
 
 Ottoman.js@<fn>{ottomanjs}は、Couchbase ServerとNode.jsのためのODM(オブジェクトデータモデラー)です。
 Node.jsアプリケーション開発にCouchbase Serverを利用する際、Ottomanの利用は必ずしも必須ではありませんが、Ottomanは、開発者に様々な恩恵をもたらすことを目的として開発されています。
+
 Ottomanは、MongoDBにおけるMongoose ODM@<fn>{mongoosejs}に相当するものであると言えます。
 
 
 //footnote[ottomanjs][https://ottomanjs.com/]
 
 //footnote[mongoosejs][https://mongoosejs.com/]
+
+=== 機能概要
+
+Couchbase Serverでは、RDBのようにデータに対してスキーマが強制されることはありません。
+しかしながら、アプリケーション開発において、スキーマは依然として重要な役割を持ちます。
+
+Ottomanは、アプリケーションサイドにおけるスキーマによるデータバリデーション(検証)のフレームワークを提供します。
+
+また、Ottomanは、Couchbase Server SDKに対する抽象化レイヤーを提供します。
+Ottomanライブラリが使われる時、Ottomanを介して、透過的にCouchbase Serverとのデータのやり取りが行われます。

@@ -2,30 +2,28 @@
 
 = コマンドライン操作
 
-== コマンド
+== couchbase-cliコマンド
 
-=== couchbase-cli
 
-@<tt>{couchbase-cli}はCouchbase　Serverの管理のため提供されている、中心となるコマンド・ライン・インターフェイスです。
+@<tt>{couchbase-cli}はCouchbase　Serverの管理のため提供されている、中心となるコマンドラインインターフェイスです。
 
 基本的な構文は以下の通りです。
 
 //cmd{
-couchbase-cli <コマンド> [オプション]
+couchbase-cli <サブコマンド> [オプション]
 //}
 
-==== 基本オプション
+=== 基本オプション
 
  * @<tt>{–version} バージョン情報を出力します。
-
  * @<tt>{–help} (@<tt>{-h}) ヘルプメッセージを出力します。
 
-==== コマンド
+=== サブコマンド
 
-@<tt>{couchbase-cli}で利用可能なコマンドを紹介します。詳細な利用方法は公式ドキュメント@<fn>{couchbase-cli}をご覧ください。
+@<tt>{couchbase-cli}で利用可能なサブコマンドを紹介します。詳細な利用方法は公式ドキュメント@<fn>{couchbase-cli}をご覧ください。
 
 //table{
-コマンド	内容
+サブコマンド	内容
 ----------------------------
 admin-role-manage	LDAPユーザーロールを管理します。
 bucket-compact	Couchbaseデータバケットを圧縮します。
@@ -108,7 +106,7 @@ Queryサービス(N1QLクエリ)は、@<tt>{INSERT} 、 @<tt>{DELETE} や @<tt>{
 
 === インストール
 
-==== CentOS/RHEL
+@<strong>{CentOS/RHEL}では、以下のようにインストールします。
 
 //cmd{
 $ sudo yum check-update
@@ -116,16 +114,14 @@ $ sudo yum search libcouchbase
 $ sudo yum install libcouchbase3 libcouchbase-devel libcouchbase3-tools libcouchbase3-libevent
 //}
 
-==== Mac
+@<strong>{Mac}では、以下のようにインストールします。
 
 //cmd{
 $ brew update
 $ brew install libcouchbase
 //}
 
-==== Windows
-
-SDKリリースノート@<fn>{install-windows}から、バイナリをダウンロード・解凍して利用します。
+@<strong>{Windows}では、SDKリリースノート@<fn>{install-windows}から、バイナリをダウンロード・解凍して利用します。
 
 その他のOSについてもドキュメント@<fn>{sdk-release-notes}を参照してください。
 
@@ -160,7 +156,7 @@ SDKリリースノート@<fn>{install-windows}から、バイナリをダウン�
 
 @<tt>{pillowfight} は、Couchbase C SDK @<tt>{libcouchbase}の一部として提供されます。
 
-==== オプション
+@<tt>{pillowfight}のオプションを示します。
 
 //table[pillowfightオプション][]{
 オプション	省略形	説明 
@@ -195,7 +191,7 @@ SDKリリースノート@<fn>{install-windows}から、バイナリをダウン�
 --help 	-？	ヘルプメッセージを表示する
 //}
 
-==== 実行例
+@<tt>{pillowfight}の実行例を示します。
 
 20スレッドで実行。１スレッド当たり１バッチ処理実行。
 
@@ -227,7 +223,7 @@ $ cbc-pillowfight --json --subdoc --set-pct 100
 $ cbc-pillowfight -U couchbase://localhost/pillow -u Administrator -P password --json -e 10
 //}
 
-==== 参考情報
+=== 参考情報
 
 
 Couchbase公式ドキュメント C SDK Release Notes and Archives@<fn>{sdk-release-notes}
@@ -262,15 +258,8 @@ Couchbaseブログ Performance Testing and Load Testing Couchbase with Pillowfig
 {"statement":"SELECT RAW meta().id FROM `travel-sample` WHERE type=$type LIMIT 1", "$type":"airline"\}
 //}
 
-処理を実行する前にコマンドにより削除される特別なオプション「n1qlback」が、あります。実行前に特定のクエリを準備する必要があるかどうかを判断できます。
 
-//cmd{
-{"statement":"SELECT * FROM `travel-sample` WHERE type=$type LIMIT 10", "$type":"airline", "n1qlback": {"prepare": true\}\}
-//}
-
-@<tt>{n1qlback} を利用する際には、Couchbase Serverに必要なリソース（データ、インデックス）が定義されている必要があります（当たり前のようですが、ツールが必要になるインデックスを事前に作成するようなような補助機能は備えていないということです）。
-
-==== オプション
+@<tt>{n1qlback}のオプションを示します。
 
  * @<tt>{-f} @<tt>{–queryfile=PATH}:
 JSON形式で実行するクエリ本文を含むファイルへのパス。1行に1つのクエリ。
@@ -280,9 +269,7 @@ JSON形式で実行するクエリ本文を含むファイルへのパス。1行
 
 次のオプションは、@<tt>{couchbase：//host/bucket？option1=value1＆option2=value2}
 のような、URIスタイルのクエリパラメータ（例）として、接続文字列に含めることができます。
-あるいは、個々のキー=値のペアとしてDスイッチと共に利用することができます（
-@<tt>{-D}
-は内部で接続文字列を作成し、コマンドラインでオプションを簡単に渡すための便宜のために提供されています）。
+あるいは、個々のキー=値のペアとしてDスイッチと共に利用することができます（@<tt>{-D}は内部で接続文字列を作成し、コマンドラインでオプションを簡単に渡すための便宜のために提供されています）。
 
  * @<tt>{operation_timeout=SECONDS}:
 操作タイムアウトを秒単位で指定します。これは、タイムアウトするまでに、クライアントが操作の完了を待つ時間です。デフォルトは2.5です。
@@ -292,16 +279,14 @@ JSON形式で実行するクエリ本文を含むファイルへのパス。1行
  * @<tt>{ssl=no_verify}:SSLの証明書検証を一時的に無効にします（@<tt>{couchbases：//}スキームでのみ適用可能）。これは、SSL機能をすばやくデバッグするためにのみ使用してください。
  * @<tt>{sasl_mech_force=MECHANISM}:初期接続を実行するときに、特定のSASLメカニズムを強制的に使用します。これは、デバッグ目的でのみ変更する必要があります。現在サポートされているメカニズムは、PLAINとCRAM-MD5です。
 
-==== 実行例
-
-以下は、3つのクエリが5つのスレッドで実行されるファイルを作成します。また、クエリに必要なインデックスの作成を事前に行っています。
+最後に、@<tt>{n1qlback}を実行する例を示します。以下の例では、クエリに必要なインデックスの事前作成を行った後に、3つのクエリが5つのスレッドで実行されるファイルを作成し、そのファイルを使って、@<tt>{n1qlback}を実行しています。
 
 //cmd{
 cbc n1ql -U couchbase://192.168.72.101/a_bucket 'CREATE INDEX ix_name ON}travel-sample@<tt>{(name)'
 cbc n1ql -U couchbase://192.168.72.101/a_bucket 'CREATE INDEX ix_country ON}travel-sample`(country)'
 
 cat queries.txt <<EOF
-{"statement":"SELECT country FROM travel-sample WHERE travel-sample.country === \"United States\""}
+{"statement":"SELECT country FROM travel-sample WHERE travel-sample.country "United States""}
 {"statement":"SELECT name FROM travel-sample LIMIT 10"}
 {"statement":"SELECT country, COUNT(country) FROM travel-sample GROUP BY country"}
 EOF
@@ -309,7 +294,7 @@ EOF
 cbc-n1qlback -U couchbase://192.168.72.101/a_bucket -t 5 -f queries.txt
 //}
 
-==== 参考情報
+=== 参考情報
 
 Couchbase公式ドキュメント Install and Start Using the C SDK with Couchbase Server@<fn>{start-using-sdk}
 

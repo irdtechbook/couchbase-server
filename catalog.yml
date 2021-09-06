@@ -7,13 +7,14 @@ CHAPS:
   - overview.re
   - get-started.re
   - data.re
-  - query-and-index.re
+  - N1QL.re
+  - index.re
   - architecture.re
+  - components.re
+  - security.re
   - cluster.re
   - management.re
-  - security.re
   - operation.re
-  - components.re
   - configuration.re
   - integration.re
   - cean.re
