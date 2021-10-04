@@ -1,63 +1,44 @@
 
 = Node.jsアプリケーション開発
 
-== なぜ、JavaScriptとNoSQLの組み合わせなのか？
+== なぜ、Node.jsとCouchbase Serverの組み合わせなのか
 
 
-NoSQLは、非RDB（RDB以降の技術）であることのみを共通点として、様々な異なる特色を持った技術に対する総称となっていますが、ここで対象とするカテゴリーは、その中でもドキュメント指向データベース（ドキュメントストア）と呼ばれるものです。
-
-
-
-ドキュメントストアは、JSONデータを格納することを特徴としており、自ずと、JavaScriptと親和性を持っています(JSON = Java Script Object Notation)。
-
-
-
-その一方、RDBから移行するだけの利点があるのか、というのが実際的な関心なのではないかと思います。こちらについては後ほど触れていきます。
-
-
-
-
-
-== NoSQL/Couchbaseを選択する理由
-
-
-Couchbaseなら、JSONデータとクエリ言語の両方の利点を活用することができます。
+JSONデータは、JavaScriptと高い親和性を持っています。
+Couchbase Serverを用いることによって、JSONデータとクエリ言語の両方の利点を活用することができます。
 
 
 === JSONデータの利点
 
+まず、アプリケーションのデータ層に、リレーショナルデータベースを用いる場合に、問題となり得る点を以下に挙げます。
 
-これは、RDBの欠点と見ることもできます。つまり...
+ * @<strong>{第一正規形テーブル構造}と、アプリケーションが扱うデータモデル（ドメインオブジェクト）との間にギャップがあり得るため、データ層とアプリケーションの間で、データ構造を変換する必要が生じる場合がある。
+ * @<strong>{厳格なテーブルスキーマ}に基づくデータ管理は、アプリケーション設計・開発の柔軟さを損なう場合がある。
 
- * アプリケーションが必要とするデータ構造（ドメインオブジェクト）と、RDBが要請する形式（第一正規形テーブル構造）との間には、断絶がある。
- * アプリケーションの設計、実装、改善、機能追加など、全ての工程において、データベースとの兼ね合いを図る必要がある（密結合）
+これに対して、データ層がJSONデータを許容した場合、以下の利点を得ることができます。
 
-
-
-これに対して、データ層が、JSONを許容した場合...
-
- * データ層は、第一正規形を要請しないため、アプリケーションが必要とするデータ構造（ドメインオブジェクト）そのものを格納することができる。
- * （JSONには、データ構造に関する情報がデータ自体に含まれているため）アプリケーション設計・開発工程において、特にデータ設計の変化に（データベース側の作業を伴うことなく）柔軟に対応できる
+ * データは、第一正規形であることが要請されないため、アプリケーションが扱うデータモデル（ドメインオブジェクト）をそのまま格納することができる。
+ * アプリケーション設計・開発において、データモデルの変化に柔軟に対応できる。
 
 
 === クエリ言語の利点
 
+標準化されたクエリ言語であるSQLが様々な異なるデータベースで利用できることは、リレーショナルデータベースの繁栄の大きな要因であり、
+SQLの習得は、アプリケーション開発者にとって、必修とさえ言えるものとなっていきました。
 
-これは、RDBの持つ大きな利点であり、標準化されたクエリ言語(SQL)が様々な異なるデータベースで利用できることは、技術者層の拡大に繋がり、SQLの習得は、（特にオープンシステムのWEBアプリケーション全盛時代には）システム開発者にとって、必須知識といえるものとなっていました。
-
-
-
-Couchbase Serverを選択することで、開発者は、SQLの知識を活用することができます。
-
+Couchbase Serverを選択することで、開発者は、既存のSQLの知識・経験を活用することができます。
 
 == キーバリュー操作
 
-N1QLによるクエリについて、他の章で、RDBとの相違点を中心に解説しました。
-Couchbase Serverでは、クエリが唯一のインターフェイスではなく、キーバリューストアのように、キー指定によるデータ(ドキュメント)の操作を行うことが可能です。
+Couchbase Serverでは、開発者は、クエリを利用するだけでなく、キー指定によるデータ(ドキュメント)の操作を行うことが可能です。
+これをキーバリュー操作(Key Value Operations)と呼びます。
+
+
+ここでは、アプリケーション開発におけるキーバリュー操作について、プログラミング例を用いて紹介します。詳細についてはドキュメント@<fn>{kv-operations}を参照してください。
 
 === CRUD操作
 
-キーバリュー操作の基本について、プログラミング例を用いて紹介します。詳細についてはドキュメント@<fn>{kv-operations}を参照ください。
+キーバリュー操作の基本となるCRUD操作に関して、以下のようなメソッドが利用可能です。
 
 //blankline
 
@@ -90,22 +71,26 @@ const result = await collection.remove(key);
 
 @<strong>{生成または更新}(@<tt>{UPSERT})
 
-（同一のキーを持つ）データが存在しなければ、生成（@<tt>{CREATE/INSERT}}）を行い、既に（同一のキーを持つ）データが存在している場合は更新（@<tt>{UPDATE/REPLACE}}）を行う。
 
 //emlist[][js]{
 let result = await collection.upsert(key, document);
 //}
 
+
+@<tt>{UPSERT}メソッドは、同一のキーを持つデータが存在しなければ、生成（@<tt>{CREATE/INSERT}）を行い、既に同一のキーを持つデータが存在している場合は更新（@<tt>{UPDATE/REPLACE}）を行います。
+
+
 //footnote[kv-operations][https://docs.couchbase.com/nodejs-sdk/current/howtos/kv-operations.html]
 
 === サブドキュメント操作
 
-アプリケーションはJSONドキュメント全体ではなく、ドキュメントの特定の箇所のみを参照すれば十分な場合があります。
-あるいは、アプリケーションでデータの更新を行う場合に、ドキュメントを取得し、必要な箇所を編集した後に、そのドキュメントをデータベースに対して更新するのは分かりやすい操作ですが、
-データベースに対してドキュメントの指定箇所の更新を指示すれば十分な場合があります。このような操作は、N1QLを利用しても行うことができますが、他の方法でも行うことができます。
-Couchbase Serverでは、DataサービスAPIを用いて、JSONデータの一部の取得・更新を行うことができます。これをサブドキュメント操作と呼びます。
+データを参照する際に、ドキュメント全体ではなく、一部を参照すれば十分な場合があります。
+また、データの更新を行う場合、ドキュメントを取得し、必要な箇所を編集した上で、同じキーで保存するのは単純で分かりやすい操作ですが、ドキュメントの指定箇所の更新を指示することができれば十分な場合があります。
+このような操作は、N1QLを利用しても行うことができますが、キーバリュー操作でも実行することができます。これをサブドキュメント操作と呼びます。
 
-サブドキュメント操作の基本について、プログラミング例を用いて紹介します。
+サブドキュメント操作の基本的な種類を、プログラミング例を用いて紹介します。
+
+//blankline
 
 @<strong>{生成}(@<tt>{CREATE})
 
@@ -122,7 +107,7 @@ Couchbase Serverでは、DataサービスAPIを用いて、JSONデータの一�
  var result = await collection.lookupIn(key, [
     couchbase.LookupInSpec.get("addresses.delivery.country"),
   ]);
-  var country = result.content[0].value; //'United Kingdom'
+  var country = result.content[0].value;
 //}
 
 
@@ -130,7 +115,7 @@ Couchbase Serverでは、DataサービスAPIを用いて、JSONデータの一�
 
 //emlist[][js]{
   await collection.mutateIn(key, [
-    couchbase.MutateInSpec.replace("email", "dougr96@hotmail.com"),
+    couchbase.MutateInSpec.replace("email", "xyz@example.com"),
   ]);
 //}
 
@@ -145,18 +130,18 @@ Couchbase Serverでは、DataサービスAPIを用いて、JSONデータの一�
 
 @<strong>{生成または更新}(@<tt>{UPSERT})
 
-指定したフィールドが存在しなければ追加し、既にフィールドが存在している場合はその値を更新します。
-
 //emlist[][js]{
   await collection.mutateIn(key, [
-    couchbase.MutateInSpec.upsert("fax", "311-555-0151"),
+    couchbase.MutateInSpec.upsert("fax", "123-456-7890"),
   ]);
 //}
 
+@<tt>{UPSERT}メソッドは、指定したフィールドが存在しなければ追加し、既にフィールドが存在している場合はその値を更新します。
 
-@<strong>{データの存在確認}
+//blankline
 
-データを実際に取得するのではなく、指定したパスが存在するかどうかを確認することが可能です。
+@<strong>{存在確認}
+
 
 //emlist[][js]{
   var result = await collection.lookupIn(key, [
@@ -166,10 +151,13 @@ Couchbase Serverでは、DataサービスAPIを用いて、JSONデータの一�
 
 //} 
 
-@<strong>{複数操作の同時実行}
+データを取得するのではなく、指定したパスが存在するかどうかを確認することが可能です。
 
-上掲のコードを見れば分かるとおり、サブドキュメント操作は、配列型の引数で与えられています。
-（上掲のコードは要素が１つの配列が使われていますが）下記のように複数の操作を一度に与えることが可能です。
+//blankline
+
+@<strong>{複数操作の同時リクエスト}
+
+上掲のコードを見れば分かりますが、サブドキュメント操作は、配列型の引数で与えられています。これまでの例では、要素が１つの配列が使われていますが、下記のように複数の操作を一度に与えることが可能です。
 
 //emlist[][js]{
 
@@ -183,66 +171,120 @@ Couchbase Serverでは、DataサービスAPIを用いて、JSONデータの一�
 
 //}
 
+//blankline
 
-ここでは、CRUD操作を中心に紹介いたしました。Couchbase Serverのサブドキュメント操作の範囲は上記に留まるものではありません。
-例えば、JSONドキュメントは、値を配列として持つことができますが、配列値に対する値の追加・挿入をサブドキュメント操作として実行することが可能です。
+@<strong>{その他の操作}
+
+ここでは、CRUD操作を中心に紹介しましたが、Couchbase Serverのサブドキュメント操作の範囲は上記に留まるものではありません。
+
+例えば、JSONドキュメントは値を配列として持つことができますが、配列に対する値の追加・挿入を実行することが可能です。
+
 また、値を数値として持つフィールドに対して、一旦値を取得した後に、増減した値で更新するのではなく、直接値の変更幅を指定するカウンター操作も用意されています。
-その他、詳細についてはドキュメント@<fn>{subdocument-operations}を参照ください。
+
+その他、詳細についてはドキュメント@<fn>{subdocument-operations}を参照してください。
 
 //footnote[subdocument-operations][https://docs.couchbase.com/nodejs-sdk/current/howtos/subdocument-operations.html]
 
 
+====[column]バルク操作API
+Couchbase Serverのキーバリュー操作について見てきましたが、読者の中には、サブドキュメント操作については、複数の操作を一括して(バルクで)リクエストするAPIについて解説しているのに対して、ドキュメントに関するCRUD操作では、そのようなバルク操作について触れられていない点に注目された人がいるかもしれません。
+
+この違いは、意図的な説明の省略によるものではなく、Couchbase ServerのSDKに由来するものです。
+
+Couchbase Server SDKのAPIには、同期型と非同期型の２種類が提供されています。
+そして、同期型のAPIの内部では、非同期型APIが用いられ、結果が戻される前に、内部的に処理がブロック(同期)されることで、非同期処理が隠されています。
+非同期プログラミングについては、同期的なプログラミングとは異なる知識が必要であり、十分に理解せずに用いることには弊害が伴うため、同期型のラッパーAPIが提供されているのは理由があることだと言えます。
+
+ここに、バルク処理のAPIを付け加えることは、本来の処理を、二重に隠すことにつながります。
+非同期APIの恩恵は、前後の処理を含めて可能な限り非同期で実行することによって得られます。そして、非同期で処理が可能な範囲は、アプリケーション毎に異なります。
+
+しかしながら、このような疑問を持たれることは珍しいことではないらしく、コミュニティフォーラムでも、１つのスレッド(How to do bulk get in 2.x java sdk@<fn>{how-to-do-bulk-get-in-2-x-java-sdk})が立てられています。このスレッドには、有識者による回答として、非同期APIを内部的に用いたバルク処理メソッドの実装も示されています(Node.jsではなく、Java SDKによる実装ですが)。
+
+アプリケーションの要件を考慮せず、一律に同期を行う戦略は、必ずしも最善の選択であるとは言えず、だからこそSDKは単純なラッパーAPIを提供していないとも言えますが、ここで挙げた論点に関する議論と、それに対する１つの解決策のサンプルとして興味深いと考えられたため、紹介します。興味のある方は、スレッドを参照してみてください。
+
+====[/column]
+
+
+
+//footnote[how-to-do-bulk-get-in-2-x-java-sdk][https://forums.couchbase.com/t/how-to-do-bulk-get-in-2-x-java-sdk/4634/5]
+
+
 == データ一貫性(Consistency)
+
+はじめに、アプリケーションに必要なデータ一貫性(Consistency)を実現するための論点を整理します。その後、関連するCouchbase Serverの機能を解説します。
 
 === 分散アーキテクチャーにおけるインデックス
 
+Couchbase Serverの特徴として、メモリーファーストアーキテクチャーがあります。
+このアーキテクチャーにより、永続化装置およびネットワークの性能が、データベースの性能のボトルネックになることが回避されます。
+ディスクへの書き込みは、キューを介して行われます。また、他ノードへの複製（レプリカ）のためのキューメカニズムとして、Data Change Protocol(DCP)が存在します。
 
-Couchbase ServerとRDBMSとの違いとして、メモリーファーストアーキテクチャーがあります。
-メモリーファーストアーキテクチャーは、永続化装置および複製（レプリケ）の作成が、アプリケーション（への応答）性能のボトルネックになることを回避するための仕組みです。そのための仕組みとして、Couchbase Serverは、ノード内部でディスクへの書き込みのためのキューを持っています。また、他ノードへの複製（レプリカ）のためのキューメカニズムとして、Data Change Protocol(DCP)と呼ばれる仕組みを持っています。
-このDCPは、レプリカのためのみではなく、クラスター内部でデータの変更を他のノードやサービスに反映するために広く利用されます。（Dataサービスにおける）データ変更のインデックスへの反映もその一つです。
+DCPは、レプリカだけではなく、データの変更を他のサービスに反映するために広く利用されます。データ更新時のインデックスへの反映もその1つです。
 
 
 === インデックス更新から見たRDBとの違い
 
 
-Couchbase ServerとRDBとの違いをこの観点から見ることができます。データを更新する際には、関係するインデックスの更新が行われるのは、Couchbase ServerとRDBとで共通です。ただし、RDBでは、ユーザーが、いつどのように、データへアクセスしたとしても、データの一貫性が保たれていることを保証するため、クライアントからのデータ更新処理リクエストに対して、成功のステータスが返されるのは、インデックスの更新が完了した後になります。これは、データ一貫性の保証という要件面に加え、RDBがモノリシックなアークテクチャーからなっているという、技術的な面から見ても自然な挙動と言えるかもしれません。一方で、Couchbase Serverは、分散アーキテクチャーという性格を持ち、データの更新処理を司るDataサービスと、インデックスを管理するIndexサービスとは、コンポーネントとして独立しており、異なるサーバーに配置されるのが一般的です。Couchbase Servevrでは、インデックスの更新は、永続化装置への反映や、複製の作成と同様、DCPプロトコルを介した、キュー（非同期）のメカニズムで実現されています。
+データ更新時に、関連するインデックスの更新が行われるのは、Couchbase ServerとRDBとで共通です。
+
+RDBでは、クライアントからのデータ更新処理リクエストに対して、成功のステータスが返されるのは、インデックス更新の終了後です。これは、データ一貫性の保証という要件面に加え、RDBがモノリシックなアークテクチャーからなっているという技術面から見ても自然な挙動と言えます。
+
+一方で、Couchbase Serverは、分散アーキテクチャーという性格を持ち、データの更新処理を司るDataサービスと、インデックスを管理するIndexサービスとは、コンポーネントとして独立しています。また、本番環境では、それらのサービスは別々のサーバーに配置されるのが一般的です。Couchbase Servevrでは、インデックスの更新は、永続化装置への反映や、複製の作成と同様、キュー（非同期）のメカニズムで実現されています。
+
+
+=== キーバリュー操作とクエリ
+
+RDBにとって、SQLがクライアントにとって共通のインターフェースであるのと異なり、Couchbase Serverでは、N1QLは、クライアントにとって、選択することのできる複数のインターフェースのうちの1つです。
+
+さらに言えば、Dataサービスへのキーバリュー操作が、Couchbase Serverにおける一次的なインターフェイスであるのに対して、N1QLクエリは、あくまで派生的なインターフェースであると言えます。
+キーによるアクセスでは、常にデータの同期が保証されます（たとえ、更新が永続化されておらず、ディスクキューに残っている状態だとしても、クライアントからのリクエストへの応答には、メモリ内の最新の情報が用いられます）。
+
+N1QLクエリは、インデックスに依存するため、デフォルトでは、クエリの結果が最新のデータと同期されていることが保証されません(同期を保証する方法について後に触れます)。
 
 
 === インデックス更新が非同期であることの影響範囲
 
+アプリケーションのバックエンドとしてのデータベースにとって、データ更新とインデックス更新の同期が必要な場合と、必要でない場合とを考えてみることができます。
 
-RDBにとって、SQLがクライアントにとって共通のインターフェースであるのと異なり、Couchbase Serverでは、N1QLは、クライアントにとって、選択することのできる複数のインターフェースのうちの1つです。さらに言えば、Dataサービスへのキーバリューアクセスが、一次的なインターフェイスであるのに対して、あくまで派生的なインターフェースであると言えます。キーによるアクセスでは、常にデータの同期が保証されます（たとえ、ある新しい更新が、永続化されておらず、ディスクキューに入っている状態だとしても、後続のクライアントのアクセスへは、メモリ内の最新の情報から応答されます）。
-さらに、このようなインターフェイスの違いを考慮せず、純粋にアプリケーションのバックエンドとしてのデータベースにとって、データの（インデックスへの）同期が必要な場合と、必要でない場合とを考えることができます。RDBでの開発に慣れている開発者にとって、データベースの中で、データの同期が行われていない可能性を考えることは、違和感があるかもしれません。一方、RDBの開発経験が豊富な方ほど、インデックス定義によるデータ検索時の性能向上と、必然的に伴うデータ更新時の性能劣化との相克に悩まされた経験を持っているのではないかと思います。
-まず、ここではインデックスは、あくまでデータの検索に使われることを確認しておきたいと思います。つまり、データがインデックスに同期されていない場合の影響は、あくまで検索結果の違いにのみ関係してきます。ある特定のレコード（ドキュメント）のカラム（フィールド）の値について、データベース内で同期が取れていない（特定時点で、異なる複数の結果を参照しうる）という現象は決して起こりません。そのことを考えれば、影響範囲は非常に限定的であることがわかると思います。また、ここでは非同期、つまり更新の遅延、を問題としていますが、クライアント（アプリケーション）から見た場合、この遅延は、究極的には、ネットワークその他、のあらゆる要因による遅延と区別できないと言えます、この後に触れる、ある１つのケースを除いては。
+RDBでの開発に慣れている開発者にとって、データベースの中で、データとインデックスの同期が取れていない可能性を考えることは、違和感があるかもしれません。
+一方、経験が豊富な開発者ほど、インデックス定義によるデータ検索時の性能向上と、必然的に伴うデータ更新時の性能劣化との相克に悩まされた経験を持っているのではないかと思います。
 
+まず、インデックスは、あくまでデータの「検索」に使われることを確認しておきたいと思います。つまり、データの変更がインデックスに同期されていない場合の影響は、あくまで検索結果の違いにのみ関係してきます。ある特定のレコード（ドキュメント）のカラム（フィールド）の値について、データベース内で同期が取れていない（特定時点で、異なる複数の結果を参照しうる）という現象は起こりません。
+ここからみても、インデックスの更新が非同期であることの影響範囲は限定的であることが分かります。
 
-=== READ YOUR OWN DATA (自分自身のデータを読む)
-
-
-複数のリクエストに対して矛盾した結果が返されたことを証明するためには、その矛盾の論拠として、正確な時刻情報を示す必要があります。これは、複数の異なるクライアントからのそれぞれ別の更新と検索リクエストを想定した場合、遅延が余程大きいものでなければ、非常に困難と言えるでしょう（上に触れたように、クライアントとデータベースの間には様々な遅延要因が存在しうると考えると、原因がデータベース内の遅延によるものだと証明することはシステムの内部情報に当たらない限り不可能だと言えます）。言い換えれば、複数のクライアント間の出来事と考えた場合、多少の遅延は事実上の問題となりえないと言えるでしょう。
-唯一の例外は、同一のクライアントからのシーケンシャルなリクエストに対して矛盾した結果が返されるケースです。自分で行った更新が、その後の検索結果に反映されていないとしたら（例えばユーザー管理アプリケーション上で、ユーザーを追加した後に、その新規ユーザーが全ユーザーリストに表示されないとしたら）、これは明らかに問題です。
+また、ここでは非同期、つまり更新の遅延、を問題としていますが、クライアント（アプリケーション）から見た場合、この遅延は、究極的には、ネットワークその他のあらゆる要因による遅延と区別できないとも言えます。この後に触れる、ある１つのケースを除いては。
 
 
-=== 永続化や複製の場合と比べた、インデックスの特殊性
+=== Read Your Own Writes (自分自身が書いたデータを読む)
 
 
-データの永続化、複製作成、インデックス更新は、全て、データ更新とは非同期の処理であるという点で、共通しています。一方、データ永続化および複製作成については、データ更新時に、同期（処理が完了するのを待ってクライアントに成功のステータスが返されること）を強制するオプションが存在しています。これに対して、インデックス更新については、このようなデータ更新時のオプションはありません。
+複数のリクエストに対して矛盾した結果が返されたことを証明するためには、その矛盾の論拠として、正確な時刻情報を示す必要があります。これは、複数の異なるクライアントからのリクエストを想定した場合、遅延が余程大きいものでなければ、非常に困難と言えるでしょう（上に触れたように、クライアントとデータベースの間には様々な遅延要因が存在し得るため、原因がデータベース内の遅延によるものだと証明することはシステムの内部情報に当たらない限り不可能だと言えます）。言い換えれば、複数のクライアント間の出来事と考えた場合、多少の遅延は事実上の問題となりえないと言えるでしょう(ここでは、あくまで複数のクライアントが「継続的に」アプリケーションを利用し続けている状況について、語っています。これは、システムが利用されているほとんどの時間を占めている、と言えます。しかしながら、より頻繁ではないにしろ、「特定時点のデータ断面」の把握が必要になる要件は、当然あり得るでしょう。特定時点までのデータ同期を保証する方法については、後に触れます)。
 
+Webアプリケーションでは、複数のクライアントからの複数のリクエストと、同一のクライアントからの複数のリクエストが、さほど明確に区別されない場合があります。
+だからこそ、同一のクライアントからのシーケンシャルなリクエストとして「Read Your Own Writes (自分自身が書いたデータを読む)」ケースを、特別なものとして考慮する必要があります。
+自分で行った更新が、その後の検索結果に反映されないとしたら、これは明らかに問題です。
+
+
+=== 永続化や複製の場合と比べたインデックスの特殊性
+
+データの永続化、複製、インデックス更新は、全て、データ更新とは非同期の処理であるという点で共通しています。一方、データ永続化および複製については、データ更新時に、同期（処理が完了するのを待ってクライアントに成功のステータスが返されること）を強制する永続性(Durability@<fn>{data-durability})オプションが存在しています。これに対して、インデックス更新については、このようなデータ更新時のオプションはありません(この違いは、永続化や複製が、データ更新と同じく、Dataサービスの役割であることを考えると、自然と納得されます)。
+
+//footnote[data-durability][https://docs.couchbase.com/server/current/learn/data/durability.html]
 
 === 一貫性を保証するためのオプション
 
 
-データ更新時にインデックス更新の同期を強制するオプションが存在しない代わりに、N1QLクエリ実行時に、インデックス更新状況に対して、リクエストの挙動を変えることのできるオプションがあります。
-次の3つのオプションがあります。オプションを指定しない場合のデフォルトは@<tt>{not_bounded}です。
+データ更新時にインデックス更新の同期を強制するオプションが存在しない代わりに、N1QLクエリ実行時における、インデックスの一貫性(Index Consistency@<fn>{b930f71470cfae6ed97d314e1717fbee})に関する選択肢があります。
 
- * @<strong>{not_bounded}：クエリの一貫性を必要とせずに、クエリをすぐに実行します。インデックスの更新に遅延がある場合は、古い結果が返されることがあります。
- * @<strong>{at_plus}：インデックスが@<strong>{最新の更新のタイムスタンプ}まで更新されている事を保証します。インデックスの更新に遅延がある場合は、更新を待ちます。
- * @<strong>{request_plus}：インデックスが、@<strong>{クエリリクエストのタイムスタンプ}まで更新されている事を保証して、クエリを実行します。インデックスの更新状況に遅延がある場合は、更新を待ちます。
+この選択肢は、以下のようなキーワードを用いて区別されます。
 
+ * @<strong>{NOT_BOUNDED} クエリの一貫性を必要とせずに、クエリをすぐに実行します。インデックスの更新に遅延がある場合は、古い結果が返されることがあります。
+ * @<strong>{REQUEST_PLUS} インデックスが、@<strong>{クエリリクエストのタイムスタンプ}まで更新されるのを待って、クエリを実行します。
+ * @<strong>{AT_PLUS} インデックスが@<strong>{クライアントの直近の更新のタイムスタンプ}まで更新されるのを待って、クエリを実行します。
 
-上記のオプション表記は、概念を説明するためのものであり、SDK/プログラム言語によって実際の表記が変わることにご注意ください。以下は、Node.js SDK/JavaScriptでの上記オプションの利用例です。
+ はじめの2つについては、SDKによるクエリ実行時に、直接指定できるオプションがあり、オプションを指定しない場合のデフォルトは@<tt>{NOT_BOUNDED}です。
 
-
+上記のオプション表記は、概念を説明するためのものであり、SDK/プログラム言語によって実際の表記が変わることにご注意ください。以下は、Node.js SDKでの@<tt>{REQUEST_PLUS}オプションの利用例です。
 
 //emlist[][js]{
 const result = await cluster.query(
@@ -252,14 +294,36 @@ const result = await cluster.query(
   });
 //}
 
-@<strong>{参考情報}
+@<tt>{REQUEST_PLUS}が、リクエストのタイムスタンプを基準にしているため、クライアント/アプリケーションの状態に依存していないのに対して、@<tt>{AT_PLUS}は、本来の意味での「Read Your Own Writes」を実現します。@<tt>{AT_PLUS}の実現には、データ更新時のトークンの取得が必要になります。取得したトークンをクエリ実行時に指定することによって、アプリケーションに必要十分な一貫性を、最低限の負荷により、保証することができます。
+
+====[column]本書におけるトークンの扱い、および参考情報
+
+本書では、トークンの利用については扱いません。
+
+代わりに、サンプルコードが掲載されているドキュメント@<fn>{nodejs-sdk-2_6-scan-consistency-examples}を示します。
+
+概略を述べると、トークンを利用するには、トークンの取得を有効化した上で、データ更新時のレスポンスから@<tt>{MutationState}オブジェクトを取得し、クエリ実行時に、@<tt>{MutationState}オブジェクトを引数に取るメソッド(@<tt>{consistentWith})を利用します。
+
+====[/column]
+
+====[column]サンプルコード実装に関する注記
+本番システムを考えると、リソース消費の面で悪手であることは間違いありませんが、@<tt>{REQUEST_PLUS}を用いても、「Read Your Own Writes」のケースに対応することは可能です。
+本書のサンプルコードでは、こちらの方法を用いています。
+
+付け加えると、リソース消費の最適化のためには、必要な時にのみ@<tt>{AT_PLUS}、ないし@<tt>{REQUEST_PLUS}を用いるべきであり、必要な要件のない限り、@<tt>{NOT_BOUNDED}を用いるべきです。
+その観点から、同じ検索処理であっても、データの更新後と、それ以外の通常の場合とでは、オプションを変更する、という実装を行うことが考えられます(本書のサンプルコードでは、区別なしに@<tt>{REQUEST_PLUS}を用いています)。
 
 
-Couchbase公式ドキュメント Index Consistency@<fn>{b930f71470cfae6ed97d314e1717fbee}
-
+====[/column]
 
 //footnote[b930f71470cfae6ed97d314e1717fbee][https://docs.couchbase.com/java-sdk/current/concept-docs/n1ql-query.html#index-consistency]
 
+//footnote[nodejs-sdk-2_6-scan-consistency-examples][https://docs.couchbase.com/nodejs-sdk/2.6/scan-consistency-examples.html]
+
+//footnote[java-sdk-2_7-scan-consistency-examples][https://docs.couchbase.com/java-sdk/2.7/scan-consistency-examples.html]
+
+
+//footnote[node-sdk-current-n1ql-query-index-consistency][https://docs.couchbase.com/nodejs-sdk/current/concept-docs/n1ql-query.html#index-consistency]
 
 == サンプルアプリケーション紹介
 
@@ -267,7 +331,7 @@ Couchbase公式ドキュメント Index Consistency@<fn>{b930f71470cfae6ed97d314
 
 //blankline
 
-@<href>{https://github.com/YoshiyukiKono/couchbase_step-by-step_node_jp}
+@<href>{https://github.com/YoshiyukiKono/Couchbase_Server_First_Step_Guide.git}
 
 //blankline
 
@@ -278,9 +342,9 @@ Couchbase公式ドキュメント Index Consistency@<fn>{b930f71470cfae6ed97d314
  * C: Couchbase Server (NoSQLドキュメント指向データベース)
  * E: Express@<fn>{expressjs} (Webアプリケーションフレームワーク）
  * A: Angular@<fn>{angular} (フロントエンドフレームワーク）
- * N: Node.js@<fn>{nodejs} (サーバサイドJavaScript実行環境）
+ * N: Node.js@<fn>{nodejs} (サーバーサイドJavaScript実行環境）
 
-類似のものとして、MEANスタックという言葉を聞いたことがある方もいるのではないかと思います。この場合のMは、MongoDBを指します。MongoDBは、Couchbase同様、JSONデータを扱うNoSQLデータベースです。
+類似のものとして、MEANスタックという言葉を聞いたことがある方もいるのではないかと思います。その場合のMは、MongoDBを指します。
 
 //footnote[expressjs][http://expressjs.com/]
 
@@ -290,53 +354,64 @@ Couchbase公式ドキュメント Index Consistency@<fn>{b930f71470cfae6ed97d314
 
 === アプリケーション概要
 
-サンプルアプリケーションは、最小限の機能からなるシンプルなものとなっています。下記の画面を見ていただきさえすれば、特にそれ以上の説明は必要ないと思われます。
+サンプルアプリケーションは、最小限の機能からなるシンプルなものとなっています。下記の画面を見ていただきさえすれば、特にそれ以上の説明は必要ないでしょう。
 
 
 //image[sample_app_screen][]{
   
 //}
 
-=== アプリケーション利用方法
-
-@<strong>{1. Couchbase Server事前準備}
-
-このアプリケーションでは、バケット名として@<tt>{node_app}を使っています。バケットは事前に作成されている必要があります。
+=== アプリケーション実行事前準備
 
 
-また、下記のインデックスを作成しておく必要があります。
+アプリケーションのデータ管理のために、以下の構成を前提としています。これらは事前に作成されている必要があります。
+
+ * バケット: @<tt>{user_management}
+ * スコープ: @<tt>{japan}
+ * コレクション: @<tt>{users}
+
+また、下記のインデックスを作成しておく必要があります。このサンプルアプリケーションでは、ユーザーのリストを表示する際に、検索条件を用いないクエリを利用しているためプライマリインデックスを作成しています。
 
 //emlist[][sql]{
-CREATE INDEX idx_node_app_user ON node_app.scp.user;
+CREATE PRIMARY INDEX primary_idx_users ON user_management.japan.users
 //}
 
+アプリケーションがCouchbase Serverにアクセスするために利用するアカウントを以下の内容で、新規作成します。
 
-@<strong>{2. ファイル取得}
+ * ユーザー: @<tt>{user_management_app}
+ * パスワード: @<tt>{C0uchb@se}
+ * アクセス権: 上記バケット(@<tt>{user_management})に対する@<tt>{Application Access}の権利を追加
 
-リポジトリから、ファイルを取得します。
+=== アプリケーション利用方法
+
+GitHubリポジトリをクローンし、作成されたディレクトリへ移動します。
 
 
-//emlist[][shell]{
-$ git clone https://github.com/YoshiyukiKono/couchbase_step-by-step_node_jp.git
-$ cd couchbase_step-by-step_node_jp
+//cmd{
+$ git clone https://github.com/YoshiyukiKono/Couchbase_Server_First_Step_Guide.git
+$ cd Couchbase_Server_First_Step_Guide/
 //}
 
-中に含まれる、@<tt>{package.json}には、下記の依存関係が定義されています。
-
+ディレクトリの中に含まれる、@<tt>{package.json}には、下記の依存関係が定義されています。
 
 //emlist[][json]{
   "dependencies": {
-    "couchbase": "^3.1.0",
+    "couchbase": "^3.2.1",
     "express": "^4.17.1"
   }
 //}
 
-@<strong>{3. アプリケーション実行}
+アプリケーションが依存するパッケージをプロジェクトにインストールします。
 
-このアプリケーションでは、実行の際に、下記のように、@<tt>{server.js}を使います。
+//cmd{
+$ npm install
+//}
 
 
-//emlist[][shell]{
+アプリケーションを実行します。下記のように、@<tt>{server.js}を使います(または、@<tt>{npm start}に置き換えることもできます)。
+
+
+//cmd{
 $ node server.js
 Server up: http://localhost:80
 //}
@@ -347,29 +422,41 @@ Server up: http://localhost:80
 
 === プログラム解説
 
+@<strong>{Couchbase Serverへの接続}
+
+
+Couchbase Serverは、アプリケーションと同じ環境で実行されていることが想定されています。
+
+//emlist[][javascript]{
+const cluster = new couchbase.Cluster('couchbase://localhost', {
+    username: 'user_management_app',
+    password: 'C0uchb@se',
+})
+//}
+
 @<strong>{ユーザーリスト表示}
 
 
-@<tt>{routes.js}を見ると、画面のリスト表示のために、下記のようなクエリが使われているのが分かります。
+@<tt>{routes.js}を見ると、ユーザーのリスト表示のために、下記のクエリが使われているのが分かります。
 
 
 //emlist[][javascript]{
-const qs = "SELECT name, id from node_app.scp.user"; 
+const qs = 'SELECT id, name from users'; 
 //}
 
-上記の(変数@<tt>{$qs}に代入された)をクエリ実行している箇所は以下の通りです。
+上記の(変数@<tt>{qs}に代入された)クエリを実行している箇所は以下の通りです。
 
 //emlist[][javascript]{
-const selectUsers = async (key) => { 
-  const result = await cluster.query(qs, {
-    scanConsistency: couchbase.QueryScanConsistency.RequestPlus,
-  });
+const selectUsers = async (key) => {
+  const result = await scope.query(qs, {
+		scanConsistency: couchbase.QueryScanConsistency.RequestPlus,
+	  });
   return result.rows;
 }
 //}
 
 
-@<tt>{script.js}中で、上記クエリのリクエストの戻り値は(@<tt>{response.data})は、下記のように、そのまま変数(@<tt>{$scope.users})に代入されます。、@<tt>{index.html}中で、画面表示に利用されます。
+@<tt>{script.js}の中で、上記クエリのリクエストの戻り値(@<tt>{response.data})は、そのまま変数(@<tt>{$scope.users})に代入されます。
 
 
 //emlist[][javascript]{
@@ -386,7 +473,7 @@ var getData = function() {
 };
 //}
 
-代入された変数(@<tt>{$scope.users})は、@<tt>{index.html}で、画面表示に利用されます。
+@<tt>{index.html}の中で、代入された変数(@<tt>{users})は、下記のように画面表示に利用されます。
 
 //emlist[][html]{
 <tr ng-repeat="user in users">
@@ -398,24 +485,26 @@ var getData = function() {
 
 @<strong>{新規ユーザー追加}
 
-@<tt>{routes.js}中のデータ（ドメインオブジェクト）の表現と、そのデータをデータベースへの保存する部分は、下記のようなものです。
+
+@<tt>{routes.js}の中の、データ（ドメインオブジェクト）の表現と、そのデータをデータベースへの保存する部分は、以下の通りです。
 
 
 //emlist[][javascript]{
 const user = {
-  type: "user",
   id: req.body.id,
   name: req.body.name,
 };
 upsertDocument(user);
 //}
 
-JavaScriptのディクショナリをそのまま格納しているのが分かります。
+以下の箇所を見ると、JavaScriptのディクショナリが、そのままドキュメントとして格納されているのが分かります。
+
+なお、既存のIDでユーザーを追加した場合には、新しい情報で上書きされる仕様としています。
 
 //emlist[][javascript]{
-const upsertDocument = async (doc) => {
+const addUser = async (doc) => {
   try {
-    const key = `${doc.type}_${doc.id}`;
+    const key = `${doc.id}`;
     const result = await collection.upsert(key, doc);
   } catch (error) {
     console.error(error);
@@ -426,12 +515,13 @@ const upsertDocument = async (doc) => {
 
 @<strong>{ユーザー削除}
 
+
 ドキュメントの削除は、キー指定により行われます。
 
 //emlist[][javascript]{
 const removeUser = async (id) => {
   try {
-    const key = `user_${id}`;
+    const key = `${id}`;
     const result = await collection.remove(key);
   } catch (error) {
     console.error(error);
@@ -439,18 +529,57 @@ const removeUser = async (id) => {
 };
 //}
 
+== Node.js SDKを開発に利用する
+
+
+新しく作成するNode.jsアプリケーションで、Couchbase ServerのNode.js SDKを利用するための手順を記します。
+
+=== 動作確認環境
+ * Mac OS Catalina Version 10.15.6
+ * Node.js v15.4.0
+ * npm 7.0.15
+
+=== プロジェクト準備手順
+
+プロジェクト用のディレクトリを作成し、その中で作業を開始します。
+
+はじめにプロジェクトを初期化します。
+
+//cmd{
+$ npm init -y
+//}
+
+package.jsonファイルが作成されます。
+
+次に、Node.js SDKをインストールし、package.jsonに追記します。
+
+//cmd{
+$ npm install couchbase --save
+//}
+
+package.jsonに以下のような依存関係が追記されます。
+
+//emlist[][json]{
+  "dependencies": {
+    "couchbase": "^3.2.1"
+  }
+//}
 
 == ODMフレームワーク Ottoman.js
 
 === Ottoman.jsとは
 
 Ottoman.js@<fn>{ottomanjs}は、Couchbase ServerとNode.jsのためのODM(オブジェクトデータモデラー)です。
-Node.jsアプリケーション開発にCouchbase Serverを利用する際、Ottomanの利用は必ずしも必須ではありませんが、Ottomanは、開発者に様々な恩恵をもたらすことを目的として開発されています。
+
+Node.jsアプリケーション開発にCouchbase Serverを利用する際、Ottomanの利用は必須ではありませんが、Ottomanは、開発者に様々な恩恵をもたらすことを目的として開発されています。@<fn>{ottoman-name}
 
 Ottomanは、MongoDBにおけるMongoose ODM@<fn>{mongoosejs}に相当するものであると言えます。
 
 
 //footnote[ottomanjs][https://ottomanjs.com/]
+
+
+//footnote[ottoman-name][Ottoman(オットマン)の元々の意味は、椅子やソファーの前において、足を乗せるために使う小型のソファーのことです。フットスツールとも呼ばれます。名前は、発祥地であるオスマン帝国に由来します。Ottoman.jsの命名については、カウチ(ソファー)と組み合わせて利用するものであることから来ているのでしょう。]
 
 //footnote[mongoosejs][https://mongoosejs.com/]
 
@@ -463,3 +592,78 @@ Ottomanは、アプリケーションサイドにおけるスキーマによる�
 
 また、Ottomanは、Couchbase Server SDKに対する抽象化レイヤーを提供します。
 Ottomanライブラリが使われる時、Ottomanを介して、透過的にCouchbase Serverとのデータのやり取りが行われます。
+
+
+====[column]Ottoman関連情報
+Ottomanについては、当初本書では扱うことを考えていませんでしたが、MongoDBのMongoose ODM(の存在)を知っている人が持つかもしれない疑問/興味に応えるために、紹介を目的として、ごく基本的な情報のみ記しています。
+
+ここでは、Ottomanに関心を持たれた方向けに、追加の情報を提供します。
+
+Ottomanは、2021年9月に、v2.0がリリースされています。
+
+公式サイトには、クィックスタート(Quick Start with Ottoman v2)が公開されており、利用を始める際の参考にすることができます。
+
+また、v2.0のリリースにあわせて、ブログ記事(「Introducing Ottoman v2.0: An ODM for Node.js & Couchbase」@<fn>{ottoman-2-0-odm-node-js-couchbase})が発表されています。
+この記事は、v2.0の新規機能のみではなく、Ottomanそのものへのイントロダクションとなっているため、Ottomanを使って、何ができるのかを理解するために有用だと思われます。
+
+また、サンプルアプリケーション@<fn>{try-ottoman}も公開されており、v2.0リリースに合わせてアップデートされています。
+
+
+====[/column]
+
+//footnote[quick-start-with-ottoman][https://ottomanjs.com/guides/quick-start.html#quick-start-with-ottoman-v2]
+
+//footnote[ottoman-2-0-odm-node-js-couchbase][https://blog.couchbase.com/ottoman-2-0-odm-node-js-couchbase/]
+//footnote[try-ottoman][https://github.com/couchbaselabs/try-ottoman]
+
+
+== 開発の実践に向けて
+
+本書によって、Couchbase Serverを使った開発について、基本的なイメージを掴むことができたと感じていただけたのなら幸いです。
+
+一方、当然のことながら、アプリケーション開発は、一冊の書籍で語り尽くせてしまうほど単純なものではなく、困難を伴うが故に奥深く、興味深いものです。
+
+ここでは、さらに学習を進めるにあたって有益と思われる情報を紹介し、締め括りとしたいと思います。
+
+=== コミュニティ
+
+Couchbase Dev Communityサイト@<fn>{developer-couchbase}では、Couchbase開発者コミュニティへ向けて、チュートリアルやベストプラクティス等、様々な情報提供が行なわれています。
+また、フォーラム@<fn>{forums-couchbase}で、Couchbase Serverコミュニティエディションに関する疑問について、過去に行なわれた質疑応答を検索したり、質問をすることができます。
+
+=== Couchbase Labsとサンプルアプリケーション
+
+Couchbase Labs GitHub@<fn>{github-couchbaselabs}では、Couchbaseに関連する様々なプロジェクトが公開されています。
+
+Ottomanのようなフレームワークの他、サンプルアプリケーションも公開されています。
+例えば、travel-sampleサンプルバケットを使ったアプリケーションが公開されており、フロントエンドは、Node.jsで実装されています。@<fn>{try-cb-frontend}
+そのフロントエンドと組み合わせて利用することができるバックエンドのREST APIアプリケーションは、各種プログラミング言語での実装が公開されており、Node.js SDKによる実装も存在します。@<fn>{try-cb-nodejs}
+
+
+=== 無償オンライントレーニング
+
+Couchbase, Inc.が運営するCouchbase Academy@<fn>{couchbase-academy}では、各種のトレーニングコースや認証資格が提供されています。
+自分のペースで受講することができる、Node.js SDKについての無償のオンライントレーニングとして、「CB130n: Couchbase Associate Node.js Developer Certification Course@<fn>{node-js-developer-certification-course}」が利用できます(対応する認証資格試験の受講は有償になります)。
+
+=== ドキュメント、API Docs、ソースコード
+
+ドキュメント@<fn>{nodejs-sdk-overview}とAPI Docs@<fn>{nodejs-sdk-api-modules}は、常に開発者の良き友です。
+さらにお望みとあらば、ソースコード@<fn>{github-couchbase-couchnode}を参照することもできます。
+
+
+//footnote[github-couchbaselabs][https://github.com/couchbaselabs/]
+
+//footnote[try-cb-nodejs][https://github.com/couchbaselabs/try-cb-nodejs]
+//footnote[try-cb-frontend][https://github.com/couchbaselabs/try-cb-frontend-v2]
+
+//footnote[developer-couchbase][https://developer.couchbase.com/]
+
+//footnote[forums-couchbase][https://forums.couchbase.com/]
+
+//footnote[couchbase-academy][https://www.couchbase.com/academy]
+//footnote[node-js-developer-certification-course][https://learn.couchbase.com/store/1246860-cb130n-couchbase-associate-node-js-developer-certification-course]
+
+//footnote[nodejs-sdk-overview][https://docs.couchbase.com/nodejs-sdk/current/hello-world/overview.html]
+
+//footnote[nodejs-sdk-api-modules][https://docs.couchbase.com/sdk-api/couchbase-node-client/modules.html]
+
+//footnote[github-couchbase-couchnode][https://github.com/couchbase/couchnode]

@@ -21,4 +21,5 @@ CHAPS:
 
 APPENDIX:
   - nosql-benchmark.re
+  - rdb-migration.re
 POSTDEF:

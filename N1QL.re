@@ -5,7 +5,7 @@ Couchbase ServerのN1QLクエリについて、SQLとの差分を中心に解説
 
 == 基本構造
 
-N1QLは、JSONデータを構成する文字列、数値、真偽値を（直接的に、つまり文字列としてエスケープされた形ではなく）含むことができます。以下に具体的な例を見てみます。
+N1QLは、JSONデータと同じ表現を（直接的に、つまり文字列としてエスケープされた形ではなく）含むことができます。
 
 === コンストラクションオペレーター
 
@@ -17,32 +17,79 @@ N1QLは、JSONデータを構成する文字列、数値、真偽値を（直接
 
 ネステッドオペレーターと呼ばれる以下の表現を利用することができます。
 
- * ドットノーテーション （@<tt>{.}）:
-ネストされたオブジェクト（サブドキュメント）へのパスをドット記号（@<tt>{.}）を使って表現できます。
+ * @<strong>{ドットノーテーション} ネストされたオブジェクト（サブドキュメント）へのパスをドット記号（@<tt>{.}）を使って表現できます。
 
- * 配列表現（インデックス、スライス）:配列へのアクセスに、インデックス（添字）や、スライス（範囲による指定）を利用することができます。
+ * @<strong>{配列表現} 配列へのアクセスに、インデックス（添字）や、スライス（範囲による指定）を利用することができます。
 
 === エスケープ文字
 
-ユーザー定義語句（バケット名、フィールド名）は、「`」(バッククォート)を使ってエスケープすることによって、予約語との衝突を回避することができます。
-Couchbase Serverでは、「-」は、予約語に含まれるため、「-」を含むバケット名を利用する場合、下記のようにバケット名をエスケープする必要があります。
+N1QLクエリ中に現れるバケット名などのユーザー定義語句をバッククォート(@<tt>{`})を使ってエスケープすることによって、予約語との衝突を回避することができます。
+
+N1QLでは、「@<tt>{-}」は、予約語に含まれるため、「@<tt>{-}」を含むユーザー定義語句を利用する場合、エスケープする必要があります。
+
+
+=== クエリコンテキスト
+
+N1QLでスコープとコレクションを活用するために、@<strong>{クエリコンテキスト}を用いることができます。
+
+これにより、SQL/RDB経験者にとって、より馴染みやすいクエリ表現を用いることができます。
+「コンテキスト」という用語自体、SQL/RDB経験者にとってよく親しまれているものだと思いますが、N1QLでも同じ意味合で使われています。
+
+まず、コンテキストを使用しないクエリについて見てみます。
 
 //emlist{
-SELECT ... FROM `travel-sample`
+select * from `travel-sample`.inventory.airline limit 1;
 //}
+
+
+このクエリでは、@<tt>{travel-sample}バケットの@<tt>{inventory}スコープにある@<tt>{airline}コレクションからデータを取得しています。N1QLでは、このような表現が可能です。
+
+一方、SQL/RDB経験者が通常、予期するクエリは、以下のようなものでしょう。
+
+//emlist{
+select * from airline limit 1;
+//}
+
+クエリコンテキストに、@<tt>{travel-sample}バケットの@<tt>{inventory}スコープを設定することによって、上記の表現が成立します。
+
+Couchbase Serverのクエリ操作用のコマンドラインインターフェースでは、下記のように設定することができます。
+
+//cmd{
+cbq> \SET -query_context   "`travel-sample`.inventory";
+//}
+
+Webコンソールのクエリワークベンチでクエリを実行する場合には、リストボックスからバケット名とスコープ名を選択して、クエリコンテキストを設定することができます。
+
+SDKでは、@<tt>{Scope}オブジェクトの@<tt>{query}メソッドを利用します。また、@<tt>{Bucket}オブジェクトの@<tt>{query}メソッドを用いて、コンテキストを使用しないクエリの実行も可能です。
+
+Javaのサンプルコードを示します。
+
+//emlist{
+Bucket bucket = cluster.bucket("travel-sample");
+Scope scope = bucket.scope("inventory");
+
+QueryResult result = scope.query("select * from airline where country = $country LIMIT 10",
+    queryOptions().parameters(JsonObject.create().put("country", "France")));
+//}
+
+以下で用いるN1QLクエリのサンプルでは、クエリコンテキストを指定しない表現を用いています。
+
 
 == ドキュメントキーの利用
 
-Couchbase Serverでは、クエリ内でドキュメントキーを使うことによって、効率的にクエリを実行することが可能です。
+ドキュメントキーの利用は、標準SQLには見られない、Couchbase ServerのN1QLに固有の特徴です。
+
+Couchbase Serverでは、ドキュメントはドキュメントキーによって一意であるため、利用できる場合には、ドキュメントキーを使うことが最も効果的です。
 
 ====[column]ドキュメントキーが利用できる場合のアプローチ
-Couchbase Serverでは、ドキュメントキーが判明している場合には、ドキュメントキーを指定してドキュメントを取り出すことが最も効果的です。
-ドキュメントキーが利用できる場合、必ずしもクエリを用いて(Queryサービスを介して)ドキュメントへアクセスする必要はなく、Dataサービスに対して直接リクエストすることで性能を最適化することが可能です。
+ドキュメントキーが利用できる場合、必ずしもN1QLクエリを用いて(Queryサービスを介して)ドキュメントへアクセスする必要はなく、Dataサービスに対して直接リクエストすることで性能を最適化することが可能です。
 一方、サブクエリを伴うような複雑なクエリの場合などのように、クエリの中でドキュメントキーを効果的に利用できる場面があります。
 
 ====[/column]
 
 === USE KEYS
+
+下記のように、@<tt>{USE KEYS}句に、ドキュメントキーを指定して、クエリを実行することができます。
 
 //emlist{
 SELECT *
@@ -50,13 +97,15 @@ FROM `travel-sample`.inventory.airport
 USE KEYS "airport_1254";
 //}
 
+ドキュメントキーは、配列として複数同時に与えることもできます。
+
 //emlist{
 SELECT *
 FROM `travel-sample`.inventory.airport
 USE KEYS ["airport_1254","airport_1255"];
 //}
 
-@<tt>{USE KEYS}のみを利用してクエリを行う場合、インデックスを作成する必要がありません。
+@<tt>{USE KEYS}のみを利用してクエリを実行する場合、インデックスを作成する必要はありません。
 
 
 
@@ -70,13 +119,29 @@ FROM `travel-sample`.inventory.airport
 WHERE META().id IN ["airport_1254","airport_1255"];
 //}
 
-@<tt>{META().id} を利用してクエリを行う場合、@<tt>{META().id}を用いたインデックスが作成されている必要があります。
+@<tt>{META().id}を利用してクエリを行う場合、@<tt>{META().id}を指定したインデックスが作成されている必要があります。
 
-@<tt>{USE KEYS}の構文では、後続する鉤括弧の中のドキュメントキーは完全一致が想定されていますが、@<tt>{META().id} を利用する場合、N1QLクエリの一部として、@<tt>{LIKE}と組み合わせることができ部分一致検索を行うことができる他、比較演算子による大小比較など、クエリの名で用いる際により自由度が高い表現と言えます。
+@<tt>{USE KEYS}の構文では、ドキュメントキーの完全一致が必須ですが、@<tt>{META().id} を利用する場合、WHERE句の条件の一部として用いることができます。
 
-また、検索条件としてのみではなく、 @<tt>{SELECT META().id FROM ... WHERE ...}のように、条件に一致するドキュメントキーを検索するために用いることもできます。
+例えば、下記のように、@<tt>{LIKE}と組み合わせて部分一致検索を行うことができます。
 
-上記のクエリ中の@<tt>{META().id} の部分は、下記のようなキースペース(の別名)を含んだ表現(@<tt>{META(a).id} )を用いることができます。このクエリのように、クエリの中でキースペースが一意に決まっている場合、指定は必須ではありません。複数のキースペースが混在している中で、ドキュメントのキーを用いる（取り出す）場合には、キースペースを指定した表現を用います。
+//emlist{
+SELECT * from MyFirstBucket where Meta().id LIKE "ABC:%";
+//}
+
+
+また、検索条件としてのみではなく、次のように、条件に一致するドキュメントキーを検索するために用いることもできます。
+
+//emlist{
+SELECT META().id FROM ... WHERE ...;
+//}
+
+このように、@<tt>{META().id}は、構文として成立している限り自由に使うことができるため、N1QL固有の@<tt>{USE KEYS}句よりも自由度が高いと言えます。
+@<tt>{USE KEYS}句では必要ない、インデックスの作成が必要になるという違いも、ここから自然に理解されるのではないでしょうか。
+
+なお、@<tt>{META()} という表現に含まれる括弧は、下記のように、キースペース(または、その別名)を含んだ表現を用いるために存在します。
+ただし、これまで紹介した例のように、クエリの中でキースペースが一意に決まっている場合には、省略することができます。
+複数のキースペースが混在しているクエリの中で用いる場合には、キースペースを指定した表現を行います。
 
 //emlist{
 SELECT *
@@ -85,11 +150,13 @@ WHERE META(a).id IN ["airport_1254","airport_1255"];
 //}
 
 
-== JSONから値のみを取得: RAW | ELEMENT | VALUE
+== フィールドから値のみを取り出す
 
-@<tt>{RAW},@<tt>{ELEMENT},@<tt>{VALUE}, これらは全て同義語です（以下では、@<tt>{RAW}を用います）。
+=== RAW | ELEMENT | VALUE
 
-N1QLで検索された結果は、JSONデータとして、フィールド名と値のペアとなることが基本ですが、@<tt>{RAW} キーワードを @<tt>{SELECT}句と共に用いることで、フィールドの値のみを取り出すことができます。
+@<tt>{RAW}、@<tt>{ELEMENT}、@<tt>{VALUE}、これらは全て同義語です（以下では、@<tt>{RAW}を用います）。
+
+N1QLの実行結果は通常、フィールド名とその値を含むJSONデータですが、@<tt>{RAW} キーワード用いることで、値のみを取り出すことができます。
 
 比較のため、まず@<tt>{RAW} を用いない場合を見てみます。
 
@@ -99,7 +166,7 @@ FROM `travel-sample`.inventory.airport
 ORDER BY city LIMIT 5;
 //}
 
-上記クエリの結果は、以下のようにJSONデータ（フィールド名と値のペア）の配列になります。
+上記クエリの結果は、以下のように名前と値のペアからなるJSONデータの配列になります。
 
 //emlist{
 [
@@ -130,7 +197,7 @@ FROM `travel-sample`.inventory.airport
 ORDER BY city LIMIT 5;
 //}
 
-結果は、値の配列になります。
+結果は、値のみの配列になります。
 
 //emlist{
 [
@@ -163,43 +230,148 @@ ORDER BY city LIMIT 5;
 //}
 
 
-== 配列からデータを取得
+== 複数の値をまとめて扱う
 
-@<tt>{ARRAY} または @<tt>{FIRST} から始まり、@<tt>{END} で基本単位となります。@<tt>{IN}または @<tt>{WITHIN} と @<tt>{FOR}により、コレクションの要素へのループを表現しています。
+SQL経験者にとって、@<tt>{IN}句を使って、複数の値を指定することは、目新しいものではないでしょう。
+ここでは、N1QLにおける@<tt>{IN}と@<tt>{WITHIN}について解説します。
 
-この構文を利用して、ドキュメントに含まれる配列が要素として、オブジェクト（サブドキュメント）を持っている時、そのオブジェクトのフィールドを配列として取り出すことができます。
+=== IN
+
+N1QLにおける@<tt>{IN}句は、SQLの@<tt>{IN}句に近い働きをします。
+@<tt>{IN}句は、配列のようなフラットなデータシーケンスを対象とします。
 
 //emlist{
-( ARRAY | FIRST ) var1 FOR var1 ( IN | WITHIN ) expr1　END
+SELECT * FROM `travel-sample`.inventory.airline AS t
+WHERE country IN ["United Kingdom", "France"];
+//}
+
+=== WITHIN
+
+N1QLでは、検索条件に複数の値を指定する際に、@<tt>{WITHIN}句を使って、JSONデータのネストした構造を対象とすることができます。
+
+JSONデータに対する条件指定において、@<tt>{IN}は、トップレベルの要素を対象とするのに対して、@<tt>{WITHIN}は、その子、および子孫を含めて対象とします。
+
+具体的に見ていきます。
+例えば、以下のクエリでは、@<tt>{WITHIN}句に(別名を介して)@<tt>{hotel}コレクションを指定しています。
+
+//emlist{
+SELECT * FROM `travel-sample`.inventory.hotel AS t WHERE "Walton Wolf" WITHIN t;
+//}
+
+以下は結果の例です。
+
+//emlist{
+[
+  {
+    "t": {
+      "id": 10851,
+      "name": "Tantallon House B&B",
+      "address": "Gilsland, CA8 7DA",
+      "country": "United Kingdom",
+      "reviews": [
+        {
+          "author": "Walton Wolf",
+          "content": "Myself and a mate stayed here the last week of April 2010. ...",
+          "date": "2014-06-07 03:54:50 +0300",
+          "ratings": {
+            "Cleanliness": 4,
+            "Location": 4,
+            "Overall": 4,
+            "Rooms": 2,
+            "Service": 3,
+            "Sleep Quality": 4,
+            "Value": 3
+          }
+        },
+        {
+          "author": "Catharine Funk",
+          "content": "My first trip to new york city was a disaster because of this hotel. ...",
+          "date": "2012-01-02 21:29:27 +0300",
+          "ratings": {
+            ...
+          }
+        },
+        {
+          ...
+        }
+      ],
+      ...
+    }
+  }
+]
+//}
+
+検索結果として、１つのドキュメントが該当しています。トップレベルの@<tt>{reviews}フィールドは、値を配列として持っており、その要素はオブジェクトです。
+配列の先頭要素のオブジェクトの@<tt>{author}フィールドの値が、検索条件に用いられた@<tt>{"Walton Wolf"}であることが分かります。
+
+
+== 配列へのアクセス
+
+N1QLで、配列へのアクセスに用いられる構文は、@<tt>{ARRAY}または @<tt>{FIRST}から始まり、@<tt>{END}で終わります。
+
+下記に基本構文を示します(簡単な構文からはじめ、徐々に複雑な構文を紹介していきます)。
+
+この構文を利用して、配列の要素に対して条件指定を行って要素を抽出したり、配列が要素として値ではなくオブジェクトを持っている時、そのオブジェクトのフィールドを配列として取り出すことができます。
+
+//emlist{
+( ARRAY | FIRST ) var1 FOR var1 ( IN | WITHIN ) expr1 END
 //}
 
 === ARRAY
 
-配列の要素全体を扱います（配列の要素に対して @<tt>{map} 操作を実行します）。
+配列の要素全体を扱います（プログラミング言語の文脈で言うところの、シーケンスに対するmap操作にあたります）。
 
 === FIRST
 
-@<tt>{ARRAY} を @<tt>{FIRST}に置き換えることで、配列のはじめの要素のみを扱います。
+@<tt>{ARRAY} を @<tt>{FIRST}に置き換えることで、配列のはじめの要素のみを扱うことになります。
+
 
 === WHEN
 
-@<tt>{WHEN} 句により、条件指定を付け加えることが可能です。配列の要素に対して@<tt>{filter} 操作を実行します。
+下記構文のように、@<tt>{WHEN} 句を使って、条件指定を付け加えることが可能です(配列の要素に対してfilter操作を実行します)。
 
 //emlist{
-( ARRAY | FIRST ) var1 FOR var1 ( IN | WITHIN ) expr1　[ ( WHEN cond1 [ AND cond2 ] ) ] END
+( ARRAY | FIRST ) var1 FOR var1 ( IN | WITHIN ) expr1 [ ( WHEN cond1 [ AND cond2 ] ) ] END
 //}
 
-下記の通り、上記説明した要素の組み合わせにより複雑なステートメント用いることができます。
+
+
+以下にクエリとその結果のサンプルを示します(構文の理解を容易にするため、クエリ内でデータを定義しています)。
 
 //emlist{
-( ARRAY | FIRST ) var1 FOR var1 ( IN | WITHIN ) expr1　
-[ ,var2 ( IN | WITHIN ) expr2 ]*
+select ARRAY v FOR v IN [1, 2, 3, 4, 5] WHEN v > 2 END as res;
+//}
+
+//emlist{
+    "results": [
+        {
+            "res": [
+                3,
+                4,
+                5
+            ]
+        }
+    ]
+//}
+
+下記のように、配列要素がオブジェクトの場合、フィールドに対して条件指定を行ったり、特定のフィールドを取り出すことができます。
+
+//emlist{
+SELECT ARRAY v.flight FOR v IN schedule WHEN v.utc > "19:00" AND v.day = 5 END AS fri_evening_flights
+FROM `travel-sample`.inventory.route
+LIMIT 5
+//}
+
+最後に、これまで説明した構文を踏まえ、配列を複数(@<tt>{var1}、@<tt>{var2})指定した、下記のような表現を用いることができます。
+
+//emlist{
+( ARRAY | FIRST ) var1 FOR var1 ( IN | WITHIN ) expr1 [ ,var2 ( IN | WITHIN ) expr2 ]*
 [ ( WHEN cond1 [ AND cond2 ] ) ] END
 //}
 
 == 配列を検索条件に利用
 
-@<tt>{ANY}　または @<tt>{EVERY} から始まり、@<tt>{END}までで基本単位となります。@<tt>{SATISFIES} で条件を指定します。
+配列を検索条件の中で用いる際の構文は、@<tt>{ANY}または @<tt>{EVERY} から始まり、@<tt>{END}で終わります。@<tt>{SATISFIES} で条件を指定します。
 
 //emlist{
 ( ANY | EVERY ) var1 ( IN | WITHIN ) expr1
@@ -207,13 +379,13 @@ ORDER BY city LIMIT 5;
 SATISFIES condition END
 //}
 
-この構文は、配列から条件が真となった要素を取り出しているのではないことに注意してください。
-条件が真となった際に、その配列が含まれているドキュメント(の指定されたフィールド)をクライアントに返します。
-これは、SQLの WHERE条件が検索に使ったカラムを取り出すものではないのと同様です。
+条件が真となった際に、その配列を持つドキュメントが、検索結果に含まれます。
 
 === ANY
 
-配列に条件で指定した要素が一つでも含まれる場合、真となります。
+配列に条件で指定した要素が１つでも含まれる場合、真となります。
+
+下記に利用例を示します。
 
 //emlist{
 SELECT *
@@ -226,6 +398,8 @@ item.count >= 5 END
 
 配列の全ての要素が、指定した条件に一致する場合、真となります。
 
+下記は、上記例のクエリの@<tt>{ANY}を@<tt>{EVERY}に変更しただけですが、条件に一致するドキュメントの範囲が狭まる(可能性が高い)ことは理解しやすいと思います。
+
 //emlist{
 SELECT *
 FROM retail.east.order o
@@ -233,30 +407,35 @@ WHERE EVERY item IN o.lineItems SATISFIES
 item.count >= 5 END
 //}
 
-=== IN | WITHIN
-
-@<tt>{IN} 句が、指定された配列のトップレベルの要素を検索するのに対して、@<tt>{WITHIN} 句は、現在の配列とその子、および子孫を含めて検索対象とします。
-
-== ドキュメントキーによる結合: NEST
-
-@<tt>{NEST} は、外部の子ドキュメントを親の下に埋め込む特別なタイプの @<tt>{JOIN}です。
-ドキュメント・キーを介した参照関係でデータをモデル化した際に用いる事ができます。@<tt>{ON KEYS}により、対象とするドキュメントのキーを指定することができます。
 
 
-以下の2つのコレクションとドキュメントに対するクエリについて考えてみます(データの構造および内容は、あくまでこの箇所での説明のためのものであり、他の箇所と同じでないことにご注意ください)。
+== サブドキュメントの階層操作
 
-コレクション：@<tt>{retail.east.order}
+=== NEST
+
+@<tt>{NEST}は、外部のドキュメントを、子ドキュメントとして親ドキュメントの中に(サブドキュメントとして)埋め込みます。
+結合の特別なタイプであると言った方が、理解しやすいかもしれません(ここで登場する、@<tt>{ON KEYS}句については、@<tt>{NEST}を使わない結合でも利用します)。
+
+具体的な利用法として、関連のあるデータをドキュメントキーを介した参照関係を用いて、複数のドキュメントとしてモデル化した際に活用する事ができます。
+それらのドキュメントを結合するために、@<tt>{ON KEYS}を用いて、結合対象とするドキュメントのキーを指定します。
+
+
+以下の２種類のデータに対するクエリについて考えてみます。
+リレーショナルモデルの解説では、よく知られた例である「受注伝票」と「受注明細」データが表現されています。
+
+まず、「受注伝票」を表すデータ(@<tt>{retail.east.order}コレクション)のサンプルを示します。
 
 //emlist{
 {
 "order_id":1234,
 "customer_id":"34567",
 "total_price":"65.5",
-"lineitems":["o11","o12","o13"]
+"lineitems":["o11","o12"]
 }
 //}
 
-コレクション：@<tt>{retail.east.lineItem}
+次に、「受注明細」を表すデータ(@<tt>{retail.east.lineItem}コレクション)のサンプルを示します。
+ドキュメントキーは、@<tt>{lineitem_id}の値と一致していると考えてください。
 
 //emlist{
 {
@@ -282,6 +461,8 @@ item.count >= 5 END
 }
 //}
 
+下記に、これらのデータを結合するクエリを示します。
+
 //emlist{
 SELECT ordr.order_id,
 ARRAY {“item_id”: l.item_id, “quantity”:l.qty} FOR l IN line END as items
@@ -290,32 +471,27 @@ NEST retailsample.east.lineItem line
 ON KEYS ordr.lineitems
 //}
 
-結果は、下記のように、一つのドキュメントになります。
+結果は、以下のようになります。
 
 //emlist{
 [
 {
 "items":[
-    {"item_id":"789", "qty":"3"\},
-    {"item_id":"234", "qty":"5"\}
-  ];
+    {"item_id":"789", "qty":"3"},
+    {"item_id":"234", "qty":"5"}
+  ],
   "order_id":"1234"
-},
-{
-  "items":[
-    {"item_id":"899", "qty":"8"\},
-    {"item_id":"651", "qty":"2"\}
-  ];
-  "order_id":"9812"
 }
 ]
 //}
 
-== サブドキュメントのフラット化: UNNEST
+=== UNNEST
 
-@<tt>{UNNEST}は、ネストされたオブジェクトを最上位ドキュメントとして表示するために用います。
+@<tt>{UNNEST}は、ネストされたオブジェクト(サブドキュメント)をドキュメントのトップレベルに表示するために用います。
 
-下記のようなネストされた構造を持つデータを想定します（受注明細データを中に含む受注伝票データ）。
+下記のようなネストされた構造を持つデータを想定します。
+
+先ほどとは逆に、受注伝票データが受注明細データを含む構造になっています。
 
 //emlist{
 {
@@ -323,16 +499,16 @@ ON KEYS ordr.lineitems
 "status": "Shipped",
 "items": [
   {
-  "prodId": "AAA-222",
-  "qty": 1
+    "prodId": "AAA-222",
+    "qty": 1
   },
   {
-  "prodId": "BBB-333",
-  "qty": 2
+    "prodId": "BBB-333",
+    "qty": 2
   },
   {
-  "prodId": "CCC-444",
-  "qty": 3
+    "prodId": "CCC-444",
+    "qty": 3
   }
 ]
 }
@@ -349,13 +525,13 @@ ORDER-0001	Shipped	CCC-444	3
 //}
 
 
-クエリでは、@<tt>{UNNEST}をサブドキュメントに対して指定し、@<tt>{as}で別名をつけたものを @<tt>{SELECT}句の中で使用します。
+下記のように、サブドキュメントに対して@<tt>{UNNEST}を指定し、@<tt>{as}で別名をつけたものを@<tt>{SELECT}句の中で使用します。
 
 //emlist{
 SELECT ord.ordId, ord.status, item.* FROM retail.east.order ord UNNEST items as item
 //}
 
-下記のようなフラットな構造のJSONが取り出されます。
+これにより、下記のようなフラットな構造のJSONが取り出されます。
 
 //emlist{
 [
@@ -365,59 +541,64 @@ SELECT ord.ordId, ord.status, item.* FROM retail.east.order ord UNNEST items as 
 ]
 //}
 
-上記のデータは、先述のテーブル形式データとの比較のために整形しています。
+なお、上記のデータは、先述のテーブル形式データとの比較のために整形しています。
 実際には、フィールドの出現順はこの通りではないことにご注意ください。JSONオブジェクトのフィールドはその登場順序に意味を持ちません。
 
 
 == データ型
 
+ここでは、Couchbase ServerのN1QL固有のデータ型(Data Types@<fn>{datatypes})について理解するために、標準SQLに含まれる関連性の高いデータ型とあわせて解説します。
 
-SQL利用者にとって、「NULL」という予約語や、@<tt>{IS [NOT] NULL}という比較演算は、馴染みがあるところです。
-NULLは、データが存在しないことである、と言ったりします。より正確には、値が存在しない状態を表しています。ここで、データと値の違いはどこにあり、なぜ後者がより正確なのでしょうか？「データ」という表現は曖昧に取れる一方、「値」という言葉には、数学でいうところのXの値という使い方に見られるように（もちろん、プログラミングでいうところの、変数の値、でもいいわけですが）、単にそれ自体で存在しているデータを超えた含意があります。データベースのコンテクストでいえば、テーブルスキーマにおけるカラムは、一定のデータ型を持ちますが、数値型であれば0、文字列型であれば空文字（長さ0の文字）のようなデータ型固有の表現とは別に、値そのものが存在していない状態がNULLで表現されます。
-JSONにおいても、「フィールドの値が未定義」であることを意味する「null」という予約語が定義されています。一方、JSONのように、データ自体にデータ構造の情報が含まれる（データとは別にスキーマが存在していない）、データにあっては、「フィールドが未定義」の場合を考慮する必要があります。
+SQL利用者にとって、「NULL」という予約語や、@<tt>{IS [NOT] NULL}という比較演算は、馴染みのあるものでしょう。
+NULLは、データが存在しないことである、と言ったりします。より正確には、値が存在しない状態を表しています。ここで、データと値の違いはどこにあり、なぜ後者がより正確なのでしょうか？「データ」という表現は曖昧に取れる一方、「値」という言葉には、数学でいうところのXの値という使い方に見られるように（もちろん、プログラミングでいうところの、変数の値、でもいいわけですが）、単にそれ自体で存在しているデータを超えた含意があります。
+リレーショナルデータベースでは、カラムは一定のデータ型を用いて定義されますが、数値型であれば0、文字列型であれば空文字（長さ0の文字）のようなデータ型固有の表現とは別に、値そのものが存在していない状態がNULLで表現されます。
+JSONにおいても、「フィールドの値が未定義」であることを意味する「null」という予約語が定義されています。一方、JSONのように、データ自体にデータ構造の情報が含まれる（データとは別にスキーマが存在していない）、データにあっては、「フィールドが未定義」のケースを考慮する必要があります。
 
 JSONデータに対して、N1QLによるクエリを実行した場合、他のドキュメントには存在するフィールドが、一部のドキュメントには存在しないことがあり得ます（RDB/SQLでは、テーブル内のすべてのレコードが同一のスキーマに従うため、このような状況が起こりません）。
-N1QLには、そのようなギャップを埋めるため、@<tt>{MISSING}というキーワード（データ型）が用意されています。以下、N1QLにおけるデータ型としての、　@<tt>{NULL}と@<tt>{MISSING}の定義を確認した後に、N1QLにおける、存在しない値に対する比較演算について見ていきます。
+N1QLには、そのようなギャップを埋めるため、@<tt>{MISSING}というキーワード（データ型）が用意されています。
+
+以下、N1QLにおけるデータ型としての、@<tt>{NULL}と@<tt>{MISSING}の定義を確認した後に、N1QLにおける、存在しない値に対する比較演算について見ていきます。
 
 
 === MISSING
 
 
-N1QLにおいて@<tt>{MISSING}は、JSONドキュメントでフィールド（名前と値のペア）が存在していない（欠落している）ことを表します。
-N1QLにおけるSELECT文で、検索結果として返されるフィールドが存在しない（MISSINGである）データがある場合、（クエリ処理において、内部的にはMISSINGはリテラル式で扱われますが）、最終的な結果の配列中では、（JSONデータにおける未定義の値である）NULLに変換されます。
+N1QLにおいて@<tt>{MISSING}は、JSONドキュメントの中にそのフィールド（名前と値のペア）が存在していない（欠落している）ことを表します。
+
+N1QLでは、SELECT句で指定されたフィールドが存在しない（MISSINGである）データがある場合、（内部的にはMISSINGリテラル式で処理されますが）検索結果データでは、（JSONデータにおける未定義の値である） nullに変換されます。
 
 
 === NULL
 
 
-N1QLは、キーワードNULLを使用して空の値を表します。データ挿入、更新時に、フィールドの値をNULLにすることができます。
+N1QLは、キーワード@<tt>{NULL}を使用して空の値を表します。データ挿入、更新時に、フィールドの値をNULLにすることができます。
 
+また、NULL値は、ゼロ除算や間違ったタイプの引数の受け渡しなど、特定の操作によっても生成され得ます。
 
-NULL値は、ゼロ除算や間違ったタイプの引数の受け渡しなど、特定の操作によっても生成され得ます。
+なお、N1QLのNULLでは大文字と小文字が区別されません。たとえば、@<tt>{null}、@<tt>{NULL}、@<tt>{Null}、および@<tt>{nUll}はすべて同等です。
 
-NULLでは大文字と小文字が区別されません。たとえば、null、NULL、Null、およびnUllはすべて同等です。
-
-Couchbase公式ドキュメント Data Types MISSING@<fn>{datatypes}
 
 //footnote[datatypes][https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/datatypes.html#datatypes]
 
 == 比較演算
 
+ここでは、Couchbase ServerのN1QL固有の比較演算子(Comparison Operators@<fn>{comparisonops})について見ていきます。
 
-@<tt>{IS [NOT] NULL|MISSING|VALUED}演算子を使用すると、データセット内の属性の存在（または不在）に基づいて条件を指定できます。
+@<tt>{IS [NOT] NULL | MISSING | VALUED}演算子を使用すると、データセット内の値や属性の存在（または不在）に基づいて条件を指定できます。
 
-これらは、@<tt>{IS [NOT] NULL}と@<tt>{IS [NOT] MISSING}は、データ型の定義から想像される通りの挙動となります。具体的なクエリと結果の例を見るのが、理解に役立つでしょう。
+@<tt>{IS [NOT] NULL}と@<tt>{IS [NOT] MISSING}は、データ型の定義から想像される通りの挙動となります。
+具体的なクエリと結果の例を見るのが、理解に役立つでしょう。
 
 
 === IS NULL
 
-//emlist[][sql]{
+//emlist{
 SELECT fname, children
-    FROM tutorial.sample.person
-       WHERE children IS NULL
+FROM tutorial.sample.person
+WHERE children IS NULL
 //}
 
-//emlist[][json]{
+//emlist{
 {
   "results": [
     {
@@ -430,43 +611,193 @@ SELECT fname, children
 
 === IS MISSING
 
-//emlist[][sql]{
+//emlist{
 SELECT fname
-   FROM tutorial.sample.person
-      WHERE children IS MISSING
+FROM tutorial.sample.person
+WHERE children IS MISSING
 //}
 
-//emlist[][json]{
-{
-  "results": [
-    {
-      "fname": "Harry"
-    },
-    {
-      "fname": "Jane"
-    }
-  ]
-}
+//emlist{
+[
+  {
+    "res": [
+      3,
+      4,
+      5
+    ]
+  }
+]
 //}
 
 === IS VALUED
 
 @<tt>{NULL}と@<tt>{MISSING}は、JSONデータ上明らかに異なっており、区別する方法が必要である一方、アプリケーションにおける検索条件としてはこれらを区別する必要がない場合が考えられます。その際に@<tt>{AND}や@<tt>{OR}を使って複数の検索条件を並置する代わりに、N1QLでは、@<tt>{IS [NOT] VALUED}という比較演算が利用可能です。
 
- * @<tt>{IS VALUED}は、値が'MISSING'でも'NULL'でもない場合、TRUE（真）になります。
- * @<tt>{IS NOT VALUED}は、値が'MISSING'あるいは'NULL'である場合、TRUE（真）になります。
+ * @<tt>{IS VALUED}は、値が@<tt>{MISSING}でも@<tt>{NULL}でもない場合、真になります。
+ * @<tt>{IS NOT VALUED}は、値が@<tt>{MISSING}あるいは@<tt>{NULL}である場合、真になります。
 
 
-=== 参考情報
 
-Couchbase公式ドキュメント Comparison Operators@<fn>{comparisonops}
+//footnote[comparisonops][https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/comparisonops.html]
 
 
-== SQLと比べた場合の制約
 
- * @<tt>{FULL [OUTER] JOIN} はサポートされていません
- * @<tt>{CROSS JOIN} はサポートされていません
- * @<tt>{RIGHT [OUTER] JOIN} は、JOIN連結の最初の (または唯一の)クエリである必要があります
+
+== 結合(JOIN)
+
+N1QLで利用することのできる、以下の3つの結合(JOIN@<fn>{63c6596bad48de18597b283a703bfc2f})のタイプについて解説します。
+
+ * ANSI JOIN
+ * ルックアップ(Lookup)JOIN
+ * インデックス(Index)JOIN
+
+ANSI JOIN以外の２つの種類のJOINでは、N1QL独自のキーワードが用いられます。
+それらは、@<tt>{ON KEYS}と @<tt>{ON KEY ... FOR} です。
+これらは、JSONドキュメントのドキュメントキーによる結合をサポートするために用意されています。
+
+ここでは、以下のデータモデルを用いて、例示による整理を行います。
+
+ * @<tt>{airline}(航空会社)と@<tt>{route}(経路)という、２つの種類のデータモデルがある
+ * @<tt>{route}データモデルは、@<tt>{airline}への参照を含む。参照の値は@<tt>{airline}ドキュメントのキーと一致している。
+
+=== ANSI JOIN
+
+ANSI JOINは、N1QL独自のキーワードを用いない、SQLの一般的なJOINです。
+ANSI JOINでドキュメントキーを用いた結合を行うために、@<tt>{META().id}を用いることができます。この場合、@<tt>{META().id}を含む適切なインデックスが作成されている必要があります。 
+
+以下に、基本構文を示します。
+
+//emlist{
+lhs-expr
+JOIN rhs-keyspace
+ON any join condition
+//}
+
+
+下記は、@<tt>{META().id}を用いたANSI JOINの例です。
+
+//emlist{
+SELECT *
+FROM `travel-sample`.inventory.route r
+JOIN `travel-sample`.inventory.airline a
+ON r.airlineid = META(a).id
+//}
+
+====[column]N1QLのJOINと標準SQLとの違い
+
+N1QLのANSI JOINには、SQL標準と比べて、以下のような制約があります。
+
+ * @<tt>{FULL [OUTER] JOIN} はサポートされていません。
+ * @<tt>{CROSS JOIN} はサポートされていません。
+ * @<tt>{RIGHT [OUTER] JOIN} は、JOIN連結の最初(または、それのみ)である必要があります。
+
+====[/column]
+
+=== ルックアップJOIN
+
+ルックアップJOINでは、@<tt>{ON KEYS}句を用います(複数形の@<tt>{KEYS}です)。ドキュメントキーを用いた結合を行うために、インデックスを利用する必要はありません。 
+
+以下に、基本構文を示します。
+
+//emlist{
+lhs-expr
+JOIN rhs-keyspace
+ON KEYS lhs-expr.foreign-key
+//}
+
+上述のANSI JOINの例と、同内容のクエリを下記のように表現することができます。
+
+//emlist{
+SELECT *
+FROM `travel-sample`.inventory.route r
+JOIN `travel-sample`.inventory.airline
+ON KEYS r.airlineid
+//}
+
+=== インデックスJOIN
+
+@<tt>{ON KEY ... FOR}句を用います(単数形の@<tt>{KEY}です)。
+インデックスJOINでは、適切なインデックスが作成されている必要があります。
+
+以下に、基本構文を示します。
+
+//emlist{
+lhs-keyspace
+JOIN rhs-keyspace
+ON KEY rhs-keyspace.idx_key
+FOR lhs-keyspace
+//}
+
+
+下記のクエリ例では、ルックアップJOINのケースと@<tt>{FROM ... JOIN ...}で指定されているキースペース（コレクション）の順序が異なっていることに注目してください。 
+
+//emlist{
+SELECT *
+FROM `travel-sample`.inventory.airline a
+JOIN `travel-sample`.inventory.route r
+ON KEY r.airlineid
+FOR a
+//}
+
+上記のクエリを実行するためには、下記のようなインデックスが必要です。
+
+//emlist{
+CREATE INDEX route_airlineid ON `travel-sample`.inventory.route(airlineid);
+//}
+
+インデックスJOINを使用すると、結合句の方向を反転できます。
+キーによる結合以外の条件指定のため、ルックアップJOINが利用できない場合、インデックスJOINが使用できます。
+
+サンプルを示した解説は、データモデルの説明を含めて、長々としたものになってしまうため、ドキュメント@<fn>{join-examples-4}の記述に譲ります。
+
+//footnote[63c6596bad48de18597b283a703bfc2f][https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/join.html]
+
+//footnote[join-examples-4][https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/join.html#examples-4]
+
+
+
+
+== ユーザー定義関数
+
+Couchbase ServerのN1QLでは、ユーザーが関数を定義して、組み込み関数と同じように、任意の式で呼び出すことができます。
+
+====[column]エディションによる差異
+ユーザー定義関数は、エンタープライズエディションでのみ利用することができます。
+
+====[/column]
+
+ここでは、ユーザー定義関数を用いて、何が実現できるかを把握するための情報を提供します。
+実際に利用するために必要となる、定義方法や呼び出し方を含めた、具体的な詳細には触れませんが、必要に応じて、ドキュメント@<fn>{4fec4dc4c082b58a3a0c563887d0169d}を参照してください。
+
+=== ユーザー定義関数の種類
+
+ユーザー定義関数は@<tt>{CREATE FUNCTION}@<fn>{9691b9034b80d65250e6f45a580041f0}ステートメントを用いて定義します。
+
+定義の仕方の異なる次の2つの種類のユーザー定義関数があります。
+
+ * @<strong>{インライン関数}は、N1QLクエリを使用して定義されます。複雑な式や、何度も用いられる式に名前を付けて定義し、再利用することができます。
+ * @<strong>{外部関数}は、N1QLではなく、プログラミング言語を使用して定義されます。この機能により、N1QL式を使用して定義するのが困難または不可能な関数を作成することができます。構文上は、他の言語の利用も想定される書式が用いられていますが、現時点でサポートされているプログラミング言語はJavaScriptのみです。
+
+=== 関数呼び出しの種類
+
+ユーザー定義関数には次の2つの呼び出し方法があります。
+
+ * N1QLの任意の式中で、組み込み関数と同じように、呼び出すことができます。ただし、Couchbase Serverのユーザー定義関数は、単純なインライン関数を超えた高い自由度を持ち、関数の中でドキュメントの変更などを行うことができる反面、このような「副作用」を持つ、ユーザー定義関数をN1QL式の中から呼び出した場合には、エラーが発生することに注意が必要です。
+ * @<tt>{EXECUTE FUNCTION}@<fn>{973a71b323540fcd67ec61262da9d1de}ステートメントを使って、ユーザー定義関数を単体で直接実行することが可能です。これは、ユーザー定義関数をテストする際に用いることができる他、@<tt>{EXECUTE FUNCTION}ステートメントでは副作用のある関数を実行することが可能なため、RDBMSにおけるストアドプロシージャのような使い方ができます(なお、Couchbase Serverでは、RDBMSにおけるトリガに類似する機能としてEventingサービスを利用することができます)。
+
+====[column]エディションによる差異
+Eventingサービスは、エンタープライズエディションでのみ利用することができます。
+
+====[/column]
+
+
+//footnote[4fec4dc4c082b58a3a0c563887d0169d][https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/userfun.html]
+
+//footnote[9691b9034b80d65250e6f45a580041f0][https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/createfunction.html]
+
+//footnote[973a71b323540fcd67ec61262da9d1de][https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/execfunction.html]
+
+
 
 
 ====[column]エディションによる差異
@@ -482,214 +813,3 @@ Couchbase公式ドキュメント Comparison Operators@<fn>{comparisonops}
  * クエリのモニタリング
 
 ====[/column]
-
-== 結合
-
-Couchbase ServerのN1QLで利用することのできる、以下の3つの結合のタイプについて解説します。
- * @<tt>{ANSI JOIN}
- * @<tt>{Lookup JOIN}
- * @<tt>{Index JOIN}
-
-下の二つのJOINでは、混同しやすいCouchbase Server独自のキーワードが用いられます。それらは、@<tt>{ON KEYS}と @<tt>{ON KEY ... FOR} です。
-
-ここでは、これらの用法について、以下のデータモデルを用いて、例示による整理を行います。
-
- * 「ルート」と「エアライン(航空会社)」という、二つの種類のデータモデルがある
- * 「ルート」モデルのデータ構造は、「エアライン」への参照（複数）を含む。参照は、「エアライン」ドキュメントのキーと一致している。
-
-=== ANSI JOIN
-
-ANSI JOINでドキュメントキーを用いた結合を行うためには、@<tt>{META().id}を利用し、適切なインデックスが作成されている必要があります。 
-
-
-//emlist{
-lhs-expr
-JOIN rhs-keyspace
-ON any join condition
-//}
-
-
-//emlist{
-SELECT *
-FROM `travel-sample`.inventory.route r
-JOIN `travel-sample`.inventory.airline a
-ON r.airlineid = META(a).id
-//}
-
-=== Lookup JOIN
-
-@<tt>{ON KEYS}句を用います。ドキュメントキーを用いた結合を行うために、インデックスを利用する必要はありません。 
-
-
-//emlist{
-lhs-expr
-JOIN rhs-keyspace
-ON KEYS lhs-expr.foreign-key
-//}
-
-
-
-//emlist{
-SELECT *
-FROM `travel-sample`.inventory.route r
-JOIN `travel-sample`.inventory.airline
-ON KEYS r.airlineid
-//}
-
-=== Index JOIN
-
-@<tt>{ON KEY ... FOR}句を用います。下記のクエリ例では、Lookup JOINのケースと@<tt>{FROM ... JOIN ...}で指定されているキースペース（コレクション）の順序が異なっていることに注目ください。 
-Index JOINでは、適切なインデックスが作成されている必要があります。
-
-
-//emlist{
-lhs-keyspace
-JOIN rhs-keyspace
-ON KEY rhs-keyspace.idx_key
-FOR lhs-keyspace
-//}
-
-
-
-//emlist{
-SELECT *
-FROM `travel-sample`.inventory.airline a
-JOIN `travel-sample`.inventory.route r
-ON KEY r.airlineid
-FOR a
-//}
-
-
-=== 参考情報
-
-Couchbase公式ドキュメント JOIN Clause@<fn>{63c6596bad48de18597b283a703bfc2f}
-
-== レンジスキャン
-
-=== 分散データベース一般のレンジスキャン
-
-分散データベースにおいては、一般的に（キーを用いた）レンジスキャンを効果的に行うためには、論理的に関連性のあるキーを設計するのみではなく、あらかじめそのレンジに含まれるデータが、同じ、あるいは近い場所（ノード、リージョン、パーティション）に存在する様に、（物理）設計を行う必要があります。
-
-例えば、MongoDBでは、シャーディングの方法として、ハッシュとレンジのいずれかを要件に応じ選択することになります（この選択が物理配置に影響します）。HBaseでは、データはRowKeyで（物理的に）ソートされます。 
-
-=== Couchbase Serverの特殊性
-
-Couchbase Serverは、N1QLというSQLをJSONのために拡張したクエリ言語で、検索を行うことができます。その際、重要なことは、Couchbase Serverの中心的なアーキテクチャーはKVS(キーバリューストア)であり、そのレベルでは、バリューとしてJSONデータを格納しているのに過ぎないため、検索を行うための前提として、インデックスの定義・構築が行われている必要があります。
-
-そもそも、スキーマレスなデータストアに対して、どうやって検索が可能なのか(全件サーチするのでなければ)？という視点からは、これはむしろ納得できるものとして受け止められるかと思います。
-
-ただし、ここで留意が必要なのは、KVSのキーを使った検索（つまりキーを特定したアクセスではなく、ある範囲のキーを指定してデータを一度に取得するという要件）であっても、事前にインデックスの作成が欠かせない、というところです。
-このことをよりよく理解するために、以下の二つの背景を押させておくことが重要です。
-
- * Couchbase　Serverにおいては、クエリおよびインデックスサービスは、（KVSである）データサービスとは、アーキテクチャー上完全に独立している（利用する要件がない場合は、無効にすることができ、そのために潜在的にリソースが消費されることはない）。
-
- * Dataサービスのキーのシャーディング方法には、ハッシュが用いられており、ユーザによって変更する余地を残していない。（CouchbaseServerは、メモリファーストアーキテクチャーと、クラスターマップを用いたクライアントからのノードへの直接のアクセスによって、データをチャンクで取り出すよりも、高い性能を実現している）
-
-=== N1QLによるレンジスキャン
-
-下記のようなインデックスを作成します。
-
-//emlist{
-CREATE INDEX range_index ON MyFirstBucket(META().id);
-//}
-
-ここで、@<tt>{META().id} が、KVSのキー（ドキュメントID）に対応します。
-
-@<tt>{MyFirstBucket} は、インデックスを作りたいバケットです。
-
-インデックス作成のための構文は、@<tt>{CREATE INDEX [インデックス名] ON [キースペース名]([ドキュメントのフィールド名])}
-というものです。バケット名の後のカッコ内に通常JSONドキュメントのフィールド名を指定しますが、ここではドキュメントの内容ではなく、ドキュメントが格納される際のキー/IDをインデックスとして利用するため @<tt>{META().id} という特殊なキーワードを用いています。
-
-ここではキースペースの指定に@<tt>{MyFirstBucket} というバケット名のみを指定していますが、この場合、そのバケットの@<tt>{_default}スコープの@<tt>{_default}コレクションを指定したことになります。  
-
-
-下記の様な、キーにレンジを指定した検索が可能になります。
-
-//emlist{
-SELECT * from MyFirstBucket where Meta().id BETWEEN 'ABC:001' AND 'ABC:999';
-//}
-
-また、下記の様な、キーの一部を指定した曖昧検索も可能になります。
-
-//emlist{
-SELECT * from MyFirstBucket where Meta().id LIKE 'ABC:%';
-//}
-
-=== DataサービスAPIによるレンジスキャン
-
-Couchbase Serverで「キー」のみによるレンジスキャンを行うケースとして、下記の様なDataサービスへのAPI呼び出しとして実現することが考えられます。
-（ここでは、Javaを用いたコード例を示しています）
-
-同期型の例。
-
-//emlist{
-protected List<Object> get() {
-  for (String key : keys) {
-    GetResult result = collection.get(String.valueOf(key));
-    listResults.add(result);
-  }
-  return listResults;
-}
-//}
-
-非同期の例。
-
-//emlist{
-protected List<Object>get() {
-  ReactiveCollection reactiveCollection = collection.reactive();
-
-  Flux<Object> resultFlux = Flux.fromArray(keys.toArray())
-    .flatMap( k -> reactiveCollection.get(String.valueOf(k)));
-
-  List<Object> listResults = resultFlux.collectList().block();
-  return listResults;
-}
-//}
-
-上記のコードは、コード外で、`id` のリストを作成し、`keys`リストとして与えられることを想定しています。
-
-//footnote[63c6596bad48de18597b283a703bfc2f][https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/join.html#index-join-clause]
-
-
-//footnote[comparisonops][https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/comparisonops.html]
-
-== ユーザー定義関数
-
-Couchbase ServerのN1QLでは、ユーザーが関数を定義して、組み込み関数と同じように、任意の式で呼び出すことができます。
-
-====[column]エディションによる差異
-ユーザー定義関数は、エンタープライズエディションでのみ利用することができます。
-
-====[/column]
-
-ユーザー定義関数には次の2つの種類があります。
-
- * @<strong>{インライン関数}は、サブクエリを含むN1QL式を使用して定義されます。クエリを簡素化するために、複雑な式や、何度も用いられる式に名前を付けて定義し、再利用することができます。
- * @<strong>{外部関数}は、N1QLではなく、プログラミング言語を使用して定義されます。この機能により、N1QL式を使用して定義するのが困難または不可能な関数を作成することができます。（構文上は、他の言語の利用も想定される書式が用いられていますが、現時点で）サポートされている言語はJavaScriptのみです。
-
-ユーザー定義関数には次の2つの呼び出し方法があります。
-
- * @<strong>{N1QL}の任意の式中で、組み込み関数と同じように、呼び出すことができます。ただし、Couchbase Serverのユーザー定義関数は、単純なインライン関数を超えた高い自由度を持ち、関数の中でドキュメントの変更などを行うことができる反面、このような「副作用」を持つ、ユーザー定義関数をN1QL式の中から呼び出した場合には、エラーが発生することに注意が必要です。
- * @<strong>{EXECUTE FUNCTIONステートメント}を使って、ユーザー定義関数を単体で直接実行することが可能です。ユーザー定義関数をテストする際に用いることができる他、@<tt>{EXECUTE FUNCTION}ステートメントでは副作用のある関数を実行することが可能なため、RDBMSにおけるストアドプロシージャのような使い方ができます(なお、Couchbase Serverでは、RDBMSにおけるトリガに類似する機能としてEventingサービスを利用することができます)。
-
-====[column]エディションによる差異
-Eventingサービスは、エンタープライズエディションでのみ利用することができます。
-
-====[/column]
-
-=== 参考情報
-
-Couchbase公式ドキュメント User-Defined Functions@<fn>{4fec4dc4c082b58a3a0c563887d0169d}
-
-Couchbase公式ドキュメント CREATE FUNCTION@<fn>{9691b9034b80d65250e6f45a580041f0}
-
-Couchbase公式ドキュメント EXECUTE FUNCTION@<fn>{973a71b323540fcd67ec61262da9d1de}
-
-
-//footnote[4fec4dc4c082b58a3a0c563887d0169d][https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/userfun.html]
-
-//footnote[9691b9034b80d65250e6f45a580041f0][https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/createfunction.html]
-
-//footnote[973a71b323540fcd67ec61262da9d1de][https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/execfunction.html]
-
-

@@ -5,9 +5,9 @@
 
 === サポートされるプログラミング言語
 
-アプリケーションからCouchbaseクラスターへアクセスするため、各種プログラミング言語のSDKが提供されています。
+Couchbase Serverには、各種プログラミング言語用のSDKが提供されています。
 
-以下のプログラミング言語のSDKが、公式サポートされています。
+以下のプログラミング言語が、公式サポートされています。
 
  * Java@<fn>{java-sdk}
  * Scala@<fn>{scala-sdk}
@@ -39,10 +39,10 @@
 
 === 拡張ライブラリ
 
-分散ACIDトランザクションのためのライブラリが、以下の言語向けに提供されています。
+マルチドキュメント(分散)トランザクションのためのライブラリが、以下の言語向けに提供されています。
 
  * Java@<fn>{java-sdk-distributed-acid-transactions}
- * C#@<fn>{dotnet-sdk-distributed-acid-transactions}
+ * .Net@<fn>{dotnet-sdk-distributed-acid-transactions}
  * C++@<fn>{cxx-txns}
 
 //footnote[java-sdk-distributed-acid-transactions][https://docs.couchbase.com/java-sdk/current/howtos/distributed-acid-transactions-from-the-sdk.html]
@@ -53,13 +53,13 @@
 
 === コネクター
 
-Couchbase Serverと外部システムを連携するため、以下のコネクターが提供されています。
+Couchbase Serverと外部システムを連携するために利用できる、以下のコネクターが提供されています。
 
  * Elasticsearch
  * Kafka
  * Spark
 
-詳細は、ドキュメント(Connector Guides@<fn>{connectors_intro})をご参照ください。
+詳細は、ドキュメント(Connector Guides@<fn>{connectors_intro})を参照してください。
 
 //footnote[connectors_intro][https://docs.couchbase.com/server/current/connectors/intro.html]
 

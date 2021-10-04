@@ -1,74 +1,89 @@
 
 = セキュリティ
 
- 
 == 主要なセキュリティ要素
+
+はじめに、Couchbase Serverにおけるセキュリティ要素の概観を示します。@<fn>{security-overview}
+
+//footnote[security-overview][https://docs.couchbase.com/server/current/learn/security/security-overview.html]
+
 
 === 認証 (Authentication)
 
-Couchbase Serverへのユーザ（理者、アプリケーションを含む）アクセスは、認証を介してのみ行うことができます。
-ユーザーは、ローカルまたは外部のパスワードレジストリを使用して認証されます（ネイティブLDAP、saslauthd、およびPAM）。
-認証には、資格情報をサーバーに直接渡すか、資格情報が埋め込まれているクライアント証明書を使用する方法があります。接続は、SCRAMとTLSを使用して保護できます。
+Couchbase Serverへのユーザー(管理者や、アプリケーション)からのアクセスは、認証を介してのみ行うことができます。
+ユーザーは、ローカルまたは外部のパスワードレジストリを使用して認証されます。
+認証には、資格情報をサーバーに直接渡す方法と、資格情報が埋め込まれているクライアント証明書を使用する方法があります。
 
 === 認可 (Authorization)
 
-Couchbase Serverは、ロールベースのアクセス制御(RBAC)によって、ユーザーを、個別に割り当てられた役割に関連付けます。ロールは、特定のシステムリソースへのアクセスの程度を許可する権限のセットです。
+Couchbase Serverは、ロールベースのアクセス制御(RBAC)によって、ユーザーを、個別に割り当てられた役割に関連付けます。ロールは、特定のシステムリソースへの、特定の操作を許可する権限のセットです。
+これにより、ユーザーがアクセスしようとしているシステムリソース、および実行しようとしている操作に応じて、システムはそのアクセスを許可または拒否します。
 
-これにより、アクセスしようとしているシステムリソース、および実行したい操作に基づいて、アクセスを許可または拒否できます。
-ロールは、ユーザーおよびグループに対して割り当てることができます。実行時、ロールはユーザ認証を介してクライアントに付与されます。
+ロールは、ユーザー認証を介してクライアントに付与されます。
+
+ロールは、ユーザーおよびグループに対して割り当てることができます。
 
 ====[column]エディションによる差異
-コミュニティエディションにおけるロールの位置づけは、ビルトインロールの提供に留まっており、本格的なロールベースのアクセス制御(RBAC)とは異なります。
-また、コミュニティエディションには、ユーザーをグループ化する機能はなく、ロールはユーザーのみに割り当てることができます。
+コミュニティエディションには、ユーザーをグループ化する機能はなく、ロールはユーザーのみに割り当てることができます。
+
+コミュニティエディションにおけるロールの位置づけは、限られたビルトインロールの提供に留まっており、本格的なロールベースのアクセス制御(RBAC)とは異なります。
 
 ====[/column]
 
 === 監査 (Auditing)
 
-Couchbase Serverで実行されるアクションを監査することを可能にします。
-アクションのレビューにより、管理者はシステム管理タスクが適切に実行されていることを確認できます。
+Couchbase Serverで実行されるアクション(発生するイベント)を監査(ログ出力)することが可能です。
+
+監査イベントの種類については、リファレンス@<fn>{audit-event-reference}を参照することができます。
+
+//footnote[audit-event-reference][https://docs.couchbase.com/server/current/audit-event-reference/audit-event-reference.html]
 
 === 暗号化 (Encription)
 
-Couchbase Serverが管理するデータは、適切な復号化手段を所有する許可された関係者による場合を除き、読み取り不可能になるようにエンコードされます。そのため、データを安全に保存または送信できます。
-これにより、ユーザーデータのプライバシー、およびサーバーとそのクライアントの整合性が保証されます。
+Couchbase Serverが管理するデータは、適切な復号化手段を所有する許可された関係者による場合を除き、読み取り不可能になるように暗号化することができます。
+これによって、データを安全に保存または送信することができます。
 
-== セキュリティ管理
+== セキュリティ管理項目
 
-Couchbase Serverにおいて、セキュリティのために管理可能な領域について紹介します。
+Couchbase Serverのセキュリティを高めるために、管理可能な領域について紹介します。@<fn>{security-management-overview}
+
+//footnote[security-management-overview][https://docs.couchbase.com/server/current/manage/manage-security/security-management-overview.html]
 
 === ネットワークアクセス
 
 暗号スイート、TLSレベル、およびコンソールアクセスを、個別に管理することが可能です。
-また、クラスターに対するアクセスのみではなく、クラスタを構成するノード間のネットワーク通信の保護も可能です。
+
+クラスターに対するアクセスのみではなく、クラスターを構成するノード間の通信の保護も可能です。
 
 === 証明書
 
-証明書を、クラスターに対して定義・登録できます。
-加えて、クライアントによって提示された証明書を許可することができます。
+クラスターに対して、証明書を登録できます。
 
-=== ログ
+クライアントによって提示された証明書を許可することができます。
 
-ログ中に、個人情報が含まれないように設定することが可能です。
+=== ログリダクション
 
-=== セッション
+個人情報がログに含まれないようにすることが可能です。
 
-ユーザーが一定期間非アクティブな状態が続いた後にセッションを終了するように構成することが可能です。
+=== セッションタイムアウト
+
+一定期間非アクティブな状態が続いた後に、セッションを終了するように構成することが可能です。
 
 === ポートマッピング
 
-適切なファイヤーウォール設定のために、Couchbase Serverが利用する必要のある全てのポート番号の情報が公開されています。
-これらのポートの多くについて、マッピングを変更することも可能です。
+適切なファイヤーウォール設定を行うために、Couchbase Serverが利用する必要のある全てのポート番号の情報が公開されています。@<fn>{install-ports}
 
+これらのポートの多くについて、マッピングを変更することが可能です。
 
+//footnote[install-ports][https://docs.couchbase.com/server/current/install/install-ports.html]
 
 ====[column]エディションによる差異
 以下のセキュリティ関連機能は、エンタープライズエディションの機能として提供されています。
 
+ * 外部アクセシビリティ管理
  * ロールベースアクセスコントロール(RBAC)
- * LDAP連携
  * ネットワークアクセス暗号化
- * x.509証明書
+ * X.509証明書
  * 監査
  * ログリダクション
  * ノード間暗号化
@@ -78,104 +93,36 @@ Couchbase Serverにおいて、セキュリティのために管理可能な領�
 
 
 
-=== 参考情報
 
-Couchbase公式ドキュメント Security@<fn>{security-overview}
+== 認証
 
-Couchbase公式ドキュメント Manage Security@<fn>{security-management-overview.}
-
-Couchbase公式ドキュメント Network and Firewall Requirements@<fn>{install-ports}
-
-Couchbaseブログ Data encryption in Couchbase Server@<fn>{data-encryption-in-couchbase-server}
-
-GluuFederation Githubリポジトリ Couchbase should not listen by default on all server IPs@<fn>{issuecomment-402791618}
+認証（Authentication@<fn>{authentication}）は、誰がシステムにアクセスしようとしているのかを識別するためのプロセスです。Couchbase Serverにアクセスするには、認証される必要があります。
 
 
+Couchbase Serverの認証は通常、ユーザー名とパスワードに依存します。これらの情報は、アクセスを試みるユーザー（管理者やアプリケーション）から渡される必要があります。
+ユーザー名とパスワードは、事前に定義されているものと一致する必要があります。事前の定義情報は、Couchbase Serverクラスター、または外部の認証システムのいずれかで管理されます。
 
-//footnote[security-overview][https://docs.couchbase.com/server/current/learn/security/security-overview.html]
-
-
-//footnote[security-management-overview.][https://docs.couchbase.com/server/current/manage/manage-security/security-management-overview.html]
-
-//footnote[install-ports][https://docs.couchbase.com/server/current/install/install-ports.html]
-
-//footnote[data-encryption-in-couchbase-server][https://blog.couchbase.com/data-encryption-in-couchbase-server/]
-
-//footnote[issuecomment-402791618][https://github.com/GluuFederation/community-edition-setup/issues/452#issuecomment-402791618]
+また、クライアントアプリケーションから、X.509証明書を使用してCouchbase Serverに資格情報を渡すこともできます。
 
 
-
-
-== 認証 Authentication
-
-Couchbase Serverにアクセスするには、ユーザーが認証されている必要があります。認証（Authentication）は、誰がシステムにアクセスしようとしているのかを識別するためのプロセスです。認証が成功した後、承認（Authorization）を実行できます。これにより、ユーザーの適切なアクセスレベルが決定されます。
-
-Couchbase Serverの認証は通常、ユーザー名とパスワードに依存します。これらの情報は、アクセスを試みるユーザー（つまり、管理者またはアプリケーション）からシステムに渡される必要があります。
-ユーザー名とパスワードは、事前に定義されているものと一致する必要があります。事前の定義情報は、Couchbase Serverクラスター自体、または外部システム、のいずれかで管理されます 。
-また、クライアントアプリケーションから、x.509証明書を使用してCouchbase Serverに資格情報を渡すこともできます。
+//footnote[authentication][https://docs.couchbase.com/server/current/learn/security/authentication.html]
 
 === ビルトイン管理者アカウント
 
-まず、Couchbaseクラスターの初期化時に、ユーザーがビルトイン管理者アカウントのユーザ名（デフォルトでは、@<tt>{Administrator}）とパスワードを設定します。その後、任意の数のユーザーをクラスターにいつでも追加できます。
-追加ユーザーを管理者権限を持つユーザーとして作成することは可能ですが、ビルトイン管理者アカウントと、追加されたユーザーとでは、管理方法が異なります。ビルトイン管理者アカウントのパスワードを変更する際には、サーバー上で下記のコマンド(@<tt>{reset-admin-password}サブコマンドによる @<tt>{couchbase-cli} )を実行する必要があります。
+クラスターの初期化時に、ビルトイン管理者アカウントのユーザ名とパスワードを設定します(その後、任意の数のユーザーをクラスターにいつでも追加できます)。
+
+ビルトイン管理者アカウントとは別に、管理者権限を持つユーザーを作成することは可能ですが、ビルトイン管理者アカウントとクラスター初期化後に追加作成されたユーザーとでは、管理方法が異なります。ビルトイン管理者アカウントのパスワードを変更する際には、サーバー上で下記のコマンドを実行する必要があります。
 
 //emlist{
 couchbase-cli reset-admin-password [--regenerate] [--new-password <password>]
 [--port <port>]
 //}
 
-=== 外部アクセシビリティ管理
-
-ユーザーは、パスワードを指定する必要のない外部ユーザーとしてクラスターに追加することもできます。外部ユーザーは外部システムで認証されます。
-外部システムによるアクセシビリティ管理としては、次のいずれかが用いられます。
-
- * LDAP（ライトウェイト・ディレクトリ・アクセス・プロトコル）
- * PAM（プラガブル認証モジュール）フレームワーク
-
-====[column]エディションによる差異
-LDAP、PAMを用いた管理は、Couchbase Serverのエンタープライズエディションでのみ利用可能です。
-
-====[/column]
-
-=== Webコンソールでの認証
-
-Couchbase Webコンソールへのログインがデフォルトのポート8091によるhttpアクセスで実行されている場合、指定されたユーザー名とパスワードが平文で渡されます。
-
-必要に応じて、セキュアなアクセス（ポート18091によるhttpsアクセス）を利用するように構成し、ユーザー名とパスワードが暗号化された形式で渡されるようにすることができます。
-
-=== アプリケーションの認証
-
-アプリケーションから資格情報を渡すには、Simple Authentication and Security Layer（SASL）フレームワークによって提供される4つのメカニズムのいずれかを使用する必要があります。SCRAMメカニズムにより、保護された形式でのみパスワードを送信することにより、アプリケーションは安全に認証できます。SHAベースのハッシュ関数をサポートするには、ドライバーの更新が必要になる場合があります。
-
-このパスワード認証メカニズムには、次の方式があります（強度による昇順）。
-
- * PLAIN：クライアントは暗号化されていない形式でパスワードを送信します。すべてのクライアントがこの認証方法をサポートしています。これは安全ではなく、送信中にパスワードが盗まれるのを防ぐことはできません。
- * SCRAM-SHA1：160ビットのキーを使用します。
- * SCRAM-SHA256：SHA2と呼ばれるハッシュ関数のグループの1つである、256ビットのキーを使用します。
- * SCRAM-SHA512：SHA2グループの別のハッシュ関数であるSCRAM-SHA512は、512ビットのキーを使用します。サポートされている最も強力な認証プロトコルです。
-
-SCRAM SHA 512が、Couchbase SDKの標準の認証方式です。
-SCRAMは、Salted Challenge Response Authentication Mechanismの略称です。
-これによって、「burute force」攻撃や、「man in the middle」攻撃を防ぐことができます。
-
-最初のクライアントサーバーネゴシエーションでは、クライアント(アプリケーション)とサーバー（Couchbase Server）のOSの両方のOSでサポートされている最も強力な認証プロトコルが選択されます。たとえば、クライアントがPLAINプロトコルのみをサポートしている場合、PLAINプロトコルが使用されます。ただし、クライアントがSCRAM-SHA1プロトコルもサポートしている場合は、SCRAM-SHA1が使用されます。
-
-チャレンジレスポンス方式は、暗号化されたチャネルと暗号化されていないチャネルの両方を介して送信できます。
-
-SCRAMチャレンジ/レスポンスプロトコルは、パスワード検証のプロセスのみを認証します。後続のセッションを保護するには、TLSを使用する必要があります。
-
-=== 証明書ベースの認証
-
-Couchbase Serverは、クライアント認証のためのx.509証明書の使用をサポートしています。
-
-証明書ベースの認証は、認証局（CA）に依存してIDを検証し、証明書を発行します。証明書には、識別したエンティティの名前、有効期限、証明書を発行したCAの名前、発行したCAのデジタル署名などの情報が含まれています。
-
-
-
-
 === パスワードポリシー設定
 
-下記のようにCLIを使って、パスワードポリシーを変更できます。
+Couchbase Serverのパスワードポリシーを、CLIを使って変更することが可能です。
+
+下記は、その実行例です。
 
 //emlist{
 couchbase-cli setting-password-policy
@@ -196,66 +143,151 @@ couchbase-cli setting-password-policy
 }
 //}
 
-=== 参考情報
+=== 外部アクセシビリティ管理
 
-Couchbase公式ドキュメント Certificates@<fn>{security_certificates}
+外部システムで認証されるユーザーを、クラスターに追加することができます。外部ユーザーは外部システムで認証されるため、クラスターでは認証情報(パスワード)を管理しません。
 
-Couchbase公式ドキュメント Manage Certificates@<fn>{manage-certificates}
+外部システムによるアクセシビリティ管理としては、次のいずれかが用いられます。
 
-Couchbase公式ドキュメント Configureing saslauthd@<fn>{configure-saslauthd}
+ * LDAP (Lightweight Directory Access Protocol)
+ * PAM (Pluggable Authentication Modules)
+
+====[column]エディションによる差異
+外部アクセシビリティ管理は、エンタープライズエディションでのみ利用可能です。
+
+====[/column]
+
+=== Webコンソールでの認証
+
+Webコンソールへのログインがデフォルトのポート(8091)によるhttpアクセスで実行されている場合、ユーザー名とパスワードは、平文で渡されます。
+
+必要に応じて、セキュアなアクセス(ポート18091によるhttpsアクセス)を利用するように構成し、ユーザー名とパスワードを暗号化された形式で渡すようにすることができます。
+
+=== アプリケーションの認証
+
+アプリケーションから資格情報を渡すには、SASL(Simple Authentication and Security Layer)フレームワークによって提供される4つのメカニズムのいずれかを使用します。
+
+このパスワード認証メカニズムには、次の方式があります(強度による昇順で掲載)。
+
+ * @<strong>{PLAIN} 暗号化されていない形式でパスワードを送信します。
+ * @<strong>{SCRAM-SHA1} 160ビットのキーを使用します。
+ * @<strong>{SCRAM-SHA256} SHA2と呼ばれるハッシュ関数グループの1つ。256ビットのキーを使用します。
+ * @<strong>{SCRAM-SHA512} SHA2グループのハッシュ関数。512ビットのキーを使用します。サポートされている最も強力な認証プロトコルです。
+
+SCRAM(Salted Challenge Response Authentication Mechanism)を用いて、保護された形式でパスワードを送信することにより、アプリケーションを安全に認証できます。
+
+クライアント/サーバー間ネゴシエーションにより、クライアント(アプリケーション)とサーバー(Couchbase Server)の両方のOSでサポートされている最も強力な認証プロトコルが選択されます。
+たとえば、クライアントがPLAINプロトコルのみをサポートしている場合、PLAINプロトコルが使用されます。クライアントがSCRAM-SHA1プロトコルをサポートしている場合は、SCRAM-SHA1が使用されます。
+
+SCRAMチャレンジ/レスポンスプロトコルは、パスワード検証のプロセスのみを保護します。後続のセッションを保護するには、TLSを使用する必要があります。
+
+=== 証明書ベースの認証
+
+Couchbase Serverは、クライアント認証のためのX.509証明書の使用をサポートしています。@<fn>{security_certificates}
+
 
 //footnote[security_certificates][https://docs.couchbase.com/server/current/learn/security/certificates.html]
 
-//footnote[manage-certificates][https://docs.couchbase.com/server/current/manage/manage-security/manage-certificates.html]
 
-//footnote[configure-saslauthd][https://docs.couchbase.com/server/current/manage/manage-security/configure-saslauthd.html]
 
-== 認可 Authorization
 
-=== 基本的なユースケース
 
-ロールの基本的なユースケースを考えるに当たって、一般にアプリケーションのバックエンドとして使われるデータベースのユーザーは、管理者、アプリケーション、そして開発者に分類し、それぞれの特徴を整理します。
+== 認可
 
- * @<strong>{管理者}は、（Webコンソールにログインして）管理タスクを実行します。基本的に、データの読み取りまたは書き込みを行う必要はありません。
- * @<strong>{アプリケーション}は、データの書き込み、および（または）、読み取りを行います。Webコンソールにログインしたり、クラスターの設定を変更する必要はありません。
- * @<strong>{開発者}は、自分の担当するアプリケーションに関係するデータを参照する必要があり、多くの場合データの書き込み権限も必要になります。また、必要に応じWEBコンソールにログインし、クラスターの情報を参照したり、データを確認・操作することも必要とされるでしょう。
+認証が成功した後、認可(Authorization@<fn>{authorization-overview})が行われます。認可(または承認と呼ばれる場合もあります)により、適切なアクセスレベルが決定されます。
 
+
+//footnote[authorization-overview][https://docs.couchbase.com/server/current/learn/security/authorization-overview.html]
+
+=== データベースユーザーの種類
+
+ロール(Role@<fn>{9d33fd7129234e2344d00e94d4853f2b})について説明するにあたって、まず基本的なユースケースを整理します。
+一般にアプリケーションのバックエンドとして使われるデータベースのユーザーは、管理者、開発者、アプリケーションに分類することができます。
+
+ * @<strong>{管理者}は、クラスターの管理タスクを担います。Webコンソールにログインしたり、CLIを使って管理タスクを実行します。データの登録を担当することも考えられます。
+ * @<strong>{開発者}は、データを参照したり、データの書き込みを行うためにデータベースにアクセスすることがあります。また、Webコンソールなどでクラスターの情報を参照する場合があります。
+ * @<strong>{アプリケーション}は、データベースに対して、データの読み取りと書き込みを行います。
 
 === ビルトインロール
 
- * @<strong>{Full Admin}: Full Adminロールは、Couchbase Serverの全ての機能やリソースへの完全なアクセスを許可します。
- * @<strong>{Read-only Admin}: Read-only Adminロールは、Couchbase　Webコンソールへのアクセスを許可します。
- * @<strong>{Application Access}: 特定のバケットに対して、全ての権限を許可します。
+以下に、ビルトインロールの概要を記します。
+
+ * @<strong>{Full Admin}ロールは、Couchbase Serverの全ての機能やリソースへの完全なアクセスを許可します。
+ * @<strong>{Read-only Admin}ロールは、統計情報を含むクラスター管理情報の参照を許可します。また、Webコンソールへのアクセスを許可します。
+ * @<strong>{Application Access}を介して、特定のバケットに対して、全ての権限を許可します。
 
 ====[column]エディションによる差異
-エンタープライズエディションでは、リソース（スコープやコレクション、あるいは各サービス）および操作（データに対する読み取り、書き込み等）の両面で、詳細なロールベースのアクセスコントロール(RBAC)を利用可能です。
+エンタープライズエディションでは、よりきめ細かいロールベースのアクセスコントロール(RBAC)を利用可能です。
 
 ====[/column]
 
 
-=== 参考情報
-
-Couchbase公式ドキュメント Roles@<fn>{9d33fd7129234e2344d00e94d4853f2b}
-
-Couchbase公式ドキュメント Role-Based Access Control (RBAC)@<fn>{0a0c84c83dc0992930bc018d8df1b279}
 
 //footnote[9d33fd7129234e2344d00e94d4853f2b][https://docs.couchbase.com/server/current/learn/security/roles.html]
 
 //footnote[0a0c84c83dc0992930bc018d8df1b279][https://docs.couchbase.com/server/current/rest-api/rbac.html]
 
 
-== 暗号化 Encription
+== 暗号化
+
+Couchbase Serverは、データの暗号化(Encryption@<fn>{encryption-overview})と復号化を、様々なレベルで広範囲にサポートします。
+
+//footnote[encryption-overview][https://docs.couchbase.com/server/current/learn/security/encryption-overview.html]
+
+=== 通信データ
+
+通信データ(On the Wire)暗号化のために、TLSが利用できます。
+
+通信データ暗号化の範囲は、クライアント/サーバー間、コンソールアクセス、ノード間、およびクラスター間(XDCR)をカバーします。
+
+また、TLSのためのX.509証明書の利用をサポートしています。
+
+=== 永続化データ
+
+永続化データ(At Rest)暗号化の機能は、下記のようなサードパーティー暗号化ツールとの組み合わせにより実現されます。
+
+ * Linux Unified Key Setup (LUKS)@<fn>{sec-Using_LUKS_Disk_Encryption}
+ * Thales CipherTrust@<fn>{thales} (旧Vormetric/Gemalto)
+ * Protegrity@<fn>{protegrity}
+
+LUKSによる暗号化については、設定手順についてのドキュメント@<fn>{luks-encryption-procedure}とスクリプト@<fn>{create_luks_fs}が提供されています。
+
+=== システム機密情報
+
+データベースに登録されているパスワードや証明書のような、システム機密情報(System Secrets@<fn>{manage-system-secrets})は、暗号化されたフォーマットでディスクに保存されます。
+
+他のデータベースには、ユーザーの情報をデータベース(システムテーブル)で管理し、参照することのできるものもありますが、Couchbase Serverは、それらとは異なり、ユーザー情報の管理・参照のために、システムテーブルは利用されていません。
 
 
-=== 通信データ(On the Wire)
 
-TLSが利用できます（クライアント・サーバー、管理者アクセス、およびセキュアXDCR）。
-また、TLSのためのX.509 certificatesの利用をサポートしています。
+//footnote[sec-Using_LUKS_Disk_Encryption][https://en.wikipedia.org/wiki/Linux_Unified_Key_Setup]
 
-=== 永続化データ(At Rest)
+//footnote[luks-encryption-procedure][https://docs.couchbase.com/server/current/manage/manage-security/manage-connections-and-disks.html#luks-encryption-procedure]
+//footnote[create_luks_fs][https://github.com/couchbase/perfrunner/blob/master/scripts/create_luks_fs.sh]
 
-サードパーティーベンダー(Vormetric, Protegrity, SafeNet)によって提供されます。
+
+
+//footnote[thales][https://cpl.thalesgroup.com/encryption/transparent-encryption]
+
+//footnote[protegrity][https://www.protegrity.com/]
+
+//footnote[manage-system-secrets][https://docs.couchbase.com/server/current/manage/manage-security/manage-system-secrets.html]
+
 
 === JSONドキュメントフィールド
 
-SDKを用いた暗号化をサポートしています。
+Couchbase Server Java SDKを使用して、JSONドキュメントの特定のフィールドを暗号化および復号化することができます。
+
+フィールドレベルの暗号化(Field Level Encryption@<fn>{java-sdk-encryption})の操作方法として、次の2つの方法が利用可能です。
+
+ * データバインディング中の透過的な暗号化/復号化
+ * フィールドに対する直接的な操作
+
+
+====[column]エディションによる差異
+フィールドレベルの暗号化は、エンタープライズサブスクリプションライセンス契約により提供されるオプションのライブラリとして実現されています。
+
+====[/column]
+
+
+//footnote[java-sdk-encryption][https://docs.couchbase.com/java-sdk/current/concept-docs/encryption.html]
