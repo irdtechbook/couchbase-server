@@ -477,9 +477,9 @@ var getData = function() {
 
 //emlist[][html]{
 <tr ng-repeat="user in users">
-	<td><input type="button" value="削除" data-ng-click="del_user(user)"></td>
-	<td>{{user.id\}\}</td>
-	<td>{{user.name\}\}</td>
+<td><input type="button" value="削除" data-ng-click="del_user(user)"></td>
+<td>{{user.id}}</td>
+<td>{{user.name}}</td>
 </tr>
 //}
 

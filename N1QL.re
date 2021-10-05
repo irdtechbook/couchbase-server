@@ -1,7 +1,10 @@
 = N1QLクエリ
 
-Couchbase ServerのN1QLクエリについて、SQLとの差分を中心に解説します(SQL標準と重複する部分を含めた網羅的な解説であることは意図されていません)。
+Couchbase ServerのN1QLクエリについて、SQLとの差分を中心に解説します（SQL標準と重複する部分を含めた網羅的な解説であることは意図されていません）。
 
+詳細については、N1QL言語リファレンス(N1QL Language Reference@<fn>{n1ql-language-reference})を参照してください。
+
+//footnote[n1ql-language-reference][https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/index.html]
 
 == 基本構造
 
@@ -38,7 +41,7 @@ N1QLでスコープとコレクションを活用するために、@<strong>{ク
 まず、コンテキストを使用しないクエリについて見てみます。
 
 //emlist{
-select * from `travel-sample`.inventory.airline limit 1;
+SELECT * FROM `travel-sample`.inventory.airline LIMIT 1;
 //}
 
 
@@ -47,7 +50,7 @@ select * from `travel-sample`.inventory.airline limit 1;
 一方、SQL/RDB経験者が通常、予期するクエリは、以下のようなものでしょう。
 
 //emlist{
-select * from airline limit 1;
+SELECT * FROM airline LIMIT 1;
 //}
 
 クエリコンテキストに、@<tt>{travel-sample}バケットの@<tt>{inventory}スコープを設定することによって、上記の表現が成立します。
@@ -60,7 +63,7 @@ cbq> \SET -query_context   "`travel-sample`.inventory";
 
 Webコンソールのクエリワークベンチでクエリを実行する場合には、リストボックスからバケット名とスコープ名を選択して、クエリコンテキストを設定することができます。
 
-SDKでは、@<tt>{Scope}オブジェクトの@<tt>{query}メソッドを利用します。また、@<tt>{Bucket}オブジェクトの@<tt>{query}メソッドを用いて、コンテキストを使用しないクエリの実行も可能です。
+SDKでは、@<tt>{Scope}クラスの@<tt>{query}メソッドを利用します。また、@<tt>{Bucket}クラスの@<tt>{query}メソッドを用いて、コンテキストを使用しないクエリの実行も可能です。
 
 Javaのサンプルコードを示します。
 
@@ -68,7 +71,8 @@ Javaのサンプルコードを示します。
 Bucket bucket = cluster.bucket("travel-sample");
 Scope scope = bucket.scope("inventory");
 
-QueryResult result = scope.query("select * from airline where country = $country LIMIT 10",
+QueryResult result = 
+  scope.query("SELECT * FROM airline WHERE country = $country",
     queryOptions().parameters(JsonObject.create().put("country", "France")));
 //}
 
@@ -126,7 +130,7 @@ WHERE META().id IN ["airport_1254","airport_1255"];
 例えば、下記のように、@<tt>{LIKE}と組み合わせて部分一致検索を行うことができます。
 
 //emlist{
-SELECT * from MyFirstBucket where Meta().id LIKE "ABC:%";
+SELECT * FROM MyFirstBucket WHERE META().id LIKE "ABC:%";
 //}
 
 
@@ -255,7 +259,8 @@ JSONデータに対する条件指定において、@<tt>{IN}は、トップレ�
 例えば、以下のクエリでは、@<tt>{WITHIN}句に(別名を介して)@<tt>{hotel}コレクションを指定しています。
 
 //emlist{
-SELECT * FROM `travel-sample`.inventory.hotel AS t WHERE "Walton Wolf" WITHIN t;
+SELECT * FROM `travel-sample`.inventory.hotel AS t 
+WHERE "Walton Wolf" WITHIN t;
 //}
 
 以下は結果の例です。
@@ -339,34 +344,34 @@ N1QLで、配列へのアクセスに用いられる構文は、@<tt>{ARRAY}ま�
 以下にクエリとその結果のサンプルを示します(構文の理解を容易にするため、クエリ内でデータを定義しています)。
 
 //emlist{
-select ARRAY v FOR v IN [1, 2, 3, 4, 5] WHEN v > 2 END as res;
+SELECT ARRAY v FOR v IN [1, 2, 3, 4, 5] WHEN v > 2 END AS res;
 //}
 
 //emlist{
-    "results": [
-        {
-            "res": [
-                3,
-                4,
-                5
-            ]
-        }
+[
+  {
+    "res": [
+      3,
+      4,
+      5
     ]
+  }
+]
 //}
 
 下記のように、配列要素がオブジェクトの場合、フィールドに対して条件指定を行ったり、特定のフィールドを取り出すことができます。
 
 //emlist{
-SELECT ARRAY v.flight FOR v IN schedule WHEN v.utc > "19:00" AND v.day = 5 END AS fri_evening_flights
+SELECT ARRAY v.flight FOR v IN schedule 
+WHEN v.utc > "19:00" AND v.day = 5 END AS fri_evening_flights
 FROM `travel-sample`.inventory.route
-LIMIT 5
+LIMIT 5;
 //}
 
 最後に、これまで説明した構文を踏まえ、配列を複数(@<tt>{var1}、@<tt>{var2})指定した、下記のような表現を用いることができます。
 
 //emlist{
-( ARRAY | FIRST ) var1 FOR var1 ( IN | WITHIN ) expr1 [ ,var2 ( IN | WITHIN ) expr2 ]*
-[ ( WHEN cond1 [ AND cond2 ] ) ] END
+( ARRAY | FIRST ) var1 FOR var1 ( IN | WITHIN ) expr1 [ ,var2 ( IN | WITHIN ) expr2 ]* [ ( WHEN cond1 [ AND cond2 ] ) ] END
 //}
 
 == 配列を検索条件に利用
@@ -374,9 +379,7 @@ LIMIT 5
 配列を検索条件の中で用いる際の構文は、@<tt>{ANY}または @<tt>{EVERY} から始まり、@<tt>{END}で終わります。@<tt>{SATISFIES} で条件を指定します。
 
 //emlist{
-( ANY | EVERY ) var1 ( IN | WITHIN ) expr1
-[ , var2 ( IN | WITHIN ) expr2 ]*
-SATISFIES condition END
+( ANY | EVERY ) var1 ( IN | WITHIN ) expr1 [ , var2 ( IN | WITHIN ) expr2 ]* SATISFIES condition END
 //}
 
 条件が真となった際に、その配列を持つドキュメントが、検索結果に含まれます。
@@ -391,7 +394,7 @@ SATISFIES condition END
 SELECT *
 FROM retail.east.order o
 WHERE ANY item IN o.lineItems SATISFIES
-item.count >= 5 END
+item.count >= 5 END;
 //}
 
 === EVERY
@@ -404,7 +407,7 @@ item.count >= 5 END
 SELECT *
 FROM retail.east.order o
 WHERE EVERY item IN o.lineItems SATISFIES
-item.count >= 5 END
+item.count >= 5 END;
 //}
 
 
@@ -465,10 +468,10 @@ item.count >= 5 END
 
 //emlist{
 SELECT ordr.order_id,
-ARRAY {“item_id”: l.item_id, “quantity”:l.qty} FOR l IN line END as items
+ARRAY {“item_id”: l.item_id, “qty”:l.qty} FOR l IN line END AS items
 FROM retailsample.east.order ordr
 NEST retailsample.east.lineItem line
-ON KEYS ordr.lineitems
+ON KEYS ordr.lineitems;
 //}
 
 結果は、以下のようになります。
@@ -517,7 +520,7 @@ ON KEYS ordr.lineitems
 @<tt>{UNNEST}は、このようなネストされた（サブドキュメントを含む）ドキュメントへのクエリの結果を下記のようなテーブル構造として利用したい時に使われます。
 
 //table{
-ordId	Status	prodId	qty
+ordId	status	prodId	qty
 ----------------------------
 ORDER-0001	Shipped	AAA-222	1
 ORDER-0001	Shipped	BBB-333	2
@@ -525,10 +528,12 @@ ORDER-0001	Shipped	CCC-444	3
 //}
 
 
-下記のように、サブドキュメントに対して@<tt>{UNNEST}を指定し、@<tt>{as}で別名をつけたものを@<tt>{SELECT}句の中で使用します。
+下記のように、サブドキュメントに対して@<tt>{UNNEST}を指定し、@<tt>{AS}で別名をつけたものを@<tt>{SELECT}句の中で使用します。
 
 //emlist{
-SELECT ord.ordId, ord.status, item.* FROM retail.east.order ord UNNEST items as item
+SELECT ord.ordId, ord.status, item.* 
+FROM retail.east.order ord 
+UNNEST items AS item;
 //}
 
 これにより、下記のようなフラットな構造のJSONが取り出されます。
@@ -565,15 +570,11 @@ N1QLには、そのようなギャップを埋めるため、@<tt>{MISSING}と�
 
 N1QLにおいて@<tt>{MISSING}は、JSONドキュメントの中にそのフィールド（名前と値のペア）が存在していない（欠落している）ことを表します。
 
-N1QLでは、SELECT句で指定されたフィールドが存在しない（MISSINGである）データがある場合、（内部的にはMISSINGリテラル式で処理されますが）検索結果データでは、（JSONデータにおける未定義の値である） nullに変換されます。
-
 
 === NULL
 
 
 N1QLは、キーワード@<tt>{NULL}を使用して空の値を表します。データ挿入、更新時に、フィールドの値をNULLにすることができます。
-
-また、NULL値は、ゼロ除算や間違ったタイプの引数の受け渡しなど、特定の操作によっても生成され得ます。
 
 なお、N1QLのNULLでは大文字と小文字が区別されません。たとえば、@<tt>{null}、@<tt>{NULL}、@<tt>{Null}、および@<tt>{nUll}はすべて同等です。
 
@@ -595,36 +596,33 @@ N1QLは、キーワード@<tt>{NULL}を使用して空の値を表します。�
 //emlist{
 SELECT fname, children
 FROM tutorial.sample.person
-WHERE children IS NULL
-//}
-
-//emlist{
-{
-  "results": [
-    {
-      "children": null,
-      "fname": "Fred"
-    }
-  ]
-}
-//}
-
-=== IS MISSING
-
-//emlist{
-SELECT fname
-FROM tutorial.sample.person
-WHERE children IS MISSING
+WHERE children IS NULL;
 //}
 
 //emlist{
 [
   {
-    "res": [
-      3,
-      4,
-      5
-    ]
+    "children": null,
+    "fname": "Fred"
+  }
+]
+//}
+
+=== IS MISSING
+
+//emlist{
+SELECT fname, children
+FROM tutorial.sample.person
+WHERE children IS MISSING;
+//}
+
+//emlist{
+[
+  {
+    "fname": "Harry"
+  },
+  {
+    "fname": "Jane"
   }
 ]
 //}
@@ -680,7 +678,7 @@ ON any join condition
 SELECT *
 FROM `travel-sample`.inventory.route r
 JOIN `travel-sample`.inventory.airline a
-ON r.airlineid = META(a).id
+ON r.airlineid = META(a).id;
 //}
 
 ====[column]N1QLのJOINと標準SQLとの違い
@@ -711,7 +709,7 @@ ON KEYS lhs-expr.foreign-key
 SELECT *
 FROM `travel-sample`.inventory.route r
 JOIN `travel-sample`.inventory.airline
-ON KEYS r.airlineid
+ON KEYS r.airlineid;
 //}
 
 === インデックスJOIN
@@ -736,7 +734,7 @@ SELECT *
 FROM `travel-sample`.inventory.airline a
 JOIN `travel-sample`.inventory.route r
 ON KEY r.airlineid
-FOR a
+FOR a;
 //}
 
 上記のクエリを実行するためには、下記のようなインデックスが必要です。

@@ -118,20 +118,25 @@ couchbase-cli reset-admin-password [--regenerate] [--new-password <password>]
 [--port <port>]
 //}
 
-=== パスワードポリシー設定
+=== パスワードポリシー
 
-Couchbase Serverのパスワードポリシーを、CLIを使って変更することが可能です。
+Couchbase Serverが管理するパスワードには、パスワード強度のルールを定義するパスワードポリシーがあります。
+
+//footnote[usernames-and-passwords-password-strengthd][https://docs.couchbase.com/server/current/learn/security/usernames-and-passwords.html#password-strengthd]
+
+Couchbase Serverのパスワードポリシーを、CLIを使って変更することが可能です。@<fn>{couchbase-cli-setting-password-policy}
 
 下記は、その実行例です。
 
-//emlist{
-couchbase-cli setting-password-policy
---cluster http://localhost:8091 -u Administrator
-–p password --set --min-length 8 --uppercase
---lowercase --digits --special-chars
+//cmd{
+$ couchbase-cli setting-password-policy \
+  --cluster http://localhost:8091 \
+  -u Administrator  -p password --set \
+  --min-length 8 --uppercase 1 \
+  --lowercase 1 --digit 1 --special-char 1
 //}
 
-デフォルトのポリシーは、以下の通りです。
+@<tt>{--get}オプション指定により、現在のパスワードポリシーを確認することができます。デフォルトのポリシーは、以下の通りです。
 
 //emlist{
 {
@@ -142,6 +147,12 @@ couchbase-cli setting-password-policy
 "minLength ": 6
 }
 //}
+
+また、REST APIを使って、設定を行うことも可能です。@<fn>{rest-set-password-policy}
+
+//footnote[couchbase-cli-setting-password-policy][https://docs.couchbase.com/server/current/cli/cbcli/couchbase-cli-setting-password-policy.html]
+
+//footnote[rest-set-password-policy][https://docs.couchbase.com/server/current/rest-api/rest-set-password-policy.html]
 
 === 外部アクセシビリティ管理
 

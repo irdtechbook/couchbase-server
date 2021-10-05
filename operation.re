@@ -788,13 +788,14 @@ $ brew install libcouchbase
 
 //blankline
 
-クライアントオプションには、以下のものがあります。
+クライアントオプションには、例えば以下のものがあります。
 
  * @<tt>{operation_timeout=SECONDS}: タイムアウト秒数を指定します。これは、クライアントが操作の完了を待つ時間です。デフォルトは2.5秒です。
  * @<tt>{config_cache=PATH}: クライアントからクラスターへの接続時に、ファイルベースの構成キャッシュを利用できるようにします。ファイルが存在しない場合、クライアントがクラスターに接続した際に、ブートストラップ情報をファイルにキャッシュします。
- * @<tt>{certpath=PATH}: サーバーSSL証明書へのパス（@<tt>{couchbases://}スキームでのみ適用可能）。
- * @<tt>{ssl=no_verify}: SSL検証を一時的に無効にします（@<tt>{couchbases://}スキームでのみ適用可能）。
- * @<tt>{sasl_mech_force=MECHANISM}: 初期接続時に、特定のSASLメカニズムを強制的に使用します。現在サポートされているメカニズムは、@<tt>{PLAIN}と@<tt>{PCRAM-MD5}です。
+
+@<tt>{libcouchbase}の詳細については、Githubリポジトリ(Couchbase C Client@<fn>{github-libcouchbase})を参照してください。
+
+//footnote[github-libcouchbase][https://github.com/couchbase/libcouchbase]
 
 == ストレステストツール
 
@@ -878,12 +879,6 @@ $ cbc-pillowfight -c 100 -I 50 -u Administrator -P password
 $ cbc-pillowfight --json -m 100000 -M 100000 -u Administrator -P password
 //}
 
-@<strong>{サブドキュメント操作によるストレステスト}
-
-//cmd{
-$ cbc-pillowfight --json --subdoc --set-pct 100 -u Administrator -P password
-//}
-
 @<strong>{JSONドキュメントの有効期限を10秒に設定}
 
 //cmd{
@@ -929,7 +924,9 @@ $ cbc-pillowfight -U couchbase://localhost/pillow --json -e 10 -u Administrator 
 以下の例では、クエリリクエストを記載したファイル@<tt>{queries.txt}を指定し、5つのスレッドで実行しています。
 
 //cmd{
-$ cbc-n1qlback -U couchbase://192.168.72.101/a_bucket -t 5 -f queries.txt -u Administrator -P password
+$ cbc-n1qlback -U couchbase://localhost/travel-sample \
+  -t 5 -f queries.txt -u Administrator -P password \
+  -e n1qlback.err
 //}
 
 == その他のツール

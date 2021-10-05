@@ -108,7 +108,9 @@ Indexサービスにおける、コミュニティエディションには含ま
 
 == プライマリインデックス
 
-プライマリインデックスは、キースペース単位で指定するインデックスです。
+プライマリインデックス@<fn>{indexing-and-query-perf-primary-index}は、キースペース単位で指定するインデックスです。
+
+//footnote[indexing-and-query-perf-primary-index][https://docs.couchbase.com/server/current/learn/services-and-indexes/indexes/indexing-and-query-perf.html#primary-index]
 
 ====[column]ドキュメントの一意性について
 Couchbase Serverでは、プライマリインデックスとは関係なく、ドキュメントキーはキースペースにおいて一意です。
@@ -137,7 +139,7 @@ CREATE PRIMARY INDEX ON `travel-sample`.inventory.airline;
 作成されたインデックスの定義を、Webコンソール等で、確認すると分かりますが、上記のDDL(データ定義言語)は、下記のDDLを実行する際の糖衣構文(syntax sugar)にあたるものです。
 
 //emlist{
-CREATE PRIMARY INDEX `#primary` ON `travel-sample`.inventory.airline
+CREATE PRIMARY INDEX `#primary` ON `travel-sample`.inventory.airline;
 //}
 
 Couchbase Serverのインデックスには名前を定義するのが通常であり、上掲の省略形は、プライマリインデックスに特有のものです。
@@ -151,7 +153,7 @@ CREATE PRIMARY INDEX <インデックス名> ON <キースペース名>;
 プライマリインデックスに頼った検索は、検索条件の内容に関わらず、キースペース(上記例の場合、@<tt>{airline}コレクション)内のドキュメントに対する全件スキャンを実行することに留意が必要です。
 これは、ドキュメントキーを検索条件(WHERE句)に用いたクエリの場合も同様です(ドキュメントキーを用いたセカンダリインデックスの定義については別に触れます)。
 
-検索条件のないクエリ、つまりコレクション(エンティティ)から全てのデータを取得するクエリを実行する場合には、プライマリインデックスを利用することになりますが、その場合も、条件を指定した個別の検索要件のためには、別にセカンダリインデックスを作成することによって、不要な全件スキャンが発生しないようにすることが重要です。
+検索条件のないクエリ、つまりコレクションから全てのデータを取得するクエリを実行する場合には、プライマリインデックスを利用することになりますが、その場合も、条件を指定した個別の検索要件のためには、別にセカンダリインデックスを作成することによって、不要な全件スキャンが発生しないようにすることが重要です。
 
 ====[/column]
 
@@ -167,8 +169,10 @@ Couchbase Serverのコア機能は、アプリケーションのバックエン�
 
 === 概要
 
-JSONドキュメントの特定の要素（ドキュメントキー指定のためのメタデータ利用を含む）に対して設定するインデックスは、セカンダリインデックスと呼ばれます。
+JSONドキュメントの特定の要素（ドキュメントキー指定のためのメタデータ利用を含む）に対して設定するインデックスは、セカンダリインデックス@<fn>{indexing-and-query-perf-secondary-index}と呼ばれます。
 
+
+//footnote[indexing-and-query-perf-secondary-index][https://docs.couchbase.com/server/current/learn/services-and-indexes/indexes/indexing-and-query-perf.html#secondary-index]
 
 === 定義方法
 
@@ -192,8 +196,8 @@ CREATE INDEX travel_name ON `travel-sample`.inventory.airline(name);
 以下のように、ドット(@<tt>{.})表記（ノーテーション）により、ネストされたオブジェクトのフィールドを指定することもできます。
 
 //emlist{
-CREATE INDEX travel_geo_alt on `travel-sample`.inventory.landmark(geo.alt);
-CREATE INDEX travel_geo_lat on `travel-sample`.inventory.landmark(geo.lat);
+CREATE INDEX travel_geo_alt ON `travel-sample`.inventory.landmark(geo.alt);
+CREATE INDEX travel_geo_lat ON `travel-sample`.inventory.landmark(geo.lat);
 //}
 
 
@@ -518,7 +522,7 @@ WHERE country = 'France' WITH {"nodes": ["192.0.3.0:8091"]};
 
 @<tt>{PARTITION BY}句を用いて、インデックスを複数のパーティションに分割することができます。
 
-インデックスのパーティション化には、次のような利点があります。
+インデックスのパーティション化@<fn>{index-partitioning}には、次のような利点があります。
 
  * @<strong>{スケールアウト} インデックスサイズの増大に対する、水平方向の拡張による性能最適化が可能です。
  * @<strong>{並行スキャン} 複数のパーティションを同時に並行してスキャン可能なため、クエリ待ち時間の短縮効果が期待できます。
@@ -536,6 +540,9 @@ PARTITION BY HASH(META().id);
 インデックスのパーティション化は、エンタープライズエディションでのみ利用できます。
 
 ====[/column]
+
+
+//footnote[index-partitioning][https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/index-partitioning.html]
 
 == 先行属性マッチと性能最適化
 
@@ -564,12 +571,12 @@ Couchbase Serverのインデックスにおいても、属性リストの先頭�
 SELECT *
 FROM retail.east.customer c ①
 WHERE c.age = $age ③
-AND c.grade = "premium" ②
+AND c.grade = "premium"; ②
 //}
 
 //emlist{
 CREATE INDEX idx_cust ON retail.east.customer(age, sex)
-WHERE grade ="premium"
+WHERE grade ="premium";
 //}
 
 上記のクエリとインデックスの例は、先行属性マッチとカーディナリティの関係が適切な例となります。
@@ -580,7 +587,7 @@ WHERE grade ="premium"
 SELECT *
 FROM retail.east.customer c 
 WHERE c.sex = $sex
-AND c.grade = "premium"
+AND c.grade = "premium";
 //}
 
 === DataサービスAPIとの併用
@@ -594,7 +601,7 @@ AND c.grade = "premium"
 SELECT META().id as docKey
 FROM retail.east.order
 WHERE META().id IS NOT MISSING
-AND status = "Pending"
+AND status = "Pending";
 //}
 
 

@@ -66,9 +66,12 @@ Couchbase Exporterを利用する際には、監視するクラスターを指�
 
 
 
-ブログ記事「Couchbase Monitoring Integration with Prometheus and Grafana」@<fn>{couchbase-monitoring-integration-with-prometheus-and-grafana}にて、Couchbase ServerとPrometheusおよびGrafanaとの連携に関する詳細な手順が説明されています。
+ブログ記事「Couchbase Monitoring Integration with Prometheus and Grafana」@<fn>{couchbase-monitoring-integration-with-prometheus-and-grafana}にて、Couchbase ServerとPrometheusおよびGrafana@<fn>{grafana}との連携に関する詳細な手順が説明されています。
 
 //footnote[couchbase-monitoring-integration-with-prometheus-and-grafana][https://blog.couchbase.com/couchbase-monitoring-integration-with-prometheus-and-grafana/]
+
+
+//footnote[grafana][https://grafana.com/]
 
 //image[grafana][]{
 //}
