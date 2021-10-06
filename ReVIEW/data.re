@@ -121,7 +121,7 @@ Couchbase Serverは、ドキュメント管理のために、スコープとコ�
 
 Couchbase Serverは、スコープとコレクションによってアクセス権限を管理する機能を提供しています。これによって、マルチテナンシーが容易になります。
 
-//table[][リレーショナルデータベースとCouchbase Serverの対比]{
+//table[EN64bPC1sa][リレーショナルデータベースとCouchbase Serverの対比]{
 リレーショナルデータベース	Couchbase Server
 ----------------------------
 サーバー	クラスター
