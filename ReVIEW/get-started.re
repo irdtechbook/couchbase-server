@@ -35,9 +35,9 @@ Linux系OSは、コマンドラインからパッケージシステムを介し�
 $ docker run -d --name cb -p 8091-8094:8091-8094 -p 11210:11210 couchbase:community
 //}
 
-CouchbaseのDockerリポジトリから最新版がダウンロードされ、コンテナの実行が開始されます。
+CouchbaseのDockerリポジトリーから最新版がダウンロードされ、コンテナの実行が開始されます。
 
-起動が成功すれば、ブラウザで下記のURLにアクセスした際に、「Setup New Cluster」と「Join Existing Cluster」のいずれかを選択する画面が表示されます。
+起動が成功すれば、ブラウザーで下記のURLにアクセスした際に、「Setup New Cluster」と「Join Existing Cluster」のいずれかを選択する画面が表示されます。
 
 //blankline
 
@@ -80,7 +80,7 @@ CONTAINER ID   IMAGE                 COMMAND                  CREATED       STAT
 $ docker stop cb
 //}
 
-ブラウザでWebコンソールにアクセスできないことを確認します。
+ブラウザーでWebコンソールにアクセスできないことを確認します。
 
 下記のコマンドを再度実行して、プロセス情報が表示されないことを確認します。
 
@@ -161,7 +161,7 @@ $ docker rmi couchbase:community
 
 クラスター設定ダイアログが表示されます。
 
-サービス毎に割り当てるメモリを、「Service Memory Quotas」として設定できることが分かります。
+サービス毎に割り当てるメモリーを、「Service Memory Quotas」として設定できることが分かります。
 
  また、不要なサービスのチェックボックスを外すことにより、このノードで、そのサービスが無効になります。
  後から有効にすることはできませんが（その場合は、クラスターから一旦削除し、再追加する際に、改めてサービスを選択します）、クラスター全体の構成を柔軟に設計することができます。

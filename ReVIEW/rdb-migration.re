@@ -27,7 +27,7 @@ GlueSync allows you to replicate data to and from RDBMS (Microsoft SQL Server an
 
  @<strong>{Couchgres}@<fn>{couchgres}は、オープンソースプロジェクトであり、その名の通り、CouchbaseとPostgreSQLとのデータマイグレーションを実現します。
 
- 以下、GitHubリポジトリのREADMEから引用します。
+ 以下、GitHubリポジトリーのREADMEから引用します。
 
 //quote{
 These are some small tools for easier migration between PostgreSQL and Couchbase 7.0, and visualising a Couchbase bucket with scopes and collections in the form of a pie chart.
@@ -37,9 +37,9 @@ These are some small tools for easier migration between PostgreSQL and Couchbase
 
 == SqlServerToCouchbase
 
-@<strong>{SqlServerToCouchbase}@<fn>{SqlServerToCouchbase}は、SQL ServerからCouchbaseへのデータ移動のためのライブラリを提供するオープンソースプロジェクトです。
+@<strong>{SqlServerToCouchbase}@<fn>{SqlServerToCouchbase}は、SQL ServerからCouchbaseへのデータ移動のためのライブラリーを提供するオープンソースプロジェクトです。
 
-以下、GitHubリポジトリのREADMEから引用します。
+以下、GitHubリポジトリーのREADMEから引用します。
 
 //quote{
 A library to help guide your SQL Server to Couchbase migration/sync efforts. This library represents a best effort at mapping SQL Server concepts to Couchbase Server concepts automatically. It may or may not fulfill every one of your requirements. In the worst case, it can at least be an educational tool. Think of it like Google Translate.

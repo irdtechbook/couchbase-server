@@ -37,9 +37,9 @@ Couchbase Serverには、各種プログラミング言語用のSDKが提供さ�
 
 //footnote[couchbase-rs][https://github.com/couchbaselabs/couchbase-rs]
 
-=== 拡張ライブラリ
+=== 拡張ライブラリー
 
-マルチドキュメント(分散)トランザクションのためのライブラリが、以下の言語向けに提供されています。
+マルチドキュメント(分散)トランザクションのためのライブラリーが、以下の言語向けに提供されています。
 
  * Java@<fn>{java-sdk-distributed-acid-transactions}
  * .Net@<fn>{dotnet-sdk-distributed-acid-transactions}
