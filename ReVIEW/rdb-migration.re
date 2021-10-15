@@ -1,6 +1,6 @@
 = データマイグレーションツール
 
-Couchbase ServerとRDBとの間でデータマイグレーションを行うツールが、サードパーティーから、あるいはオープンソースプロジェクトとして、提供されています。
+Couchbase ServerとRDBとの間でデータマイグレーションを行うツールが、サードパーティーから、あるいはオープンソースプロジェクトとして提供されています。
 
 このような外部ツールを用いなくとも、RDBからCSV形式でデータを出力し、Couchbase Serverが提供しているツール(@<tt>{cbimport})を使って、データマイグレーションプロセスを構築することができます。
 
@@ -25,7 +25,7 @@ GlueSync allows you to replicate data to and from RDBMS (Microsoft SQL Server an
 
 == Couchgres
 
- @<strong>{Couchgres}@<fn>{couchgres}は、オープンソースプロジェクトであり、その名の通り、CouchbaseとPostgreSQLとのデータマイグレーションを実現します。
+ @<strong>{Couchgres}@<fn>{couchgres}はオープンソースプロジェクトであり、その名の通り、CouchbaseとPostgreSQLとのデータマイグレーションを実現します。
 
  以下、GitHubリポジトリーのREADMEから引用します。
 

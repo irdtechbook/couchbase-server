@@ -21,7 +21,7 @@ Couchbase Serverには、各種プログラミング言語用のSDKが提供さ�
 
  また、デベロッパープレビューとして、Kotlin SDK@<fn>{kotlin-sdk}があります。
 
- さらに、コミュニティサポートとしてRust SDK@<fn>{couchbase-rs}があります。
+ さらに、コミュニティーサポートとしてRust SDK@<fn>{couchbase-rs}があります。
 
 //footnote[java-sdk][https://docs.couchbase.com/java-sdk/current/hello-world/overview.html]
 //footnote[scala-sdk][https://docs.couchbase.com/scala-sdk/current/hello-world/overview.html]

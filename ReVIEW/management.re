@@ -6,7 +6,7 @@
 
 Couchbase Serverにおける監視について見ていきます。
 
-Couchbase Serverの監視機能の対象は、CPU、メモリー利用量などノード(サーバー)レベルの監視と、データ量やアクセス状況などデータベースやクラスターレベルの監視の両方を含んでいます。
+Couchbase Serverの監視機能の対象は、CPU、メモリー利用量などノード(サーバー)レベルの監視と、データ量やアクセス状況など、データベースやクラスターレベルの監視の両方を含んでいます。
 
 
 === Webコンソール
@@ -44,7 +44,7 @@ Couchbase Serverは、自動フェイルオーバー等の特定の状況が発�
 Prometheus@<fn>{prometheus}は、監視対象にアクセスしてデータを収集するPull型アーキテクチャに基づいています。Prometheusによる監視対象サーバーは、Exporterと呼ばれるアクセスポイントを公開します。
 
 Prometheusのサイト(Exporters and Integrations@<fn>{exporters})で、公開されているExporterのリストを見ることができます。
-公開されているExporterの1つとして、Couchbase Exporter@<fn>{couchbase-exporter}を利用することが可能です。
+公開されているExporterのひとつとして、Couchbase Exporter@<fn>{couchbase-exporter}を利用することが可能です。
 
 //footnote[prometheus][https://prometheus.io/]
 
@@ -93,15 +93,16 @@ Couchbase Serverは、バックアップファイルの作成、バックアッ�
 
 
 ====[column]エディションによる差異
+
 Backupサービスは、エンタープライズエディションでのみ利用可能です。
 
 ====[/column]
 
 === Backupサービス
 
-本書では、コミュニティエディションに基づく記述を方針としているため、エンタープライズエディションでのみ利用可能なBackupサービスは対象外となります。
+本書では、コミュニティーエディションに基づく記述を方針としているため、エンタープライズエディションでのみ利用可能なBackupサービスは対象外となります。
 
-一方、本書で取り扱っていない他のサービスは、データ分析や全文検索など、ユースケースによって要否が決まり、必ずしも普遍的に必要な知識ではないのに対して、Backupサービスは、それらとは異なる性質を持ちます。
+一方、本書で取り扱っていない他のサービスは、データ分析や全文検索など、ユースケースによって要否が決まり、必ずしも普遍的に必要な知識ではないのに対して、Backupサービスはそれらとは異なる性質を持ちます。
 
 そこで、Backupサービスについては、ドキュメント参照先@<fn>{manage-backup-and-restore}を示すことで、機能の紹介に代えたいと思います。
 
@@ -136,6 +137,7 @@ Optional Flags:
 //}
 
 ====[column]エディションによる差異
+
 上記の出力例中の「Enterprise Edition Only」という記載からも見て取れるように、@<tt>{cbbackupmgr}には、@<tt>{merge}や@<tt>{examine}サブコマンドのように、エンタープライズエディションでのみ利用できる機能があります。
 
 ====[/column]
