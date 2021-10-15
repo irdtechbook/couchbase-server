@@ -83,6 +83,13 @@ server-info	サーバーレベルの情報と統計を表示します。
 server-list	クラスター内のすべてのサーバーを一覧表示します。
 server-readd	フェイルオーバー後にサーバーをクラスターに追加し直します。
 setting-alert	アラート設定を変更します。
+//}
+
+//blankline
+
+//table{
+サブコマンド	内容
+----------------------------
 setting-audit	監査ログの設定を変更します。
 setting-autofailover	自動フェイルオーバー設定を変更します。
 setting-autoreprovision	自動再プロビジョニングの設定を変更します。
