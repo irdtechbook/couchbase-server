@@ -308,7 +308,7 @@ $ cbimport csv -c http://localhost:8091 -u Administrator -p password \
 @<tt>{--infer-types}を指定していないので、@<tt>{user_id}は、文字列として扱われます。
 
 
-== データのエクスポート:cbexport
+== データのエクスポート: cbexport
 
 === 概要
 
@@ -338,7 +338,7 @@ cbexport json [--cluster <url>] [--bucket <bucket_name>] [--format <data_format>
  * @<strong>{LINES} 各行が、ひとつのJSONオブジェクト
  * @<strong>{LIST} JSONオブジェクトを要素として持つ、ひとつの配列
 
-== バックアップ:cbbackupmgr
+== バックアップ: cbbackupmgr
 
 データベースにとって、バックアップは必須の機能です。
 
