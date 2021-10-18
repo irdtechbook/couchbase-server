@@ -136,6 +136,8 @@ Optional Flags:
   -h,--help                   Prints the help message
 //}
 
+//blankline
+
 ====[column]エディションによる差異
 
 上記の出力例中の「Enterprise Edition Only」という記載からも見て取れるように、@<tt>{cbbackupmgr}には、@<tt>{merge}や@<tt>{examine}サブコマンドのように、エンタープライズエディションでのみ利用できる機能があります。

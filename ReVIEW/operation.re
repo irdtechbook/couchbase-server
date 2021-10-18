@@ -644,6 +644,8 @@ $ cbbackupmgr merge -a /data/backup -r cluster \
 Merge completed successfully
 //}
 
+//blankline
+
 ====[column]エディションによる差異
 
 @<tt>{merge}サブコマンドは、エンタープライズエディションでのみ利用できます。
