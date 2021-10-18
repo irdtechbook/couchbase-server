@@ -408,7 +408,7 @@ NewSQLと呼ばれる新しいデータベースの登場は、現在におけ�
 
 図の中で、Couchbase Serverは「Document」と「KeyVakue」の両方のエリアに跨がる場所に位置づけられています。
 
-//image[newsql][]{
+//image[newsql][451 Groupによる情報管理市場の分類]{
 //}
 
 (画像は、NoSQL, NewSQL and Beyond@<fn>{90234a6d1bc62d7f4d443da72a796c21}より引用)

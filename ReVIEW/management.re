@@ -11,8 +11,9 @@ Couchbase Serverの監視機能の対象は、CPU、メモリー利用量など�
 
 === Webコンソール
 
-Couchbase ServerのWebコンソールは、様々な情報を期間と対象を変えながら表示することのできるダッシュボードを備えています。@<fn>{ui-monitoring-statistics}
-//image[web_console_monitoring][]{
+Couchbase ServerのWebコンソールは、様々な監視情報を期間と対象を変えながら表示することのできるダッシュボードを備えています。@<fn>{ui-monitoring-statistics}
+
+//image[web_console_monitoring][Webコンソールダッシュボード]{
 //}
 
 //footnote[ui-monitoring-statistics][https://docs.couchbase.com/server/current/manage/monitor/ui-monitoring-statistics.html]
@@ -73,7 +74,7 @@ Couchbase Exporterを利用する際には、監視するクラスターを指�
 
 //footnote[grafana][https://grafana.com/]
 
-//image[grafana][]{
+//image[grafana][Grafanaダッシュボードサンプル]{
 //}
 
  (画像は、 Couchbase Monitoring Integration with Prometheus and Grafana@<fn>{couchbase-monitoring-integration-with-prometheus-and-grafana}より引用)

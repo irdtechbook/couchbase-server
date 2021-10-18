@@ -21,7 +21,7 @@ Couchbase Serverにおける、データ格納の最小単位はドキュメン�
  * ユーザー拡張属性
  * システム拡張属性
 
-//image[document_conceptual_diagram][]{
+//image[document_conceptual_diagram][ドキュメント構成要素概念図]{
 //}
 
 
@@ -64,7 +64,7 @@ Couchbase Serverにおける、データ格納の最小単位はドキュメン�
 クラスターには、最大30のバケットを作成することが可能です。
 
 
-//image[bucket-concept][]{
+//image[bucket-concept][論理的コンテナとしてのバケット]{
 //}
 
 (画像は、 Couchbase Under the Hood: An Architectural Overview@<fn>{server-arc-overview}より引用)

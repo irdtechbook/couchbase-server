@@ -39,7 +39,7 @@ Couchbase Serverでは、レプリカは高可用性のみを目的としてお�
 
 一方、レプリカを取得するためのAPIも提供されており、アクティブデータが利用できなくなってからフェイルオーバーが実行されるまでの期間、このAPIを用いることで、データ読み取りの可用性を向上させることができます。
 
-//image[replica-concept][]{
+//image[replica-concept][ピアツーピアレプリケーション]{
 //}
 
 (画像は、 Couchbase Under the Hood: An Architectural Overview@<fn>{server-arc-overview}より引用)
@@ -59,10 +59,10 @@ Couchbase Serverでは、レプリカ数が3である場合、アクティブデ
 他の分散アーキテクチャーを持つソフトウェアでは、ノードは全て同一のリソースを持つハードウェアで構成されることが必要ないし前提とされているのがしばしば見られます。それに対して、Couchbase Serverはリソース配分の柔軟性を特徴としており、各サービスに異なるノード数を割り当てられるだけでなく、各ノードでワークロード/サービスの特性に応じた異なるリソース(メモリー、CPU)を用いることができます。
 こうした水平および垂直方向に拡張可能な柔軟なスケーリングは、@<strong>{マルチディメンショナルスケーリング(MDS)}と呼ばれています。
 
-//image[mds-horizontal][]{
+//image[mds-horizontal][クラスター構成例]{
 //}
 
-//image[mds-vertical][]{
+//image[mds-vertical][水平および垂直方向へのスケーリング]{
 //}
 
 (画像は、 Couchbase Under the Hood: An Architectural Overview@<fn>{server-arc-overview}より引用)
@@ -122,7 +122,7 @@ Couchbase Serverクライアントは、ドキュメントのアクティブな�
 
 同様に、クラスターマップではQueryサービスを実行しているノードのリストも、最新の状態に維持されます。Queryサービスはステートレスであるため、任意のノードで任意のリクエストを処理できます。
 
-//image[crc32hash][]{
+//image[crc32hash][スマートクライアント]{
 //}
 
 (画像は、 Moving from Relational to NoSQL: How to Get Started@<fn>{relational-no-sql-wp}より引用)
@@ -178,7 +178,7 @@ XDCRは、クラスターの構成変更に対して透過的に動作します�
 
 Couchbase Serverは、データベースチェンジプロトコル(DCP)と呼ばれるストリーミングプロトコルを持ち、順序付けられたキューを使用してデータの変更を通信します。XDCRはコンシューマーとして、DCPを利用しています。
 
-//image[XDCR][]{
+//image[XDCR][XDCR]{
 //}
 
 (画像は、 Couchbase Under the Hood: An Architectural Overview@<fn>{server-arc-overview}より引用)

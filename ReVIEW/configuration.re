@@ -21,7 +21,7 @@ Couchbase Serverはこのメモリー領域を用いて、可能な限りすべ�
 この排出プロセスは、メモリークォータの75％（ローウォーターマークと呼ばれます）を下回るまで続きます。
 
 
-//image[ejection_conceptual_diagram][]{
+//image[ejection_conceptual_diagram][バケットのメモリークォータとハイ/ローウォーターマーク]{
 //}
 
 (画像は、Couchbase Serverドキュメント Ejection@<fn>{ejection}より引用)
@@ -74,7 +74,7 @@ Webコンソールでは、下記のように、RAMに占めるデータおよ�
 
 ここでは機能を紹介するためにダッシュボード画面を示しましたが、Couchbase Serverでは、ダッシュボードと同内容の監視項目をコマンドラインやREST APIを用いて利用することができます。そのため、これらを外部監視システムとの連携のために利用することが考えられます。
 
-//image[data_monitoring][]{
+//image[data_monitoring][RAM利用状況グラフ]{
 //}
 
 //blankline
@@ -85,7 +85,7 @@ Webコンソールでは、下記のように、RAMに占めるデータおよ�
 
 下のような、Webコンソール上のポップアップの他、Eメールを送信することができます。
 
-//image[data_alert][]{
+//image[data_alert][メタデータオーバーヘッドに関する警告]{
 //}
 
 == コンパクション
@@ -173,7 +173,7 @@ Couchbase Serverでは、クライアント/アプリケーションがクラス
 
 外部ネットワークにあるアプリケーションとの接続に限らず、複数の異なるネットワークにあるクラスター間でXDCRを実行する場合も、このケースに該当します。
 
-//image[nat][]{
+//image[nat][外部ネットワークからのクラスターへのアクセス]{
 //}
 
 (画像は、 Couchbase Serverドキュメント Alternate Addresses - Internal Network or Cloud Access@<fn>{internal-network-or-cloud-access}より引用)
@@ -193,7 +193,7 @@ Couchbase Serverでは、クライアント/アプリケーションがクラス
 
 次の図で示すように、セキュリティーを最適化するために、デュアルネットワークを使用して複数のアプリケーションのノードへのアクセスを分離することが考えられます。
 
-//image[dual_network][]{
+//image[dual_network][デュアルネットワーク環境におけるクラスターへのアクセス]{
 //}
 
 (画像は、 Couchbase Serverドキュメント Alternate Addresses - Dual Network@<fn>{dual-network}より引用)

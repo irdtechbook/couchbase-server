@@ -135,7 +135,7 @@ DCPストリーム上のデータミューテーション（更新）情報が�
 
 以下は、Indexノードのスーパーバイザー、Dataノードのプロジェクターとルーター、およびQueryサービスとの間のコミュニケーションの概念図です。
 
-//image[services-relationship][]{
+//image[services-relationship][サービス間連携]{
 //}
 
 (画像は、 Couchbase Under the Hood: An Architectural Overview@<fn>{server-arc-overview}より引用)

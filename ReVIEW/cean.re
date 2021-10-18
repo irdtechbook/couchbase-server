@@ -374,7 +374,7 @@ const result = await cluster.query(
 サンプルアプリケーションは、最小限の機能からなるシンプルなものとなっています。下記の画面を見ていただきさえすれば、特にそれ以上の説明は必要ないでしょう。
 
 
-//image[sample_app_screen][]{
+//image[sample_app_screen][サンプルアプリケーション画面]{
   
 //}
 
