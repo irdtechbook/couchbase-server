@@ -2,9 +2,13 @@
 
 以下のNoSQLデータベースに対して実施されたベンチマークの内容を紹介します。
 
+//blankline
+
  * MongoDB v3.6
  * DataStax Enterprise v6 (Cassandra)
  * Couchbase Server v5.5
+
+//blankline
 
 ここで紹介するベンチマークは、2018年にAltoros@<fn>{bbb133363925367c0a5c46eccf1cc6ef}社によって実施されたもので、下記のタイトルで公開されています。
 
@@ -25,13 +29,19 @@ NoSQL Performance Benchmark 2018: Couchbase Server v5.5, DataStax Enterprise v6 
 
 検証のパターンとして、２種類のYCSB(Yahoo! Cloud Serving Benchmark)@<fn>{ba11732b1ec091926ca4e319cd264f5f}標準ワークロードと、２種類の独自のクエリが用いられています。
 
+//blankline
+
  * ワークロード A: 更新処理
  * ワークロード E: レンジスキャン
 
  * クエリ１: ページネーション（OFFSETとLIMITによるフィルター）
  * クエリ２: ジョイン（テーブル結合）
 
+//blankline
+
 クエリ１とクエリ２は、それぞれ下記のドメインとシナリオを表現しています。
+
+//blankline
 
  * 財務: 地域を指定した財務データの一覧表示(ブラウザー表示のためのページネーションを考慮)
  * eコマース: 期間と地域を指定した売り上げ集計レポート
@@ -39,6 +49,8 @@ NoSQL Performance Benchmark 2018: Couchbase Server v5.5, DataStax Enterprise v6 
 === クラスター構成
 
 サイズの異なる以下の３通りのクラスターで、それぞれ異なるサイズのデータを用いて検証が実施されています。
+
+//blankline
 
  * 4ノード
  * 10ノード
@@ -71,15 +83,23 @@ vCPUs	8
 
 @<strong>{Couchbase Server}は、本番環境ではノード毎に異なるサービスを割り当てることが一般的ですが、ここでは以下の簡略化された構成が用いられています。
 
+//blankline
+
  * クラスターのサイズを問わず、全てのノードでDataサービス、Indexサービス、Queryサービスを有効化。
  * Dataサービスには、データベースに使用可能なRAMの60%を割り当て。
  * Indexサービスには、データベースに使用可能なRAMの40%を割り当て。インデックスはすべてのノードに複製。
 
+//blankline
+
 @<strong>{MongoDB}は、Routerプロセス、Configサーバー、およびデータシャードからなる階層型クラスタートポロジーを持っていますが、ここでは以下の構成が使用されています。
+
+//blankline
 
  * Configサーバーは、3つのメンバーからなるレプリカセットとして構成(クラスターのノード数としてはカウントしない、別のサーバーを利用）。
  * 各シャードは、3つのメンバー (Primary、Secondary、Arbeiter)からなるレプリカセットとして構成。
  *  @<tt>{mongos} （Routerプロセス）は、クライアント環境にデプロイ。
+
+//blankline
 
 @<strong>{Cassandra}のクラスター構成については、ノード毎の差異はなく、全てのノードに共通の設定が適用されています。
 
@@ -87,6 +107,8 @@ vCPUs	8
 == 検証パターン別詳細
 
 以下、各検証パターン毎に、下記の情報を整理します。
+
+//blankline
 
  * データアクセス特性
  * 利用データ件数

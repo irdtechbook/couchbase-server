@@ -6,8 +6,12 @@
 
 Couchbaseという名称で名指される技術には、大きくいって、次のふたつがあります。
 
+//blankline
+
  * Couchbase Server
  * Couchbase Mobile
+
+//blankline
 
 Couchbase Serverは、分散JSONドキュメントデータベース（distributed JSON Document database）です(ここでの英語による引用は、Open Source Projects from Couchbase@<fn>{7b7c6748332542cc032aa96a4fa60999}より)。Couchbase Mobileは、Couchbase LiteとSync Gatewayというふたつの技術を包含する呼称です。Couchbase Liteは、モバイル端末および組み込みデバイス用のネイティブドキュメントデータベース(native document database for mobile and embedded devices)です。Sync Gatewayは、Couchbase MobileのデータをCouchbase Serverと同期するために使うことができるコンポーネント（components to sync to Couchbase Server）です。
 

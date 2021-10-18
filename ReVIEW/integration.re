@@ -6,8 +6,9 @@
 === サポートされるプログラミング言語
 
 Couchbase Serverには、各種プログラミング言語用のSDKが提供されています。
-
 以下のプログラミング言語が、公式サポートされています。
+
+//blankline
 
  * Java@<fn>{java-sdk}
  * Scala@<fn>{scala-sdk}
@@ -19,9 +20,10 @@ Couchbase Serverには、各種プログラミング言語用のSDKが提供さ�
  * Ruby@<fn>{ruby-sdk}
  * Go@<fn>{go-sdk}
 
- また、デベロッパープレビューとして、Kotlin SDK@<fn>{kotlin-sdk}があります。
+//blankline
 
- さらに、コミュニティーサポートとしてRust SDK@<fn>{couchbase-rs}があります。
+また、デベロッパープレビューとして、Kotlin SDK@<fn>{kotlin-sdk}があります。
+さらに、コミュニティーサポートとしてRust SDK@<fn>{couchbase-rs}があります。
 
 //footnote[java-sdk][https://docs.couchbase.com/java-sdk/current/hello-world/overview.html]
 //footnote[scala-sdk][https://docs.couchbase.com/scala-sdk/current/hello-world/overview.html]
@@ -39,7 +41,9 @@ Couchbase Serverには、各種プログラミング言語用のSDKが提供さ�
 
 === 拡張ライブラリー
 
-マルチドキュメント(分散)トランザクションのためのライブラリーが、以下の言語向けに提供されています。
+マルチドキュメントトランザクションのためのライブラリーが、以下の言語向けに提供されています。
+
+//blankline
 
  * Java@<fn>{java-sdk-distributed-acid-transactions}
  * .Net@<fn>{dotnet-sdk-distributed-acid-transactions}
@@ -55,9 +59,13 @@ Couchbase Serverには、各種プログラミング言語用のSDKが提供さ�
 
 Couchbase Serverと外部システムを連携するために利用できる、以下のコネクターが提供されています。
 
+//blankline
+
  * Elasticsearch
  * Kafka
  * Spark
+
+//blankline
 
 詳細は、ドキュメント(Connector Guides@<fn>{connectors_intro})を参照してください。
 

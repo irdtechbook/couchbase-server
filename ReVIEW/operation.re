@@ -13,10 +13,13 @@ Couchbase Serverには、様々なコマンドラインツールが用意され�
 
 Couchbase Serverをインストールした際に同時にインストールされるコマンドは、下記のパス以下(ほとんどは@<tt>{bin}直下、一部@<tt>{tools}や、@<tt>{install}ディレクトリーの下)に存在します。
 
+//blankline
+
  * @<strong>{Linux}: /opt/couchbase/bin
  * @<strong>{Windows}: C:\Program Files\couchbase\server\bin
  * @<strong>{Mac OS X}: /Applications/Couchbase Server.app/Contents/Resources/couchbase-core/bin
 
+//blankline
 
 本章の実行例では、コマンドへのパスが通っていることを前提としています。
 
@@ -82,7 +85,6 @@ server-add	サーバーをクラスターに追加します。
 server-info	サーバーレベルの情報と統計を表示します。
 server-list	クラスター内のすべてのサーバーを一覧表示します。
 server-readd	フェイルオーバー後にサーバーをクラスターに追加し直します。
-setting-alert	アラート設定を変更します。
 //}
 
 //blankline
@@ -90,6 +92,7 @@ setting-alert	アラート設定を変更します。
 //table{
 サブコマンド	内容
 ----------------------------
+setting-alert	アラート設定を変更します。
 setting-audit	監査ログの設定を変更します。
 setting-autofailover	自動フェイルオーバー設定を変更します。
 setting-autoreprovision	自動再プロビジョニングの設定を変更します。
@@ -193,6 +196,8 @@ cbimport json [--cluster <url>] [--bucket <bucket_name>] [--dataset <path>]
 
 @<tt>{cbimport}(および@<tt>{cbexport})コマンドに対して、ホスト名を指定する際には、以下のフォーマットが利用可能です。
 
+//blankline
+
  * @<tt>{<addr>:<port>}
  * @<tt>{http://<addr>:<port>}
  * @<tt>{https://<addr>:<port>}
@@ -202,6 +207,8 @@ cbimport json [--cluster <url>] [--bucket <bucket_name>] [--dataset <path>]
  * @<tt>{couchbases://<srv>}
  * @<tt>{<addr>:<port>,<addr>:<port>}
  * @<tt>{<schema>:<addr>:<port>,<addr>:<port>}
+
+//blankline
 
 末尾に@<tt>{s}のついた@<tt>{couchbases://}は、(@<tt>{http://}と@<tt>{https://}の関係と同様)、セキュアな接続を意味します。
 
@@ -335,8 +342,10 @@ cbexport json [--cluster <url>] [--bucket <bucket_name>] [--format <data_format>
 
 @<tt>{cbexport}は、@<tt>{cbimport}におけるJSONデータの扱いと同様に、以下のフォーマットでファイルを出力することが可能です。
 
- * @<strong>{LINES} 各行が、ひとつのJSONオブジェクト
- * @<strong>{LIST} JSONオブジェクトを要素として持つ、ひとつの配列
+//blankline
+
+ * @<strong>{LINES}: 各行が、ひとつのJSONオブジェクト
+ * @<strong>{LIST}: JSONオブジェクトを要素として持つ、ひとつの配列
 
 == バックアップ: cbbackupmgr
 
@@ -800,8 +809,12 @@ $ brew install libcouchbase
 
 クライアントオプションには、たとえば以下のものがあります。
 
+//blankline
+
  * @<tt>{operation_timeout=SECONDS}: タイムアウト秒数を指定します。これは、クライアントが操作の完了を待つ時間です。デフォルトは2.5秒です。
  * @<tt>{config_cache=PATH}: クライアントからクラスターへの接続時に、ファイルベースの構成キャッシュを利用できるようにします。ファイルが存在しない場合、クライアントがクラスターに接続した際に、ブートストラップ情報をファイルにキャッシュします。
+
+//blankline
 
 @<tt>{libcouchbase}の詳細については、Githubリポジトリー(Couchbase C Client@<fn>{github-libcouchbase})を参照してください。
 
@@ -924,10 +937,13 @@ $ cbc-pillowfight -U couchbase://localhost/pillow --json -e 10 -u Administrator 
 
 @<tt>{n1qlback}のオプションを示します。
 
+//blankline
+
  * @<tt>{-f}, @<tt>{--queryfile=PATH}: 実行するクエリをJSON形式で記述したファイルへのパスを指定します。
  * @<tt>{-t}, @<tt>{--num-threads=NTHREADS}: 同時に実行するスレッド数(クライアントインスタンスの数)を設定します。
  * @<tt>{-e}, @<tt>{--error-log=PATH}: エラーログを出力するファイルへのパスを指定します。失敗したクエリとエラーの詳細がファイルへ書き込まれます。
 
+//blankline
 
 最後に、@<tt>{n1qlback}の実行例を示します。
 
@@ -944,6 +960,8 @@ $ cbc-n1qlback -U couchbase://localhost/travel-sample \
 @<tt>{pillowfight}と@<tt>{n1qlback}以外に、以下のツールがあります。
 
 ここでは紹介に留めますが、詳細は、各ツールのAPI Docを参照してください。
+
+//blankline
 
  * @<tt>{cbc}@<fn>{md_doc_cbc}: クラスターと通信するためのユーティリティ
  * @<tt>{cbc-subdoc}@<fn>{md_doc_cbc-subdoc}: サブドキュメントAPIに由来するコマンドを用いてデータにアクセスすることのできるインタラクティブシェルを実行するためのユーティリティ

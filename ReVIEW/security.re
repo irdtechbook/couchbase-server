@@ -82,6 +82,8 @@ Couchbase Serverのセキュリティーを高めるために、管理可能な�
 
 以下のセキュリティー関連機能は、エンタープライズエディションの機能として提供されています。
 
+//blankline
+
  * 外部アクセシビリティ管理
  * ロールベースアクセスコントロール(RBAC)
  * ネットワークアクセス暗号化
@@ -162,6 +164,8 @@ $ couchbase-cli setting-password-policy \
 
 外部システムによるアクセシビリティ管理としては、次のいずれかが用いられます。
 
+//blankline
+
  * LDAP (Lightweight Directory Access Protocol)
  * PAM (Pluggable Authentication Modules)
 
@@ -183,10 +187,14 @@ Webコンソールへのログインがデフォルトのポート(8091)によ�
 
 このパスワード認証メカニズムには、次の方式があります(強度による昇順で掲載)。
 
- * @<strong>{PLAIN} 暗号化されていない形式でパスワードを送信します。
- * @<strong>{SCRAM-SHA1} 160ビットのキーを使用します。
- * @<strong>{SCRAM-SHA256} SHA2と呼ばれるハッシュ関数グループのひとつ。256ビットのキーを使用します。
- * @<strong>{SCRAM-SHA512} SHA2グループのハッシュ関数。512ビットのキーを使用します。サポートされている最も強力な認証プロトコルです。
+//blankline
+
+ * @<strong>{PLAIN}: 暗号化されていない形式でパスワードを送信します。
+ * @<strong>{SCRAM-SHA1}: 160ビットのキーを使用します。
+ * @<strong>{SCRAM-SHA256}: SHA2と呼ばれるハッシュ関数グループのひとつ。256ビットのキーを使用します。
+ * @<strong>{SCRAM-SHA512}: SHA2グループのハッシュ関数。512ビットのキーを使用します。サポートされている最も強力な認証プロトコルです。
+
+//blankline
 
 SCRAM(Salted Challenge Response Authentication Mechanism)を用いて、保護された形式でパスワードを送信することにより、アプリケーションを安全に認証できます。
 
@@ -218,6 +226,8 @@ Couchbase Serverは、クライアント認証のためのX.509証明書の使�
 ロール(Role@<fn>{9d33fd7129234e2344d00e94d4853f2b})について説明するにあたって、まず基本的なユースケースを整理します。
 一般にアプリケーションのバックエンドとして使われるデータベースのユーザーは、管理者、開発者、アプリケーションに分類することができます。
 
+//blankline
+
  * @<strong>{管理者}は、クラスターの管理タスクを担います。Webコンソールにログインしたり、CLIを使って管理タスクを実行します。データの登録を担当することも考えられます。
  * @<strong>{開発者}は、データを参照したり、データの書き込みを行うためにデータベースにアクセスすることがあります。また、Webコンソールなどでクラスターの情報を参照する場合があります。
  * @<strong>{アプリケーション}は、データベースに対して、データの読み取りと書き込みを行います。
@@ -225,6 +235,8 @@ Couchbase Serverは、クライアント認証のためのX.509証明書の使�
 === ビルトインロール
 
 以下に、ビルトインロールの概要を記します。
+
+//blankline
 
  * @<strong>{Full Admin}ロールは、Couchbase Serverの全ての機能やリソースへの完全なアクセスを許可します。
  * @<strong>{Read-only Admin}ロールは、統計情報を含むクラスター管理情報の参照を許可します。また、Webコンソールへのアクセスを許可します。
@@ -261,6 +273,8 @@ Couchbase Serverは、データの暗号化(Encryption@<fn>{encryption-overview}
 
 永続化データ(At Rest)暗号化の機能は、下記のようなサードパーティー暗号化ツールとの組み合わせにより実現されます。
 
+//blankline
+
  * Linux Unified Key Setup (LUKS)@<fn>{sec-Using_LUKS_Disk_Encryption}
  * Thales CipherTrust@<fn>{thales} (旧Vormetric/Gemalto)
  * Protegrity@<fn>{protegrity}
@@ -294,6 +308,8 @@ LUKSによる暗号化については、設定手順についてのドキュメ�
 Couchbase Server Java SDKを使用して、JSONドキュメントの特定のフィールドを暗号化および復号化することができます。
 
 フィールドレベルの暗号化(Field Level Encryption@<fn>{java-sdk-encryption})の操作方法として、次のふたつの方法が利用可能です。
+
+//blankline
 
  * データバインディング中の透過的な暗号化/復号化
  * フィールドに対する直接的な操作
