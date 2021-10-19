@@ -32,7 +32,8 @@ Linux系OSは、コマンドラインからパッケージシステムを介し�
 下記のコマンドを実行します。 ここでは、@<tt>{--name} オプションとして @<tt>{cb}を指定しており、以降の操作でこの名称を利用します。
 
 //cmd{
-$ docker run -d --name cb -p 8091-8094:8091-8094 -p 11210:11210 couchbase:community
+$ docker run -d --name cb -p 8091-8094:8091-8094 -p 11210:11210 \
+  couchbase:community
 //}
 
 CouchbaseのDockerリポジトリーから最新版がダウンロードされ、コンテナの実行が開始されます。

@@ -57,8 +57,10 @@ Prometheusのサイト(Exporters and Integrations@<fn>{exporters})で、公開�
 
 Couchbase Exporterを利用する際には、監視するクラスターを指定して、以下のようにプロセスを実行します。
 
-//cmd{
-./couchbase-exporter --couchbase.username Administrator --couchbase.password password --web.listen-address=":9420" --couchbase.url="http://example.host.a:8091"
+//emlist{
+couchbase-exporter --couchbase.username <username> 
+--couchbase.password <password> --web.listen-address=":9420" 
+--couchbase.url="http://<host>:8091"
 //}
 
 

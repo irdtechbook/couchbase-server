@@ -210,7 +210,7 @@ cbimport json [--cluster <url>] [--bucket <bucket_name>] [--dataset <path>]
 
 //blankline
 
-末尾に@<tt>{s}のついた@<tt>{couchbases://}は、(@<tt>{http://}と@<tt>{https://}の関係と同様)、セキュアな接続を意味します。
+末尾に@<tt>{s}のついた@<tt>{couchbases://}は、(@<tt>{http://}と@<tt>{https://}の関係と同様)セキュアな接続を意味します。
 
 ホストフォーマットでは、複数のノードを指定したり、SRVレコードを用いることができます。
 詳細な解説や有効な接続文字列の実例について、ドキュメント@<fn>{cbimport-host-formats}を参照してください。
@@ -442,7 +442,8 @@ backup_repo  | 32c97d5f-821a-4284-840b-9ee7cf8733a3  | 0B    | 2        |
 
 
 //cmd{
-$ cbbackupmgr backup -c 127.0.0.1 -u Administrator -p password -a /data/backup -r cluster
+$ cbbackupmgr backup -c 127.0.0.1 -u Administrator -p password \
+  -a /data/backup -r cluster
 Backing up to 2020-03-25T08_08_11.770436Z
 Copied all data in 33.02s (Avg. 759.44KB/Sec)  38894 items / 24.47MB
 beer-sample             [===================================] 100.00%
@@ -538,7 +539,8 @@ backup_repo  | 32c97d5f-821a-4284-840b-9ee7cf8733a3  | 54.35MB  | 2        |
 
 
 //cmd{
-$ cbbackupmgr backup -a /data/backup -r cluster -c couchbase://127.0.0.1 -u Administrator -p password
+$ cbbackupmgr backup -a /data/backup -r cluster -c couchbase://127.0.0.1 \
+  -u Administrator -p password
 
 Backing up to 2020-03-25T08_41_21.461311Z
 Copied all data in 3s (Avg. 18.98KB/Sec)           4 items / 56.95KB
@@ -613,9 +615,9 @@ backup_repo  | 32c97d5f-821a-4284-840b-9ee7cf8733a3  | 86.37MB  | 2        |
 
 //cmd{
 $ cbbackupmgr restore -a /data/backup -r cluster \
- -c http://127.0.0.1:8091 -u Administrator -p password \
- --start 2020-03-25T08_08_11.770436Z \
- --end 2020-03-25T08_08_11.770436Z --force-updates
+  -c http://127.0.0.1:8091 -u Administrator -p password \
+  --start 2020-03-25T08_08_11.770436Z \
+  --end 2020-03-25T08_08_11.770436Z --force-updates
 
 (1/1) Restoring backup 2020-03-25T08_08_11.770436Z
 Copied all data in 2s (Avg. 19.96MB/Sec)       38894 items / 39.91MB
@@ -749,7 +751,8 @@ Couchbase Serverには、CLIリファレンス@<fn>{cli-intro}に含まれてい
 //cmd{
 $ sudo yum check-update
 $ sudo yum search libcouchbase
-$ sudo yum install libcouchbase3 libcouchbase-devel libcouchbase3-tools libcouchbase3-libevent
+$ sudo yum install libcouchbase3 libcouchbase-devel libcouchbase3-tools \
+  libcouchbase3-libevent
 //}
 
 @<strong>{Mac}では、以下のようにインストールします。
@@ -905,7 +908,8 @@ $ cbc-pillowfight --json -m 100000 -M 100000 -u Administrator -P password
 @<strong>{JSONドキュメントの有効期限を10秒に設定}
 
 //cmd{
-$ cbc-pillowfight -U couchbase://localhost/pillow --json -e 10 -u Administrator -P password
+$ cbc-pillowfight -U couchbase://localhost/pillow --json -e 10 \
+  -u Administrator -P password
 //}
 
 最後の例では、接続先を明示的に指定しています。その他の例では、デフォルトの接続先（@<tt>{couchbase://localhost/default}）が利用されています。

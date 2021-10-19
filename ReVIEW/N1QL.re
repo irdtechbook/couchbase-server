@@ -352,6 +352,8 @@ N1QLで配列へのアクセスに用いられる構文は、@<tt>{ARRAY}また�
 SELECT ARRAY v FOR v IN [1, 2, 3, 4, 5] WHEN v > 2 END AS res;
 //}
 
+//blankline
+
 //emlist{
 [
   {
@@ -456,6 +458,8 @@ item.count >= 5 END;
 "total_price":"18.22"
 }
 //}
+
+//blankline
 
 //emlist{
 {
@@ -604,6 +608,8 @@ FROM tutorial.sample.person
 WHERE children IS NULL;
 //}
 
+//blankline
+
 //emlist{
 [
   {
@@ -620,6 +626,8 @@ SELECT fname, children
 FROM tutorial.sample.person
 WHERE children IS MISSING;
 //}
+
+//blankline
 
 //emlist{
 [
@@ -822,6 +830,8 @@ Eventingサービスは、エンタープライズエディションでのみ利
 ====[column]エディションによる差異
 
 クエリに関連した、コミュニティーエディションには含まれない、エンタープライズエディションの機能として、以下があります。
+
+//blankline
 
  * ウィンドウ関数
  * FLEXインデックス（クエリからの全文検索インデックス利用）

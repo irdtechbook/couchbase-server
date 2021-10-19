@@ -195,8 +195,8 @@ Couchbase Serverのフェイルオーバーは、以下の方法で手動で実�
 
 
 //emlist{
-couchbase-cli failover --cluster=<server(available)>:8091\
--u cluster-username -p cluster-password\
+couchbase-cli failover --cluster=<server(available)>:8091
+-u cluster-username -p cluster-password
 --server-failover=<server(target)>:8091
 //}
 

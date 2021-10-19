@@ -57,14 +57,14 @@ const result = await collection.insert(key, document);
 
 //emlist[][js]{
 const result = await collection.get(key);
-document = result.value;
+const document = result.value;
 //}
 
 @<strong>{更新}(@<tt>{UPDATE})
 
 
 //emlist[][js]{
-let result = await collection.replace(key, document);
+const result = await collection.replace(key, document);
 //}
 
 
@@ -78,7 +78,7 @@ const result = await collection.remove(key);
 
 
 //emlist[][js]{
-let result = await collection.upsert(key, document);
+const result = await collection.upsert(key, document);
 //}
 
 
@@ -100,45 +100,44 @@ let result = await collection.upsert(key, document);
 @<strong>{生成}(@<tt>{CREATE})
 
 //emlist[][js]{
-  await collection.mutateIn(key, [
-    couchbase.MutateInSpec.insert("purchases.complete", [42, true, "None"]),
-  ]);
-
+await collection.mutateIn(key, [
+  couchbase.MutateInSpec.insert("purchases.complete", [42, true, "None"]),
+]);
 //}
 
 @<strong>{読み取り}(@<tt>{READ})
 
 //emlist[][js]{
- var result = await collection.lookupIn(key, [
-    couchbase.LookupInSpec.get("addresses.delivery.country"),
-  ]);
-  var country = result.content[0].value;
+const result = await collection.lookupIn(key, [
+  couchbase.LookupInSpec.get("addresses.delivery.country"),
+]);
+const country = result.content[0].value;
 //}
 
 
 @<strong>{更新}(@<tt>{UPDATE})
 
 //emlist[][js]{
-  await collection.mutateIn(key, [
-    couchbase.MutateInSpec.replace("email", "xyz@example.com"),
-  ]);
+await collection.mutateIn(key, [
+  couchbase.MutateInSpec.replace("email", "xyz@example.com"),
+]);
 //}
 
 
 @<strong>{削除}(@<tt>{DELETE})
 
 //emlist[][js]{
-  await collection.mutateIn(key, [
-    couchbase.MutateInSpec.remove("addresses.billing"),
-  ]);
+await collection.mutateIn(key, [
+  couchbase.MutateInSpec.remove("addresses.billing"),
+]);
 //}
 
 @<strong>{生成または更新}(@<tt>{UPSERT})
 
 //emlist[][js]{
-  await collection.mutateIn(key, [
-    couchbase.MutateInSpec.upsert("fax", "123-456-7890"),
-  ]);
+await collection.mutateIn(key, [
+  couchbase.MutateInSpec.upsert("fax", "123-456-7890"),
+]);
 //}
 
 @<tt>{UPSERT}メソッドは、指定したフィールドが存在しなければ追加し、既にフィールドが存在している場合はその値を更新します。
@@ -149,11 +148,10 @@ let result = await collection.upsert(key, document);
 
 
 //emlist[][js]{
-  var result = await collection.lookupIn(key, [
-    couchbase.LookupInSpec.exists("purchases.pending[-1]"),
-  ]);
-  console.log("Path exists? ", result.content[0].value);
-
+const result = await collection.lookupIn(key, [
+  couchbase.LookupInSpec.exists("purchases.pending[-1]"),
+]);
+console.log("Path exists? ", result.content[0].value);
 //} 
 
 データを取得するのではなく、指定したパスが存在するかどうかを確認することが可能です。
@@ -165,15 +163,13 @@ let result = await collection.upsert(key, document);
 上掲のコードを見ればわかりますが、サブドキュメント操作は配列型の引数で与えられています。これまでの例では要素がひとつの配列が使われていますが、下記のように複数の操作を一度に与えることが可能です。
 
 //emlist[][js]{
+const result = await collection.lookupIn(key, [
+  couchbase.LookupInSpec.get("addresses.delivery.country"),
+  couchbase.LookupInSpec.exists("purchases.pending[-1]"),
+]);
 
-  var result = await collection.lookupIn(key, [
-    couchbase.LookupInSpec.get("addresses.delivery.country"),
-    couchbase.LookupInSpec.exists("purchases.pending[-1]"),
-  ]);
-
-  console.log(result.content[0].value); 
-  console.log("Path exists?", result.content[1].value);
-
+console.log(result.content[0].value); 
+console.log("Path exists?", result.content[1].value);
 //}
 
 //blankline

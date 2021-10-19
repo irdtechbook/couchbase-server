@@ -77,6 +77,8 @@ Couchbase Serverのグローバルセカンダリインデックス(GSI)には�
 SELECT * FROM system:indexes WHERE name = '#primary';
 //}
 
+//blankline
+
 //emlist{
 [
   {
@@ -398,7 +400,8 @@ SATISFIES v = {"day":2, "flight": "US681", "utc": "19:20:00"} END;
 複数のキーを持つインデックスを定義することが可能です。
 
 //emlist{
-CREATE INDEX travel_info ON `travel-sample`.inventory.airline(name, id, icao, iata);
+CREATE INDEX travel_info 
+ON `travel-sample`.inventory.airline(name, id, icao, iata);
 //}
 
 複合(Composit)インデックスには、@<strong>{先行属性(leading attributes)マッチ}という性質があります。
@@ -467,8 +470,8 @@ WHERE LOWER(name) = "villeneuve-sur-lot";
 より複雑な式の組み合わせを使用することもできます。たとえば以下のように、計算式を指定することも可能です。
 
 //emlist{
-CREATE INDEX travel_cx1 ON `travel-sample`.inventory.airport
-(LOWER(name), ROUND(geo.alt * 0.3048));
+CREATE INDEX travel_cx1 
+ON `travel-sample`.inventory.airport(LOWER(name), ROUND(geo.alt * 0.3048));
 //}
 
 === 適応(Adaptive)インデックス
@@ -558,8 +561,8 @@ WHERE country = 'France' WITH {"nodes": ["192.0.3.0:8091"]};
 ここでは、限られた例を示すに留めますが、たとえば、次のインデックス定義DDLはドキュメントキーでパーティション化されたインデックスを作成します。
 
 //emlist{
-CREATE INDEX idx ON `travel-sample`.inventory.airline
-(country, name, id)
+CREATE INDEX idx 
+ON `travel-sample`.inventory.airline(country, name, id)
 PARTITION BY HASH(META().id);
 //}
 
