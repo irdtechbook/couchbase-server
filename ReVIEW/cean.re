@@ -176,7 +176,7 @@ console.log("Path exists?", result.content[1].value);
 
 @<strong>{その他の操作}
 
-ここではCRUD操作を中心に紹介しましたが、Couchbase Serverのサブドキュメント操作の範囲は上記に留まるものではありません。
+ここではCRUD操作を中心に紹介しましたが、Couchbase Serverのサブドキュメント操作の範囲は上記にとどまるものではありません。
 
 たとえば、JSONドキュメントは値を配列として持つことができますが、配列に対する値の追加・挿入を実行することが可能です。
 

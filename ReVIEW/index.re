@@ -365,11 +365,11 @@ AND (v.day = 1) END; ③
 
 //blankline
 
- ① 述語中の「@<tt>{sourceairport = "SFO"}」の箇所が、インデックスの @<tt>{WHERE}句に一致します。
+① 述語中の「@<tt>{sourceairport = "SFO"}」の箇所が、インデックスの @<tt>{WHERE}句に一致します。
 
- ② 述語中、@<tt>{ANY-SATISFIES}句の@<tt>{schedule}配列に関する検索のキーとして、@<tt>{v.flight} が一致します。
+② 述語中、@<tt>{ANY-SATISFIES}句の@<tt>{schedule}配列に関する検索のキーとして、@<tt>{v.flight} が一致します。
 
- ③ @<tt>{ANY-SATISFIES}句のもうひとつの条件「@<tt>{v.day = 1}」は、インデックス定義の@<tt>{WHEN}句の条件「 @<tt>{v.day < 4} 」に包含されます。
+③ @<tt>{ANY-SATISFIES}句のもうひとつの条件「@<tt>{v.day = 1}」は、インデックス定義の@<tt>{WHEN}句の条件「 @<tt>{v.day < 4} 」に包含されます。
 
 
 
@@ -558,7 +558,7 @@ WHERE country = 'France' WITH {"nodes": ["192.0.3.0:8091"]};
 
 //blankline
 
-ここでは、限られた例を示すに留めますが、たとえば、次のインデックス定義DDLはドキュメントキーでパーティション化されたインデックスを作成します。
+ここでは、限られた例を示すにとどめますが、たとえば、次のインデックス定義DDLはドキュメントキーでパーティション化されたインデックスを作成します。
 
 //emlist{
 CREATE INDEX idx 
@@ -596,7 +596,14 @@ Couchbase Serverのインデックスにおいても、属性リストの先頭�
 
 //blankline
 
-具体的には、クエリ中の下記の要素が対応します。
+具体例として、下記のようなインデックス定義とクエリについて考えてみます。
+
+//emlist{
+CREATE INDEX idx_cust ON retail.east.customer(age, sex)
+WHERE grade ="premium";
+//}
+
+クエリ中の下記の要素が対応します。
 
 //emlist{
 SELECT *
@@ -605,14 +612,10 @@ WHERE c.age = $age ③
 AND c.grade = "premium"; ②
 //}
 
-//emlist{
-CREATE INDEX idx_cust ON retail.east.customer(age, sex)
-WHERE grade ="premium";
-//}
 
 上記のクエリとインデックスの例は、先行属性マッチとカーディナリティの関係が適切な例となります。
 
-ただし、下記のようなクエリでは、上のインデックスを用いることができません。
+ただし、下記のようなクエリでは、上記のインデックスを用いることができません。
 
 //emlist{
 SELECT *

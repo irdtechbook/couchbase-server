@@ -22,7 +22,7 @@ Couchbase Liteは、組み込み用ネイティブデータベースとして、
 
 ====[/column]
 
-=== Couchbase Serverについて
+== Couchbase Serverについて
 
 Couchbase Serverは、ドキュメント指向データベースにカテゴライズされるNoSQLデータベースであり、シェアードナッシング型の分散アーキテクチャーを持ちます。
 
@@ -39,7 +39,7 @@ NoSQLと呼ばれるデータベースは、ビッグデータの集計処理や
 
 //footnote[release-701][https://docs.couchbase.com/server/current/release-notes/relnotes.html#release-701]
 
-=== エディションとオープンソースプロジェクト
+== エディションとオープンソースプロジェクト
 
 Couchbase Serverは、エンタープライズエディションとコミュニティーエディションの、ふたつの形態でバイナリが提供されており、その基盤としてオープンソースプロジェクト@<fn>{https://github.com/couchbase}が存在しています。
 

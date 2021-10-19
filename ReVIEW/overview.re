@@ -2,6 +2,8 @@
 
 == Couchbase Serverの歴史
 
+=== Couchbase, Inc.の設立
+
 Couchbase Serverの歴史の直接的な始まりは、Membase社とCouchOne社の合併により、Couchbase, Inc.@<fn>{about}が設立された2011年に遡ります。
 
 Couchbase, Inc.は、Membase社とCouchOne社の合併により設立されました。
@@ -286,7 +288,7 @@ Couchbase Serverの内部的な実装は、いわば上述の「ライトビハ�
 Couchbase Serverは、Memcachedプロジェクトのメンバーにより開発されたMembaseをその前身としており、Memcachedのユースケースへの適応が意識されています。
 そうした背景から、メモリーのみを利用して永続化要件のないデータを扱うこともサポートされています。
 
-本書では、Couchbase Serverのこの側面については、本来的なデータベースとは異なるユースケースとして、最小限の扱いに留めています。
+本書では、Couchbase Serverのこの側面については、本来的なデータベースとは異なるユースケースとして、最小限の扱いにとどめています。
 
 ====[/column]
 

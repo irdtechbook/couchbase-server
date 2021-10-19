@@ -15,6 +15,7 @@ CHAPS:
   - cluster.re
   - management.re
   - operation.re
+  - utility.re
   - configuration.re
   - integration.re
   - cean.re
