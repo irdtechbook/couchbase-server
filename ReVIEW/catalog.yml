@@ -1,0 +1,41 @@
+PREDEF:
+  - preface.re
+  - prologue.re
+
+CHAPS:
+  - overview.re
+  - cbl-data.re
+  - cbl-query.re
+  - get-started.re
+  - cbl-query-builder.re
+  - cbl-n1ql.re
+  - cbl-index.re
+  - cbl-fts.re
+  - cbl-c-sdk.re
+  - cbl-log.re
+  - cbl-tool.re
+  - cross-platform.re
+  - sg-concepts.re
+  - sync-function.re
+  - sg-management.re
+  - sg-security.re
+  - sg-deploy.re
+  - sg-integration.re
+  - sg-maintenance.re
+  - sg-log.re
+  - sg-with-cbs-client.re
+  - cbl-replication.re
+  - sg-mechanism.re
+  - conflict-resolution.re
+  - sync-patterns.re
+  - cbm-environments.re
+  - cbm-tutorial.re
+  - dev-practice.re
+
+APPENDIX:
+
+- peer-to-peer.re
+- predictive.re
+- cloud.re
+
+POSTDEF:
