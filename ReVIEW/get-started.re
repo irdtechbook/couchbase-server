@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
 
  1. エミュレーターを起動している状態で、メニューから次のように開きます。: [View] > [Tool Window] >  [Device File Explore]
  2. Device File Exploreのツリービューで次のように展開します。: [data] > [data]
- 3. アプリケーションのパッケージ名のフォルダの中の[files]の下に作成されたデータベースを確認することができます。
+ 3. アプリケーションのパッケージ名のフォルダーの中の[files]の下に作成されたデータベースを確認することができます。
 
 
 === 開発参考情報
@@ -302,7 +302,7 @@ GlobalScope.launch(Dispatchers.Default) {
 //}
 
 
-名前付きパラメーターを活用してデータベースやレプリケーターなどの各種プロパティ設定を行うことができます。
+名前付きパラメーターを活用してデータベースやレプリケーターなどの各種プロパティー設定を行うことができます。
 
 //emlist[][KOTLIN]{
 val config = ReplicatorConfigurationFactory.create(
@@ -357,7 +357,7 @@ Swiftパッケージマネージャーを使用して、Couchbase Liteをセッ�
 
 //blankline
 
-サイドメニュー のツリービューの[PROJECT]セクションのプロジェクト名(~.xcodepojファイル)を選択し、[Swift Packages]タブを開きます。
+サイドメニューのツリービューの[PROJECT]セクションのプロジェクト名(~.xcodepojファイル)を選択し、[Swift Packages]タブを開きます。
 
 
 //image[swift_3][Swift Packages画面]{
@@ -614,7 +614,7 @@ $ carthage update --platform ios
 //}
 
 
-サイドメニュー のツリービューの[TARGETS]セクションのプロジェクト名を選択し、[General]タブの [Framework, Libraries, and Embeded Content]セクションを確認します
+サイドメニューのツリービューの[TARGETS]セクションのプロジェクト名を選択し、[General]タブの [Framework, Libraries, and Embeded Content]セクションを確認します
 
 
 //image[objective-c_2][Xcode General画面]{
@@ -671,7 +671,7 @@ ViewController.mの全体を示します。
 
 
     CBLDocument *document = [database documentWithID:mutableDoc2.id];
-    // ドキュメントIDとプロパティの出力
+    // ドキュメントIDとプロパティーの出力
     NSLog(@"ドキュメントID: %@", document.id);
     NSLog(@"タイプ: %@", [document stringForKey:@"type"]);
     NSLog(@"ユーザー名: %@ %@", [document stringForKey:@"lastname"], [document stringForKey:@"firstname"]);
@@ -724,13 +724,13 @@ Couchbase Liteのセットアップ方法を含め、公式ドキュメントや
 === プロジェクト作成
 
 C#.NETでCouchbase Liteを使う方法を簡潔に示すため、コンソールアプリとしてプロジェクトを作成します。
-ここでは、フレームワークに、「.NET5.0」を選んでいます。
+ここでは、フレームワークに「.NET5.0」を選んでいます。
 
 
 === NuGetによるセットアップ
 
  1. メニューから、プロジェクト > 「NuGetパッケージの管理...(Manage NuGet Packages...)」を開きます。
- 2. 右上の「検索」フォームに「couchbase」と入力し、表示された項目から「Couchbase.Lite」を選びます。これは、コミュニティエディションにあたります。エンタープライズエディションの場合は、「Couchbase.Lite.Enterprise」を選択します。
+ 2. 右上の「検索」フォームに「couchbase」と入力し、表示された項目から「Couchbase.Lite」を選びます。これは、コミュニティーエディションにあたります。エンタープライズエディションの場合は、「Couchbase.Lite.Enterprise」を選択します。
  3. 「パッケージの追加」ボタンを押下し、ダイアログの指示に従って進めていくと、Couchbase.Liteが依存関係に追加されます。
 
 //image[csharp_nuget][NuGetパッケージ管理ダイアログ]{
@@ -861,7 +861,7 @@ https://packages.couchbase.com/releases/couchbase-release/couchbase-release-1.0-
 
 //blankline
 
-例えば、以下のようにcurlコマンドを用いることができます。
+たとえば、以下のようにcurlコマンドを用いることができます。
 
 //cmd{
 $ curl -O https://packages.couchbase.com/releases/couchbase-release/couchbase-release-1.0-noarch.deb
@@ -886,7 +886,7 @@ $ sudo apt update
 パッケージをインストールします。
 
 
-以下は、コミュニティエディションを使う場合の例です。
+以下は、コミュニティーエディションを使う場合の例です。
 
 
 //cmd{
@@ -939,7 +939,7 @@ int main(void) {
         return 1;
     }
 
-    // ドキュメントIDを保存し、ドキュメントのメモリを解放
+    // ドキュメントIDを保存し、ドキュメントのメモリーを解放
     // (注. FLSliceResultやFLStringResultとして確保した変数は明示的な解放が必要）
     FLStringResult id = FLSlice_Copy(CBLDocument_ID(mutableDoc));
     CBLDocument_Release(mutableDoc);
@@ -977,7 +977,7 @@ int main(void) {
         return 1;
     }
 
-    // ここでは、コピーを行なっていないため、後のメモリ解放は不要 (注.下記ではFLStringを利用し、FLStringResultでないことに留意)
+    // ここでは、コピーを行っていないため、後のメモリー解放は不要 (注.下記ではFLStringを利用し、FLStringResultでないことに留意)
     FLString retrievedID = CBLDocument_ID(docAgain);
     FLDict retrievedProperties = CBLDocument_Properties(docAgain);
     FLString retrievedType = FLValue_AsString(FLDict_Get(retrievedProperties, FLSTR("type")));
@@ -1036,7 +1036,7 @@ $ gcc -g -o cbltest cbltest.c -lcblite
 //}
 
 
-コンパイルの結果生成された@<tt>{cbltest}を実行します。
+コンパイルの結果、生成された@<tt>{cbltest}を実行します。
 
 //cmd{
 $ ./cbltest

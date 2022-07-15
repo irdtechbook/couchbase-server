@@ -40,7 +40,7 @@ Couchbase Liteは、2018年にリリースされたバージョン2.0にて、C/
 現在のCouchbase Liteはプラットフォームに依存しない共通のコアコンポーネントに基づいています。
 Java、Swift、Objective-C、C#等、各プラットフォーム用のCouchbase Lite実装は、全て内部でC APIを利用しています。
 
-Couchbase Lite C言語実装は、 Couchbase Liteコアライブラリと静的にリンクされたバイナリとして提供されます。
+Couchbase Lite C言語実装は、 Couchbase Liteコアライブラリーと静的にリンクされたバイナリとして提供されます。
 
 //image[c-support-arch][C API階層アーキテクチャー]{
 //}
@@ -62,7 +62,7 @@ C言語特有の以下の利点があります。
 //blankline
 
  * @<em>{リソースフットプリントと実行速度}: C/C++を用いて開発することにより、IoT/エッジコンピューティングに求められる、低いリソースフットプリントと実行速度の最大化が図れます。
- * @<em>{非サポート言語用のパッケージ開発}: C APIを他のプログラミング言語と組み合わせて利用することによって、開発プラットフォームに幅広い選択肢をもたらすことが考えられます。例えば、Python、JavaScript、Rust、Goなどのプログラミング言語による開発の際に、FFI(Foreign function interface@<fn>{Foreign_function_interface})のような、それらの言語が提供するネイティブ言語サポートを活用し、Couchbase Liteを用いたアプリケーションを構築することができます。
+ * @<em>{非サポート言語用のパッケージ開発}: C APIを他のプログラミング言語と組み合わせて利用することによって、開発プラットフォームに幅広い選択肢をもたらすことが考えられます。たとえば、Python、JavaScript、Rust、Goなどのプログラミング言語による開発の際に、FFI(Foreign function interface@<fn>{Foreign_function_interface})のような、それらの言語が提供するネイティブ言語サポートを活用し、Couchbase Liteを用いたアプリケーションを構築することができます。
 
 //footnote[Foreign_function_interface][https://en.wikipedia.org/wiki/Foreign_function_interface]
 

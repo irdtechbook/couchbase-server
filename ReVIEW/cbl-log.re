@@ -37,14 +37,14 @@ Couchbase Liteのログ出力先には、ファイルとコンソールのふた
 
 バイナリフォーマットは、ストレージとパフォーマンスに最も効率的であり、ファイルベースログ出力のデフォルトフォーマットです。
 
-ファイルベースのロギングでは、@<tt>{LogFileConfiguration}クラスのプロパティを使用して以下を指定することができます。
+ファイルベースのロギングでは、@<tt>{LogFileConfiguration}クラスのプロパティーを使用して以下を指定することができます。
 
 //blankline
 
  * ログファイルを保存するディレクトリー
  * 出力フォーマット: バイナリまたは、プレインテキスト。デフォルトはバイナリです。必要に応じて、プレーンテキストのログに変更できます。
  * ログファイルの最大サイズ（バイト）: この制限を超えるとログファイルのローテーションが行われます。
- * ローテーションされたログファイルを保持する最大数: デフォルトは「1」です。例えば、この設定を「5」にした場合、ローテーションされた5つのログファイルとアクティブなログファイルの最大6ファイルが存在することになります。
+ * ローテーションされたログファイルを保持する最大数: デフォルトは「1」です。たとえば、この設定を「5」にした場合、ローテーションされた5つのログファイルとアクティブなログファイルの最大6ファイルが存在することになります。
 
 //blankline
 
@@ -53,7 +53,7 @@ Couchbase Liteのログ出力先には、ファイルとコンソールのふた
 //emlist[][JAVA]{
 final File path = context.getCacheDir();
 
-// ログファイルディレクトリを設定
+// ログファイルディレクトリーを設定
 LogFileConfiguration LogCfg = new LogFileConfiguration(path.toString());
 
 // ログファイルの最大サイズ（バイト）を設定
@@ -76,7 +76,7 @@ Database.log.getFile().setLevel(LogLevel.INFO);
 コンソールベースのロギングでは、ログはコンソールに出力されます。
 コンソールログはデフォルトで有効になっています。
 
-コンソールログはファイルログとは独立に設定を行うことができるため、通常のファイルベースのログに干渉することなく、問題調査のための診断シナリオに合わせて出力情報を調整できます。
+コンソールログはファイルログとは独立して設定を行うことができるため、通常のファイルベースのログに干渉することなく、問題調査のための診断シナリオに合わせて出力情報を調整できます。
 
 デフォルトのログでは情報が不十分な場合に、下記のようにデータベースエラーに焦点を当てて、より詳細なメッセージを得ることができます。
 
@@ -125,10 +125,10 @@ Database.log.setCustom(new LogTestLogger(LogLevel.WARNING));
 @<tt>{cblite}の利用方法について、次の章で説明しています。
 
 また、ログ専用のコマンドラインツール@<tt>{cbl-log}も提供されています。
-@<tt>{cbl-log}ツール(The cbl-log Tool@<fn>{cbl-log})は、Couchbase LabsのGitHubリポジトリThe Couchbase Mobile Tool Repo@<fn>{couchbase-mobile-tools}にて公開されています。
+@<tt>{cbl-log}ツール(The cbl-log Tool@<fn>{cbl-log})は、Couchbase LabsのGitHubリポジトリーThe Couchbase Mobile Tool Repo@<fn>{couchbase-mobile-tools}にて公開されています。
 
 @<tt>{cbl-log}の利用法については、ドキュメント@<fn>{decoding-binary-logs}を参照ください。
-また、ライセンス、利用規約や詳細については、リポジトリの記載をご確認ください。
+また、ライセンス、利用規約や詳細については、リポジトリーの記載をご確認ください。
 
 //footnote[couchbase-mobile-tools][https://github.com/couchbaselabs/couchbase-mobile-tools/]
 

@@ -6,8 +6,8 @@
 Couchbase Serverを、単にCouchbase Mobileによるモバイル/エッジコンピューティングデータプラットフォームのバックエンドデータベースとして利用するだけでなく、同時に、Webアプリケーションのような他のシステムのデータベースとしても利用し、共通のデータに基づくサービスをユーザーに提供することは珍しくありません。
 
 Sync Gatewayは、Couchbase Serverを単体で利用している場合には存在しない、Couchbase Liteとの同期のためのデータを、Couchbase Serverのバケットに保持します。
-Couchbase Liteと同期されるドキュメントには、ユーザーが定義したドキュメントプロパティ以外の、同期のためのプロパティ/拡張属性が存在します。
-そのため、Couchbase Serverクライアント(Couchbase Server SDKを利用するアプリケーション)が、Couchbase Serverに保存したドキュメントを、Sync Gatewayを介してCouchbase Liteと同期するためには、これらのプロパティ/拡張属性のための追加的な措置が必要になります。
+Couchbase Liteと同期されるドキュメントには、ユーザーが定義したドキュメントプロパティー以外の、同期のためのプロパティー/拡張属性が存在します。
+そのため、Couchbase Serverクライアント(Couchbase Server SDKを利用するアプリケーション)が、Couchbase Serverに保存したドキュメントを、Sync Gatewayを介してCouchbase Liteと同期するためには、これらのプロパティー/拡張属性のための追加的な措置が必要になります。
 
 また、必ずしもCouchbase Serverクライアントアプリケーションが扱うデータの全てをCouchbase Liteと同期する必要があるとは限らないため、同期の範囲を定める必要も生じます。 
 
@@ -21,7 +21,7 @@ Couchbase Liteと同期されるドキュメントには、ユーザーが定義
 
 Couchbase Liteアプリケーションと、Couchbase Serverクライアントが同じバケットに対して読み取りと書き込みを行えるようにする仕組みを@<strong>{共有バケットアクセス}と呼びます。
 
-Sync Gateway構成プロパティ@<tt>{enable_shared_bucket_access}の設定により、共有バケットアクセスを有効化します。
+Sync Gateway構成プロパティー@<tt>{enable_shared_bucket_access}の設定により、共有バケットアクセスを有効化します。
 
 以下に、設定例を示します。
 
@@ -41,9 +41,9 @@ Sync Gatewayが、Couchbase Serverクライアントにより行われたデー�
 
 === 構成
 
-Sync Gatewayを複数ノードからなるクラスターとして構成する場合、ノードをインポート処理に参加させるかどうかを選択する事ができます。
+Sync Gatewayを複数ノードからなるクラスターとして構成する場合、ノードをインポート処理に参加させるかどうかを選択することができます。
 
-ノードがインポート処理に参加することを指定するために@<tt>{import_docs}プロパティが使用されます。
+ノードがインポート処理に参加することを指定するために@<tt>{import_docs}プロパティーが使用されます。
 なお、@<tt>{enabled_shared_bucket_access}が@<tt>{true}に設定されている場合にのみ@<tt>{import_docs}が有効になります。
 
 インポート処理においても、ドキュメントに対してSync関数が適用されますが、通常のSync関数の適用とは次の違いがあります。
@@ -77,7 +77,7 @@ Sync Gatewayを複数ノードからなるクラスターとして構成する�
 //blankline
 
 インポートフィルターは、以下のようなJavaScript関数として定義します。
-この例では、「type」プロパティが、「mobile」に等しいをドキュメントのみをインポートします。
+この例では、「type」プロパティーが、「mobile」に等しいとドキュメントのみをインポートします。
 
 //emlist[][JAVASCRIPT]{
 function(doc) {
@@ -89,7 +89,7 @@ function(doc) {
 //}
 
 インポートフィルターの設定には、以下のように管理REST APIを利用します。
-@<tt>{import_filter}プロパティを使用してフィルター関数を指定します。
+@<tt>{import_filter}プロパティーを使用してフィルター関数を指定します。
 
 //cmd{
 $ curl -X PUT "http://localhost:4985/mybucket/_config/import_filter" \
@@ -101,11 +101,11 @@ $ curl -X PUT "http://localhost:4985/mybucket/_config/import_filter" \
 
 ====[column]@<tt>{import_docs}デフォルト設定
 
-コミュニティエディションでは、@<tt>{import_docs}プロパティのデフォルトは@<tt>{false}です。
+コミュニティーエディションでは、@<tt>{import_docs}プロパティーのデフォルトは@<tt>{false}です。
 ノードをインポート処理に参加させるには、明示的に@<tt>{true}に設定する必要があります。
 
 エンタープライズエディションでは、@<tt>{import_docs}のデフォルトは@<tt>{true}であり、クラスタ内のすべてのノードがインポート処理に参加することを意味します。
-ノードをインポート処理から除外するには、@<tt>{import_docs}プロパティを@<tt>{false}に設定します。
+ノードをインポート処理から除外するには、@<tt>{import_docs}プロパティーを@<tt>{false}に設定します。
 
 詳細は、ドキュメント@<fn>{sync-with-couchbase-server-configuration}を参照してください。
 
@@ -125,7 +125,7 @@ $ curl -X PUT "http://localhost:4985/mybucket/_config/import_filter" \
 
 
 
-次の図は、クライアント接続を処理する2つのSync Gatewayノードとインポート処理専用の2つのノードからなるクラスター構成を示しています。
+次の図は、クライアント接続を処理するふたつのSync Gatewayノードとインポート処理専用のふたつのノードからなるクラスター構成を示しています。
 
 
 //image[import_docs-diagram][Sync Gatewayワークロード分離アーキテクチャー例]{
@@ -135,7 +135,7 @@ $ curl -X PUT "http://localhost:4985/mybucket/_config/import_filter" \
 
 ====[column]エディションによるインポート処理の高可用性対応の違い
 
-Sync Gatewayコミュニティエディションには、インポート処理をノード間で分散する機能が存在しません。高可用性のためにはスタンバイノードを用いて、外部的に制御する必要があります。
+Sync Gatewayコミュニティーエディションには、インポート処理をノード間で分散する機能が存在しません。高可用性のためにはスタンバイノードを用いて、外部的に制御する必要があります。
 
 Sync Gatewayエンタープライズエディションでは、インポート処理作業は、インポート処理を有効に設定されたすべてのSync Gatewayノードにわたって分散されます。これによって、インポート処理の高可用性が実現されます。
 

@@ -11,8 +11,8 @@ Couchbase Mobileをモバイル/エッジコンピューティングデータプ
 このチュートリアルに従うことによって、Sync Gatewayを用いたCouchbase LiteとCouchbase Serverとの同期を比較的簡単に体験することができます。
 また、チュートリアルの素材としてモバイルアプリケーションのみではなくWebアプリケーションも提供されており、Couchbase Serverクライアントとの共存のユースケースについても確認することができます。
 
-このチュートリアルの環境は、Dockerリポジトリに公開されているセットアップ済みのDockerイメージを利用して構築することができます。
-また、アプリケーションのコードや設定ファイルはGitHubリポジトリで公開されています。
+このチュートリアルの環境は、Dockerリポジトリーに公開されているセットアップ済みのDockerイメージを利用して構築することができます。
+また、アプリケーションのコードや設定ファイルはGitHubリポジトリーで公開されています。
 
 本章では、演習形式の実行を想定して、このチュートリアルの内容を紹介します。
 演習の進め方の概要としては、はじめに環境を構築して、アプリケーションを実行できるようにします。
@@ -21,8 +21,7 @@ Couchbase Mobileをモバイル/エッジコンピューティングデータプ
 
 チュートリアルのアプリケーションは、旅行会社のサービスを扱っており、ホテルの検索とブックマークやフライトの検索と予約を行う機能を提供します。
 
-なお、このCouchbase Mobile Workshopチュートリアルは、Swift等複数のプログラミング言語に対応していますが、
-ここではAndroid Javaを用いて解説します。
+なお、このCouchbase Mobile Workshopチュートリアルは、Swift等複数のプログラミング言語に対応していますが、ここではAndroid Javaを用いて解説します。
 
 また、チュートリアルでは、エンタープライズエディションが利用されています。
 
@@ -34,7 +33,7 @@ Couchbase Mobileをモバイル/エッジコンピューティングデータプ
 Couchbaseのエンタープライズエディションには、ライセンスキーやアクティベーションコードは存在しません。
 また試用期間も存在せず、利用規約の定める範囲で使い続けることができます。
 
-コミュニティエディションは、機能や利用規模に関して定められた規約(Couchbase, Inc. Community Edition License Agreement@<fn>{community-license-agreement04272021})に基づいて商用目的で利用することができます。
+コミュニティーエディションは、機能や利用規模に関して定められた規約(Couchbase, Inc. Community Edition License Agreement@<fn>{community-license-agreement04272021})に基づいて商用目的で利用することができます。
 規約の概要について、2021年6月に投稿されたBlog: Couchbase Modifies License of Free Community Edition Package@<fn>{couchbase-modifies-license-free-community-edition-package}を参照することができます。
 
 エンタープライズエディションは、商用目的以外ないしプリプロダクションフェーズにおいて利用することができます。
@@ -51,7 +50,7 @@ Customers can use Enterprise Edition free-of-charge for unlimited pre-production
 //}
 
 
-コミュニティエディションユーザーや、エンタープライズエディションをサブスクリプションを購入せずに利用しているユーザーは、フォーラム@<fn>{forums-couchbase-com}で、質問を投稿して有志からの回答を受けたり、過去の質問への回答を検索したりすることができます。
+コミュニティーエディションユーザーや、エンタープライズエディションをサブスクリプションを購入せずに利用しているユーザーは、フォーラム@<fn>{forums-couchbase-com}で、質問を投稿して有志からの回答を受けたり、過去の質問への回答を検索したりすることができます。
 
 ====[/column]
 
@@ -106,10 +105,10 @@ Couchbase Serverについては、サンプルデータやユーザーがセッ�
 
 == 環境構築
 
-=== チュートリアルリポジトリ
+=== チュートリアルリポジトリー
 
-はじめにmobile-travel-sampleリポジトリを取得します。
-Sync Gatewayの環境構築のために、このリポジトリに含まれているSyng Gateway用の構成ファイルを利用します。
+はじめにmobile-travel-sampleリポジトリーを取得します。
+Sync Gatewayの環境構築のために、このリポジトリーに含まれているSyng Gateway用の構成ファイルを利用します。
 
 
 //cmd{
@@ -193,9 +192,9 @@ $ docker pull couchbase/sync-gateway:3.0.0-enterprise
 //}
 
 このチュートリアルでは、sync-gateway-config-travelsample.jsonという名前の構成ファイルを使用してSync Gatewayを起動します。
-このファイルは、mobile-travel-sampleリポジトリに含まれています。
+このファイルは、mobile-travel-sampleリポジトリーに含まれています。
 
-接続先を確認するため、任意のテキストエディタを使用してsync-gateway-config-travelsample.jsonを開きます。
+接続先を確認するため、任意のテキストエディターを使用してsync-gateway-config-travelsample.jsonを開きます。
 
 Couchbase Serverに接続するには、サーバーのアドレスを指定する必要があります。
 Couchbase ServerのDockerコンテナを起動したときに@<tt>{--name}オプションに「cb-server」を指定したことを思い出してください。
@@ -213,7 +212,7 @@ Couchbase ServerのDockerコンテナを起動したときに@<tt>{--name}オプ
 
 確認したファイルを使用してSync Gatewayを起動します。
 
-ファイルが置かれているフォルダから以下のコマンドを実行します。
+ファイルが置かれているフォルダーから以下のコマンドを実行します。
 
 
 Windows以外のプラットフォームでの実行方法は、以下のようになります。
@@ -246,7 +245,7 @@ $ docker ps
 $ docker logs sync-gateway
 //}
 
-ブラウザで次のURLにアクセスします。: @<href>{http://127.0.0.1:4984}
+ブラウザーで次のURLにアクセスします。: @<href>{http://127.0.0.1:4984}
 
 以下のような応答が返されることを確認します。
 
@@ -279,7 +278,7 @@ couchbase://cb-server <couchbase.auth.PasswordAuthenticator object at 0x7f06d135
  * Running on http://0.0.0.0:8080/ (Press CTRL+C to quit)
 //}
 
-ブラウザで次のURLにアクセスします。: @<href>{http://127.0.0.1:8080}
+ブラウザーで次のURLにアクセスします。: @<href>{http://127.0.0.1:8080}
 
 
 Webアプリのログイン画面が表示されることを確認します。
@@ -292,7 +291,7 @@ Webアプリのログイン画面が表示されることを確認します。
 
 === プロジェクト
 
-先に取得済みのmobile-travel-sampleリポジトリに含まれるAndroidプロジェクトをAndroid Studioで開きます。
+先に取得済みのmobile-travel-sampleリポジトリーに含まれるAndroidプロジェクトをAndroid Studioで開きます。
 build.gradleファイルは@<tt>{mobile-travel-sample/android/TravelSample}の下にあります。
 
 === 接続先確認
@@ -430,11 +429,11 @@ Andoroidエミュレーターのからローカルホストへの接続に用い
 === ドキュメント設計
 
 Couchbase Liteでは、異なる種類のドキュメントが同じ名前空間に保存されます。
-したがって、通常はドキュメントの種類を示すプロパティを使用して、各エンティティを区別します。
-このアプリケーションでは、このプロパティを「type」と名付けています。
+したがって、通常はドキュメントの種類を示すプロパティーを使用して、各エンティティーを区別します。
+このアプリケーションでは、このプロパティーを「type」と名付けています。
 
 また、このアプリケーションではドキュメントIDに、ドキュメントの種類と数値文字列との組み合わせを用いています。
-ドキュメントIDに用いるドキュメント種類は、ドキュメントの@<tt>{type}プロパティの値と一致しており、数値文字列との組み合わせにより、ドキュメントを一意に識別します。
+ドキュメントIDに用いるドキュメント種類は、ドキュメントの@<tt>{type}プロパティーの値と一致しており、数値文字列との組み合わせにより、ドキュメントを一意に識別します。
 
 
 === プロジェクト構成
@@ -451,7 +450,7 @@ Couchbase Liteでは、異なる種類のドキュメントが同じ名前空間
 
 //blankline
 
-演習では、Couchbase Liteの機能について、プレゼンターのコードで行われている内容を確認していきます。
+演習ではCouchbase Liteの機能について、プレゼンターのコードで行われている内容を確認していきます。
 
 
 == データベース操作
@@ -472,7 +471,7 @@ Couchbase Liteでは、異なる種類のドキュメントが同じ名前空間
 
 このアプリケーションでは、ユーザーごとにデータベースを作成します。
 
-@<tt>{guest}という名前のディレクトリにゲストユーザー用の空のデータベースを作成します。
+@<tt>{guest}という名前のディレクトリーにゲストユーザー用の空のデータベースを作成します。
 
 @<tt>{DatabaseManager}の@<tt>{OpenGuestDatabase}メソッドを確認します。
 
@@ -500,7 +499,7 @@ Couchbase Liteでは、異なる種類のドキュメントが同じ名前空間
 === ドキュメントの作成と更新
 
 
-ユーザーがホテルをブックマークすると、@<tt>{bookmarkedhotels}タイプのドキュメントが作成され、@<tt>{hotels}プロパティに、そのホテルに対応する@<tt>{hotel}ドキュメントのドキュメントIDが格納されます。
+ユーザーがホテルをブックマークすると、@<tt>{bookmarkedhotels}タイプのドキュメントが作成され、@<tt>{hotels}プロパティーに、そのホテルに対応する@<tt>{hotel}ドキュメントのドキュメントIDが格納されます。
 以下は、@<tt>{bookmarkedhotels}ドキュメントの例です。
 
 //emlist[][JSON]{
@@ -539,8 +538,8 @@ try {
 
 
 次に、@<tt>{bookmarkedhotels}ドキュメントを作成します。
-ドキュメントには、@<tt>{type}プロパティの値として「bookmarkedhotels」が設定されています。
-また、ブックマークされたホテルのドキュメントIDを格納するのための配列型の@<tt>{hotels}プロパティが含まれます。
+ドキュメントには、@<tt>{type}プロパティーの値として「bookmarkedhotels」が設定されています。
+また、ブックマークされたホテルのドキュメントIDを格納するのための配列型の@<tt>{hotels}プロパティーが含まれます。
 
 ドキュメントIDには@<tt>{user::guest}が用いられています。
 ゲストユーザーのための@<tt>{bookmarkedhotels}ドキュメントはアプリにおいて唯一であり、ローカルでのみ利用されます。
@@ -557,7 +556,7 @@ else {
 }
 //}
 
-ユーザーによって選択されたホテルのIDは、@<tt>{bookmarkedhotels}ドキュメントの配列型の@<tt>{hotels}プロパティに追加されます。
+ユーザーによって選択されたホテルのIDは、@<tt>{bookmarkedhotels}ドキュメントの配列型の@<tt>{hotels}プロパティーに追加されます。
 
 //emlist[HotelsPresenter.java][JAVA]{
 MutableArray hotels =  mutableCopy.getArray(hotels).toMutable();
@@ -589,7 +588,7 @@ try {
 === ドキュメントの削除
 
 ホテルがブックマークされると、そのホテルのドキュメントがゲストユーザー用のローカルデータベースに挿入されます。
-ユーザーがホテルのブックマークを解除する時は、その反対に、挿入されたホテルドキュメントをゲストユーザーのデータベースから削除します。
+ユーザーがホテルのブックマークを解除するときは、その反対に、挿入されたホテルドキュメントをゲストユーザーのデータベースから削除します。
 
 ドキュメントの削除について、確認します。
 
@@ -638,7 +637,7 @@ try {
 
 ====[/column]
 
-== セキュリティ
+== セキュリティー
 
 === アプリケーションユーザー作成
 
@@ -654,14 +653,14 @@ Syng Gatewayユーザーは、Couchbase Serverの同期対象バケットの中�
 
 ====[column]演習: 新規ユーザー作成
 
- 1. ブラウザでWebアプリを開きます。
+ 1. ブラウザーでWebアプリを開きます。
  2. 新しいユーザーを作成します。ユーザー名に「demo」、パスワードに「password」を入力して[Register]をクリックします。
  3. Webアプリへログインしたことを確認します。
- 4. 次に、ブラウザでCouchbase Server Web管理コンソールを開きます。
+ 4. 次に、ブラウザーでCouchbase Server Web管理コンソールを開きます。
  5. Web管理コンソールにログインします。ID/パスワードは次の通りです。: @<tt>{Administrator/password}
  6. サイドメニューの[Buckets]を選択します。「travel-sample」バケットの[Documents]リンクをクリックします。
  7. [Document ID]というラベルの付いた入力欄に、「@<tt>{user::demo}」と入力し、[Retrieve Docs]ボタンを押下します。
- 8. 検索されたドキュメントの表示を確認します。「username」プロパティの値が「demo」であることを確認します。これはアプリケーションのユーザー情報です。
+ 8. 検索されたドキュメントの表示を確認します。「username」プロパティーの値が「demo」であることを確認します。これはアプリケーションのユーザー情報です。
  9. 次に、ドキュメントIDが「@<tt>{_sync:user:demo}」のドキュメントを探します。これは、Sync Gatewayのユーザー情報です。
 
 ====[/column]
@@ -689,7 +688,7 @@ $ curl -X GET http://localhost:4984/travel-sample/
 
 @<tt>{authorization}ヘッダの値は、先に作成したユーザーの情報である「demo:password」をbase64でエンコードした文字列を使用します。
 
-例えば、以下のように「<ユーザー>:<パスワード>」のbase64エンコード文字列を取得することができます。
+たとえば、以下のように「<ユーザー>:<パスワード>」のbase64エンコード文字列を取得することができます。
 
 //cmd{
 $ echo -n "demo:password" | base64
@@ -724,7 +723,7 @@ $ curl -X GET http://localhost:4984/travel-sample/ \
 @<tt>{SearchFlightPresenter}の@<tt>{startsWith(String prefix, String tag)}メソッドを確認します。
 
 
-以下では、@<tt>{type}プロパティの値が「airport」であり、@<tt>{airportname}プロパティが指定された検索語(@<tt>{prefix})から始まるドキュメントを検索し、そのドキュメントの@<tt>{airportname}プロパティを取得するための@<tt>{Query}を構築しています。
+以下では、@<tt>{type}プロパティーの値が「airport」であり、@<tt>{airportname}プロパティーが指定された検索語(@<tt>{prefix})から始まるドキュメントを検索し、そのドキュメントの@<tt>{airportname}プロパティーを取得するための@<tt>{Query}を構築しています。
 
 
 //emlist[SearchFlightPresenter.java][java]{
@@ -739,7 +738,7 @@ Query searchQuery = QueryBuilder
 
 
 次に、@<tt>{Query}の@<tt>{execute()}メソッドを使用してクエリが実行されます。
-結果の各行には、@<tt>{airportname}プロパティの値が含まれます。
+結果の各行には、@<tt>{airportname}プロパティーの値が含まれます。
 検索結果は、画面表示のために@<tt>{mSearchView}の@<tt>{showAirports}メソッドに渡されます。
 
 
@@ -772,15 +771,15 @@ mSearchView.showAirports(data, tag);
 
 次に、結合(JOIN)クエリについて見ていきます。
 
-@<tt>{bookmarkedhotels}タイプのドキュメントには、ブックマークされたホテルのドキュメントIDの配列である@<tt>{hotels}プロパティが含まれています。
+@<tt>{bookmarkedhotels}タイプのドキュメントには、ブックマークされたホテルのドキュメントIDの配列である@<tt>{hotels}プロパティーが含まれています。
 
 
-@<tt>{bookmarkedhotels}ドキュメントの@<tt>{hotels}プロパティ配列に含まれているドキュメントをフェッチするクエリを確認します。
+@<tt>{bookmarkedhotels}ドキュメントの@<tt>{hotels}プロパティー配列に含まれているドキュメントをフェッチするクエリを確認します。
 
 @<tt>{BookmarksPresenter.java}から、@<tt>{fetchBookmarks()}メソッドを確認します。
 
 
-まず、結合クエリの両側に対応する2つのデータソースをインスタンス化しています。
+まず、結合クエリの両側に対応するふたつのデータソースをインスタンス化しています。
 
 
 //emlist[BookmarksPresenter.java][java]{
@@ -790,7 +789,7 @@ DataSource hotelsDS = DataSource.database(database).as("hotelDS");
 
 
 次に、クエリ式記述を確認します。
-@<tt>{bookmark}データソースのプロパティ@<tt>{hotels}と、@<tt>{hotel}データソースのドキュメントIDに対応する@<tt>{Expression}をインスタンス化しています。
+@<tt>{bookmark}データソースのプロパティー@<tt>{hotels}と、@<tt>{hotel}データソースのドキュメントIDに対応する@<tt>{Expression}をインスタンス化しています。
 
 
 //emlist[BookmarksPresenter.java][java]{
@@ -866,7 +865,7 @@ try {
 @<tt>{DatabaseManager}の@<tt>{createFTSQueryIndex()}メソッドを確認します。
 
 
-以下のコードは、@<tt>{description}プロパティに対するFTSインデックスを作成します。
+以下のコードは、@<tt>{description}プロパティーに対するFTSインデックスを作成します。
 
 
 //emlist[DatabaseManager.java][JAVA]{
@@ -1092,7 +1091,7 @@ replicator.start();
 
 ====[column]演習: プッシュレプリケーション
 
- 1. モバイルアプリに「demo」ユーザーとして、パスワードに「password」を使い、ログインします。このユーザーは、Webアプリを介して作成されている必要があります。
+ 1. モバイルアプリに「demo」ユーザーとしてパスワードに「password」を使い、ログインします。このユーザーは、Webアプリを介して作成されている必要があります。
  2. モバイルアプリ画面右下の飛行機のアイコンをタップして、遷移先画面でフライトを予約します。すべての入力は初期値のままにしておきます。
  3. [lookup]リンクをタップします。
  4. フライトのリストから、最初のフライトリストを選択します。これにより、予約が行われます。
@@ -1109,7 +1108,7 @@ replicator.start();
 ====[column]演習: プルレプリケーション
 
  1. Webアプリにアクセスします。
- 2. 「demo」ユーザーとして、パスワードに「password」を使い、Webアプリにログインします。
+ 2. 「demo」ユーザーとしてパスワードに「password」を使い、Webアプリにログインします。
  3. [Flights]タブをクリックしてフライトを予約します。
  4. [From]に「Seattle」と入力し、ドロップダウンメニューから空港(Seattle Tacoma Intl)を選択します。
  5. [To]に「San Francisco」と入力し、ドロップダウンメニューから空港(San Francisco Intl)を選択します。

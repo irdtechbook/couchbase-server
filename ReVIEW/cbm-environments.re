@@ -13,7 +13,7 @@ Couchbase Mobile環境構築の概要を記します。
 
 
 各種Linux系OSや、Windows、macOS用のSyncGatewayをCouchbaseのサイト@<fn>{downloads-extend-with-mobile}からダウンロードできます。
-コミュニティエディションとエンタープライズエディションの両方をここから入手可能です。
+コミュニティーエディションとエンタープライズエディションの両方をここから入手可能です。
 
 サポートされるOSの詳細については、ドキュメント(Supported Operating Systems@<fn>{supported-operating-systems})を参照ください。
 
@@ -38,7 +38,7 @@ $ dpkg -i couchbase-sync-gateway-community_3.0.0_x86_64.deb
 
 
 macOSの場合、ダウンロードしたファイルを解凍して利用します。
-ドキュメントの記載は、@<tt>{/opt}ディレクトリに解凍して利用することを想定したものになっています。
+ドキュメントの記載は、@<tt>{/opt}ディレクトリーに解凍して利用することを想定したものになっています。
 
 
 //cmd{
@@ -59,11 +59,11 @@ Windoesへのインストールの詳細については、ドキュメント(Ins
 //table[tbl1][]{
 コンテンツ	ロケーション	実例
 -----------------
-バイナリ	インストールディレクトリ	@<tt>{/opt/couchbase-sync-gateway/bin/}
-サンプル構成ファイル	インストールディレクトリ	@<tt>{/opt/couchbase-sync-gateway/examples/}
-スクリプト	インストールディレクトリ	@<tt>{/opt/couchbase-sync-gateway/service/}
-サービス(Mac)	ライブラリディレクトリ	@<tt>{<LIBRARY_ROOT>/com.couchbase.mobile.sync_gateway.plist}
-サービス(Linux)	ライブラリディレクトリ	@<tt>{<LIBRARY_ROOT>/sync_gateway.service}
+バイナリ	インストールディレクトリー	@<tt>{/opt/couchbase-sync-gateway/bin/}
+サンプル構成ファイル	インストールディレクトリー	@<tt>{/opt/couchbase-sync-gateway/examples/}
+スクリプト	インストールディレクトリー	@<tt>{/opt/couchbase-sync-gateway/service/}
+サービス(Mac)	ライブラリーディレクトリー	@<tt>{<LIBRARY_ROOT>/com.couchbase.mobile.sync_gateway.plist}
+サービス(Linux)	ライブラリーディレクトリー	@<tt>{<LIBRARY_ROOT>/sync_gateway.service}
 //}
 
 @<tt>{<LIBRARY_ROOT>}は、macOSの場合@<tt>{/Library/LaunchDaemons}、Linuxの場合@<tt>{/lib/systemd/system}または、@<tt>{/usr/lib/systemd/system}です。
@@ -82,7 +82,7 @@ Sync Gatewayは、サービスとして実行することも、コマンドラ�
 
 === コマンドライン実行
 
-インストールディレクトリに解凍されたバイナリファイル(@<tt>{sync_gateway})に対して、実行時引数としてブートストラップ構成ファイルのパスを指定して実行することができます。
+インストールディレクトリーに解凍されたバイナリファイル(@<tt>{sync_gateway})に対して、実行時引数としてブートストラップ構成ファイルのパスを指定して実行することができます。
 
 特定のシャットダウン手順はなく、SIGINTシグナル(Ctrl+C)を使用して安全に停止することができます。
 
@@ -133,8 +133,8 @@ Sync Gatewayと共に利用するCouchbase Serverクラスターでは、以下�
 
 === バケット
 
-Couchbase Serverでは、データはバケットと呼ばれる論理エンティティに格納されます。
-バケットには、データをメモリとディスクの両方に保持するCouchbaseバケットと、データをメモリにのみ保持するEphemeralバケットとがあります。
+Couchbase Serverでは、データはバケットと呼ばれる論理エンティティーに格納されます。
+バケットには、データをメモリーとディスクの両方に保持するCouchbaseバケットと、データをメモリーにのみ保持するEphemeralバケットとがあります。
 Couchbase Liteとデータ同期を行うリモートデータベースとして利用する場合には、Couchbaseバケットを利用します。
 
 Couchbase Liteと同期されるバケットには、Sync Gatewayのメタデータも保存されます。
