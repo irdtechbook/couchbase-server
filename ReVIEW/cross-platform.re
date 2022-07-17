@@ -15,7 +15,7 @@ Couchbase Liteを用いたモバイルアプリを開発する際に、iOSとAnd
  * @<em>{Xamarin}: C#で書かれたコードが、Intermediate Language(IL)としてコンパイルされます。
  * @<em>{Flutter}: Dartで書かれたコードが、C/C++コードとしてコンパイルされて、ネイティブに実行されます。
  * @<em>{React Native}: JavaScriptやTypeScriptで書かれたコードが、JavaScriptエンジンで実行されます。
- * @<em>{Ionic}: JavaScriptや、HTML、CSSのようなWebアプリケーション開発技術を使って書かれたコードが、Webブラウザの機能を提供するWeb View@<fn>{webview}を介して、ネイティブアプリやPWA(Progressive Web Apps)として実行されます。
+ * @<em>{Ionic}: JavaScriptやHTML、CSSのようなWebアプリケーション開発技術を使って書かれたコードが、Webブラウザーの機能を提供するWeb View@<fn>{webview}を介して、ネイティブアプリやPWA(Progressive Web Apps)として実行されます。
 
 //footnote[webview][https://ionicframework.com/docs/ja/core-concepts/webview]
 
@@ -43,7 +43,7 @@ iOS、Android、およびUWPに対応しており、それぞれ以下の環境�
 
 ここで紹介するアプリケーションは、Couchbase LiteをCouchbase Serverとの同期を行わずにスタンドアローンで利用するものです。
 
-アプリケーションを実行するには、以下のようにGitHubリポジトリから@<tt>{standalone}ブランチをクローンします。
+アプリケーションを実行するには、以下のようにGitHubリポジトリーから@<tt>{standalone}ブランチをクローンします。
 
 
 //cmd{
@@ -66,7 +66,7 @@ $ git clone -b standalone \
  * UserProfileDemo: ビュー機能のための.NET標準プロジェクト
  * UserProfileDemo.Core: ビューモデル機能のための.NET標準プロジェクト
  * UserProfileDemo.Models: データモデルのための.NET標準プロジェクト
- * UserProfileDemo.Repositories: データベースの管理のためのリポジトリクラスを含む.NET標準プロジェクト
+ * UserProfileDemo.Repositories: データベースの管理のためのリポジトリークラスを含む.NET標準プロジェクト
  * UserProfileDemo.iOS: .ipaファイルのビルドを担当するiOSプラットフォームプロジェクト
  * UserProfileDemo.Android: .apkファイルのビルドを担当するAndroidプラットフォームプロジェクト
  * UserProfileDemo.UWP: .exeファイルのビルドを担当するUWPプラットフォームプロジェクト
@@ -145,10 +145,10 @@ Flutterは、FFI(foreign function interface@<fn>{Foreign_function_interface})に
 === Couchbase Liteパッケージ
 
 
-DartとFlutterの公式パッケージリポジトリ(pub.dev@<fn>{pub-dev})に、各種パッケージが公開されています。
+DartとFlutterの公式パッケージリポジトリー(pub.dev@<fn>{pub-dev})に、各種パッケージが公開されています。
 
-Couchbase Liteに関するパッケージは、アクティブにメンテナンスされていないように見えるものも含めて何種類か存在します。
-ここでは現在最もアクティブと思われるパッケージを紹介します。
+Couchbase Liteに関するパッケージは、アクティブにメンテナンスされていないように見えるものも含めて、何種類か存在します。
+ここでは、現在最もアクティブと思われるパッケージを紹介します。
 
 以下は、同じPublisherによって開発された一連のパッケージです。目的に合わせた組み合わせにより利用することが想定されています。
 
@@ -166,7 +166,7 @@ Couchbase Liteに関するパッケージは、アクティブにメンテナン
 //footnote[cbl][https://pub.dev/packages/cbl]
 //footnote[cbl_flutter][https://pub.dev/packages/cbl_flutter]
 
-パッケージの利用方法や、サンプルアプリケーションについて各パッケージのサイトを参照することができます。
+パッケージの利用方法や、サンプルアプリケーションについて、各パッケージのサイトを参照することができます。
 
 
 == React Native
@@ -194,7 +194,7 @@ NOTE: The plugin is not officially supported by Couchbase and there are no guara
 //}
 
 この参照実装は、ネイティブCouchbase Lite API機能のサブセットをエクスポートし、ReactネイティブJavaScriptアプリで利用できるようにしています。
-プラグインによってJavaScriptにエクスポートされたAPIのリストや個々のAPI使用例について、リポジトリのREADMEを参照する事ができます。
+プラグインによってJavaScriptにエクスポートされたAPIのリストや個々のAPI使用例について、リポジトリーのREADMEを参照することができます。
 
 また、このモジュールを使用したサンプルアプリケーション@<fn>{userprofile-couchbase-mobile-reactnative}も公開されています。
 
@@ -217,7 +217,7 @@ Ionic@<fn>{ionicframework}は、ハイブリッドアプリ開発のためのオ
 JavaScriptや、HTML、CSSといったWebアプリケーション開発技術を使って、ネイティブアプリやPWA(Progressive Web Apps)@<fn>{pwa}を開発するために利用することができます。
 Angular、React、そしてVueのようなJavaScriptのWebフレームワークと組み合わせて利用されます。
 
-Ionicフレームワークは、GitHubにおいて、Ionicチーム(https://github.com/ionic-team)によってリポジトリ@<fn>{github-ionic-framework}が公開されています。
+Ionicフレームワークは、GitHubにおいて、Ionicチーム(https://github.com/ionic-team)によってリポジトリー@<fn>{github-ionic-framework}が公開されています。
 
 ハイブリッドモバイルアプリ開発のために必要となるネイティブ連携のフレームワークとして、同じくIonic(Ionic.io@<fn>{ionic})によるCapacitor@<fn>{capacitorjs}があります。
 Ionic.ioは、Ionicの有償サポートも提供しています。@<fn>{ionic-pricing}

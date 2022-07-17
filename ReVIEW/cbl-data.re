@@ -4,13 +4,13 @@
 
 Couchbase Liteのデータの基本単位は@<em>{ドキュメント}であり、これはRDBの行またはレコードに相当します。
 
-Couchbase Liteの内部で、一つのドキュメントは、一意かつ不変の@<em>{ドキュメントID}(キー)と、ドキュメントIDにより一意に特定されるデータ(バリュー)、つまりキーとバリューのペアから構成されます。
+Couchbase Liteの内部で、ひとつのドキュメントは一意かつ不変の@<em>{ドキュメントID}(キー)と、ドキュメントIDにより一意に特定されるデータ(バリュー)、つまりキーとバリューのペアから構成されます。
 
 
 === ドキュメントID
 
-ドキュメントIDは、データベース内で一意であり、ドキュメント作成後に変更することができません。
-ドキュメントIDは、ユーザーが作成時に指定するか、あるいは(UUIDとして)自動的に生成することができます。
+ドキュメントIDはデータベース内で一意であり、ドキュメント作成後に変更することができません。
+ドキュメントIDはユーザーが作成時に指定するか、あるいは(UUIDとして)自動的に生成することができます。
 
 ドキュメントIDとして利用できる文字列には、以下の制約あります。
 
@@ -22,13 +22,13 @@ Couchbase Liteの内部で、一つのドキュメントは、一意かつ不変
 
 === JSONドキュメント
 
-Couchbase Lieteデータベースに格納されるドキュメントのデータモデル(Documents Data Model@<fn>{couchbase-lite-document})はJSONの形式を取ります。
+Couchbase Lieteデータベースに格納されるドキュメントのデータモデル(Documents Data Model@<fn>{couchbase-lite-document})は、JSONの形式を取ります。
 
 JSONオブジェクトは、名前と値のペアのコレクションであり、値は、数値、文字列、null、JSONオブジェクト、そしてこれらの値の配列といった、さまざまなデータ型を取ります。
 
-この「名前」と「値」のペアは@<em>{プロパティ}と呼ばれます。
-「名前」のことをプロパティ名、「値」をプロパティ値と呼ぶことがあります。
-このように、プロパティは、データ自体に加え、名前という属性情報を含むため、JSONドキュメントは複雑なデータ構造を自己組織化された方法で表すことができます。
+この「名前」と「値」のペアは@<em>{プロパティー}と呼ばれます。
+「名前」のことをプロパティー名、「値」をプロパティー値と呼ぶことがあります。
+このように、プロパティーは、データ自体に加え、名前という属性情報を含むため、JSONドキュメントは複雑なデータ構造を自己組織化された方法で表すことができます。
 
 以下は、このようなJSONオブジェクトの例です。
 
@@ -64,7 +64,7 @@ JSONオブジェクトは、名前と値のペアのコレクションであり�
 添付先ドキュメントには、そのドキュメント自体のデータに加え、添付ファイルへの参照や添付ファイルの属性情報に関するデータが加えられます。
 
 ひとつのドキュメントに対して、複数の添付ファイルを関連付けることができます。
-反対に、同じ添付ファイルを複数のドキュメントに添付することもでき、その場合、添付ファイルの1つのインスタンスのみがデータベースに保存されます。
+反対に、同じ添付ファイルを複数のドキュメントに添付することもでき、その場合、添付ファイルのひとつのインスタンスのみがデータベースに保存されます。
 
 === ドキュメント有効期限
 
@@ -116,7 +116,7 @@ Database database = new Database(DB_NAME, config);
 
 エンタープライズエディションでは、データベースを暗号化することができます。
 
-暗号化を有効にするには、データベース作成時に@<tt>{DatabaseConfiguration}の@<tt>{encryptionKey}プロパティに暗号化キーを設定します。
+暗号化を有効にするには、データベース作成時に@<tt>{DatabaseConfiguration}の@<tt>{encryptionKey}プロパティーに暗号化キーを設定します。
 暗号化に使用されるアルゴリズムは256ビットAESです。
 
 暗号化されたデータベースをオープンする際には、複合化のために暗号化キーを指定する必要があります。
@@ -198,17 +198,17 @@ try {
 === 型付きアクセサー
 
 
-@<tt>{Document}クラスは、文字列、数値(整数、浮動小数点数)、ブーリアン(真偽値)など、さまざまな型のプロパティへのアクセサーを提供します。
+@<tt>{Document}クラスは、文字列、数値(整数、浮動小数点数)、ブーリアン(真偽値)など、さまざまな型のプロパティーへのアクセサーを提供します。
 これらのアクセサーを利用して、アプリケーションが期待する型とJSONエンコーディングとの間の変換を行うことができます。
 
-アクセサーの引数として指定された名前のプロパティがドキュメント内に存在しない場合、アクセサーのタイプに応じたデフォルト値が返されます（例えば、整数値に対するアクセサー@<tt>{getInt}の場合は@<tt>{0}のように）。
+アクセサーの引数として指定された名前のプロパティーがドキュメント内に存在しない場合、アクセサーのタイプに応じたデフォルト値が返されます（たとえば、整数値に対するアクセサー@<tt>{getInt}の場合は@<tt>{0}のように）。
 
 === Dateアクセサー
 
-@<tt>{Date}型は、一般的なデータ型ですが、JSONはネイティブにサポートしていないため、ISO-8601形式の文字列として日付データを格納するのが慣例です。
+@<tt>{Date}型は一般的なデータ型ですが、JSONはネイティブにサポートしていないため、ISO-8601形式の文字列として日付データを格納するのが慣例です。
 @<tt>{Document}クラスは、@<tt>{Date}型アクセサーを備えています。
 
-次の例では、@<tt>{java.util.Date}オブジェクトを@<tt>{MutableDocument}のプロパティとして設定しています。
+次の例では、@<tt>{java.util.Date}オブジェクトを@<tt>{MutableDocument}のプロパティーとして設定しています。
 
 
 //emlist[][JAVA]{
@@ -224,12 +224,12 @@ Date date = document.getDate("createdAt");
 
 === 配列操作
 
-@<tt>{Document}クラスは、配列型のプロパティへのアクセサーを持ちます。
+@<tt>{Document}クラスは、配列型のプロパティーへのアクセサーを持ちます。
 
-@<tt>{Document}の配列型のプロパティ値として、Couchbase Liteは@<tt>{Array}クラスと@<tt>{MutableArray}クラスを提供します。
+@<tt>{Document}の配列型のプロパティー値として、Couchbase Liteは@<tt>{Array}クラスと@<tt>{MutableArray}クラスを提供します。
 
 
-以下は、@<tt>{MutableArray}を@<tt>{Document}のプロパティとして追加する例です。
+以下は、@<tt>{MutableArray}を@<tt>{Document}のプロパティーとして追加する例です。
 
 //emlist[][JAVA]{
 // MutableArrayオブジェクト作成
@@ -239,7 +239,7 @@ MutableArray mutableArray = new MutableArray();
 mutableArray.addString("650-000-0000");
 mutableArray.addString("650-000-0001");
 
-// 新規ドキュメントのプロパティとしてMutableArrayオブジェクトを追加
+// 新規ドキュメントのプロパティーとしてMutableArrayオブジェクトを追加
 MutableDocument mutableDoc = new MutableDocument("doc1");
 mutableDoc.setArray("phones", mutableArray);
 
@@ -252,7 +252,7 @@ database.save(mutableDoc);
 //emlist[][JAVA]{
 Document document = database.getDocument("doc1");
 
-// ドキュメントプロパティから配列を取得
+// ドキュメントプロパティーから配列を取得
 Array array = document.getArray("phones");
 
 // 配列の要素数をカウント
@@ -270,11 +270,11 @@ for (int i = 0; i < count; i++) {
 
 === ディクショナリー操作
 
-@<tt>{Document}クラスは、ディクショナリー型のプロパティへのアクセサーを持ちます。
+@<tt>{Document}クラスは、ディクショナリー型のプロパティーへのアクセサーを持ちます。
 
-@<tt>{Document}のディクショナリー型のプロパティ値として、Couchbase Liteは@<tt>{Dictionary}クラスと@<tt>{MutableDictionary}クラスを提供します。
+@<tt>{Document}のディクショナリー型のプロパティー値として、Couchbase Liteは@<tt>{Dictionary}クラスと@<tt>{MutableDictionary}クラスを提供します。
 
-以下は、@<tt>{MutableDictionary}を@<tt>{Document}のプロパティとして追加し、データベースに保存する例です。
+以下は、@<tt>{MutableDictionary}を@<tt>{Document}のプロパティーとして追加し、データベースに保存する例です。
 
 //emlist[][JAVA]{
 // MutableDictionaryオブジェクト作成
@@ -284,7 +284,7 @@ MutableDictionary mutableDict = new MutableDictionary();
 mutableDict.setString("street", "1 Main st.");
 mutableDict.setString("city", "San Francisco");
 
-// 新規ドキュメントのプロパティとしてMutableDocumentオブジェクトを追加
+// 新規ドキュメントのプロパティーとしてMutableDocumentオブジェクトを追加
 MutableDocument mutableDoc = new MutableDocument("doc1");
 mutableDoc.setDictionary("address", mutableDict);
 
@@ -297,7 +297,7 @@ database.save(mutableDoc);
 //emlist[][JAVA]{
 Document document = database.getDocument("doc1");
 
-// ドキュメントプロパティからディクショナリーを取得
+// ドキュメントプロパティーからディクショナリーを取得
 Dictionary dict = document.getDictionary("address");
 
 // キーによる値の取得
@@ -312,9 +312,9 @@ for (String key : dict) {
 MutableDictionary mutableDict = dict.toMutable();
 //}
 
-=== プロパティ確認
+=== プロパティー確認
 
-ドキュメントに特定のプロパティが存在するかどうかを確認するために、@<tt>{contains}メソッドを使用できます。
+ドキュメントに特定のプロパティーが存在するかどうかを確認するために、@<tt>{contains}メソッドを使用できます。
 
 
 //emlist[][JAVA]{
@@ -351,7 +351,7 @@ database.inBatch(() -> {
 バッチとして実現される一連の操作は、ローカルレベルでトランザクショナルです。
 つまり、他のプロセスは、コードブロック実行中に変更を加えることができず、また、コードブロック中の変更の一部を認識するということがありません。
 
-ローカルレベルとことわっているのは、Couchbase LiteとCouchbase Serverとのデータ同期を行う場合、これらのグループ化された操作によるCouchbase Liteデータベースに対する更新が、Couchbase Serverに対して反映される際に、トランザクショナルに実施されるわけではない、という意味合いです。
+ローカルレベルと断っているのは、Couchbase LiteとCouchbase Serverとのデータ同期を行う場合、これらのグループ化された操作によるCouchbase Liteデータベースに対する更新が、Couchbase Serverに対して反映される際に、トランザクショナルに実施されるわけではない、という意味合いです。
 
 
 === 変更イベントのリスニング
@@ -386,7 +386,7 @@ Instant ttl = Instant.now().plus(1, ChronoUnit.DAYS);
 database.setDocumentExpiration("doc1", new Date(ttl.toEpochMilli()));
 //}
 
-以下のように、nullを設定する事で、有効期限をリセットする事ができます。
+以下のように、nullを設定することで、有効期限をリセットすることができます。
 
 //emlist[][JAVA]{
 database.setDocumentExpiration("doc1", null);
@@ -476,7 +476,7 @@ for (String key: mDict.getKeys()) {
 
 === JSON文字列と配列との変換
 
-JSON文字列を使用して、@<tt>{MutableArray}オブジェクトを作成する事ができます。
+JSON文字列を使用して、@<tt>{MutableArray}オブジェクトを作成することができます。
 
 以下は、JSON文字列と配列の変換を扱う例です。
 
@@ -497,7 +497,7 @@ for (int i = 0; i < mArray.count(); i++) {
 ここでは、Couchbase Lite APIによるJSON操作について解説しました。
 
 一旦、Couchbase LiteオブジェクトからJSONデータが文字列として取り出された後は、プログラミング言語で提供されているJSON用ライブラリーを活用することができます。
-例えば、ライブラリーの提供するデータバインディング機能を利用して、JSONからPOJO(Plain Old Java Object)に変換することが考えられます。
+たとえば、ライブラリーの提供するデータバインディング機能を利用して、JSONからPOJO(Plain Old Java Object)に変換することが考えられます。
 
 そのようなライブラリーの例として、Jackson@<fn>{github-jackson}があります。
 Couchbase LiteとJacksonの組み合わせは、Couchbase Blog: Exploring Couchbase Mobile on Android: Object Mapping@<fn>{object-mapping-couchbase-mobile-android}でも取り上げられています。

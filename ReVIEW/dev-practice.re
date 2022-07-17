@@ -7,10 +7,10 @@
 
 ここでは、さらに学習を進めるにあたって有益と思われる情報を紹介し、締め括りとしたいと思います。
 
-== コミュニティ
+== コミュニティー
 
-Couchbase Dev Communityサイト@<fn>{developer-couchbase}では、Couchbase開発者コミュニティへ向けて、チュートリアルやベストプラクティス等、様々な情報提供が行なわれています。
-また、フォーラム@<fn>{forums-couchbase}で、コミュニティエディションに関する疑問について質問したり、過去に行なわれた質疑応答を検索したりすることができます。
+Couchbase Dev Communityサイト@<fn>{developer-couchbase}では、Couchbase開発者コミュニティーへ向けて、チュートリアルやベストプラクティス等、様々な情報提供が行われています。
+また、フォーラム@<fn>{forums-couchbase}で、コミュニティーエディションに関する疑問について質問したり、過去に行われた質疑応答を検索したりすることができます。
 
 == 無償オンライントレーニング
 
@@ -39,7 +39,7 @@ URLについては、すでに開発参考情報として紹介しているた�
 == チュートリアル、サンプルアプリケーション
 
 Couchbaseチュートリアル(Couchbase Tutorials@<fn>{couchbase-totorials})から、モバイル開発者向けのチュートリアルを見つけることができます。
-また、Couchbase Labs GitHubリポジトリ@<fn>{github-couchbaselabs}では、Couchbaseに関連する様々なプロジェクトが公開されており、Couchbase Mobileを使ったサンプルアプリケーションも含まれています。
+また、Couchbase Labs GitHubリポジトリー@<fn>{github-couchbaselabs}では、Couchbaseに関連する様々なプロジェクトが公開されており、Couchbase Mobileを使ったサンプルアプリケーションも含まれています。
 これらについて、すでにその中からいくつかを開発参考情報として紹介しています。
 
 //footnote[couchbase-totorials][https://docs.couchbase.com/tutorials/index.html]
@@ -68,18 +68,18 @@ Couchbaseは、様々なプロジェクトをオープンソースとして公�
 ソースコードは、「common」、「android」、「java」等のフォルダーに分かれて格納されています。
 プラットフォームに依存しない大部分のソースコードについて、「common」以下を参照することになります。
 
-注意しなければならないところとしては、この「common」以下のパッケージの@<tt>{com.couchbase.lite}パッケージに含まれるクラスのソースコードが格納されているパス@<fn>{couchbase-lite-java-common-com-couchbase-lite}を確認した時に、ログ関連のクラスのようなプラットフォーム依存のクラスではないにもかかわらず、存在しないファイルがあることです。
-例えば、@<tt>{AbstractReplicatorConfiguration.java}は存在しますが、@<tt>{ReplicatorConfiguration.java}は存在していません。
+注意しなければならないところとしては、この「common」以下のパッケージの@<tt>{com.couchbase.lite}パッケージに含まれるクラスのソースコードが格納されているパス@<fn>{couchbase-lite-java-common-com-couchbase-lite}を確認したときに、ログ関連のクラスのようなプラットフォーム依存のクラスではないにもかかわらず、存在しないファイルがあることです。
+たとえば、@<tt>{AbstractReplicatorConfiguration.java}は存在しますが、@<tt>{ReplicatorConfiguration.java}は存在していません。
 この@<tt>{ReplicatorConfiguration.java}ファイルを確認するには、別のプロジェクト(couchbase-lite-java-ce@<fn>{couchbase-lite-java-ce})にあたることになります。
 
 === Couchbase Lite Java CE
 
 このプロジェクトは、「Code for the Community edition of the Java language family of products (Java Desktop, Java WebService, and Android)」とされています。
 
-@<tt>{ReplicatorConfiguration}や、@<tt>{Database}、@<tt>{Function}、@<tt>{IndexBuilder}クラスのようなCE(コミュニティエディション)とEE(エンタープライズエディション)で機能に差異があるクラスのソースコードが、このプロジェクトに含まれています。
+@<tt>{ReplicatorConfiguration}や、@<tt>{Database}、@<tt>{Function}、@<tt>{IndexBuilder}クラスのようなCE(コミュニティーエディション)とEE(エンタープライズエディション)で機能に差異があるクラスのソースコードが、このプロジェクトに含まれています。
 なおエンタープライズエディションのソースコードは一般に公開されていませんが、利用可能なクラスやメソッドについては、APIリファレンス@<fn>{couchbase-lite-android-api-ref}から参照可能です。
 
-APIリファレンスの内容と、このプロジェクトに格納されているソースコードの内容を対照することによって、クラスとメソッドのレベルで、コミュニティエディションとエンタープライズエディションの機能差異を確認することができます。
+APIリファレンスの内容と、このプロジェクトに格納されているソースコードの内容を対照することによって、クラスとメソッドのレベルで、コミュニティーエディションとエンタープライズエディションの機能差異を確認することができます。
 
 
 
