@@ -57,13 +57,13 @@ Windoesへのインストールの詳細については、ドキュメント(Ins
 デフォルトのSync Gatewayインストールでは、次のロケーションが使用されます。
 
 //table[tbl1][]{
-コンテンツ	ロケーション	実例
+コンテンツ	ロケーション
 -----------------
-バイナリ	インストールディレクトリー	@<tt>{/opt/couchbase-sync-gateway/bin/}
-サンプル構成ファイル	インストールディレクトリー	@<tt>{/opt/couchbase-sync-gateway/examples/}
-スクリプト	インストールディレクトリー	@<tt>{/opt/couchbase-sync-gateway/service/}
-サービス(Mac)	ライブラリーディレクトリー	@<tt>{<LIBRARY_ROOT>/com.couchbase.mobile.sync_gateway.plist}
-サービス(Linux)	ライブラリーディレクトリー	@<tt>{<LIBRARY_ROOT>/sync_gateway.service}
+バイナリ	@<tt>{/opt/couchbase-sync-gateway/bin/}
+サンプル構成ファイル	@<tt>{/opt/couchbase-sync-gateway/examples/}
+スクリプト	@<tt>{/opt/couchbase-sync-gateway/service/}
+サービス(Mac)	@<tt>{<LIBRARY_ROOT>/com.couchbase.mobile.sync_gateway.plist}
+サービス(Linux)	@<tt>{<LIBRARY_ROOT>/sync_gateway.service}
 //}
 
 @<tt>{<LIBRARY_ROOT>}は、macOSの場合@<tt>{/Library/LaunchDaemons}、Linuxの場合@<tt>{/lib/systemd/system}または、@<tt>{/usr/lib/systemd/system}です。
