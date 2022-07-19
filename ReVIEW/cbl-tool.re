@@ -128,16 +128,16 @@ airport_1258            1-11b49ddf ---     922     0.2K
 
 //blankline
 
-@<b>{[flags]}のような、角括弧内の記載はオプションであることを表します。
+@<tt>{[}@<b>{flags}@<tt>{]}のような、角括弧内の記載はオプションであることを表します。
 
 === cat
 
-@<tt>{cblite cat} @<b>{[flags]} @<b>{databasepath} @<b>{DOCID} [@<b>{DOCID} ...]
+@<tt>{cblite cat [}@<b>{flags}@<tt>{] }@<b>{databasepath}@<tt>{ }@<b>{DOCID}@<tt>{ [}@<b>{DOCID}@<tt>{ ...]}
 
 //blankline
 
 
-@<tt>{cat} @<b>{[flags]} @<b>{DOCID} [@<b>{DOCID} ...]
+@<tt>{cat }@<b>{[flags]}@<tt>{ }@<b>{DOCID}@<tt>{ [}@<b>{DOCID}@<tt>{ ...]}
 
 //blankline
 
@@ -162,11 +162,11 @@ airport_1258            1-11b49ddf ---     922     0.2K
 
 === cp
 
-@<tt>{cblite cp} @<b>{[flags]} @<b>{source} @<b>{destination}
+@<tt>{cblite cp }@<b>{[flags]}@<tt>{ }@<b>{source}@<tt>{ }@<b>{destination}
 
 //blankline
 
-@<tt>{cp} @<b>{[flags]} @<b>{destination}
+@<tt>{cp [}@<b>{flags}@<tt>{] }@<b>{destination}
 
 //blankline
 
@@ -216,11 +216,11 @@ airport_1258            1-11b49ddf ---     922     0.2K
 
 === info
 
-@<tt>{cblite info} @<b>{databasepath} 
+@<tt>{cblite info }@<b>{databasepath} 
 
-@<tt>{cblite info} @<b>{databasepath} @<tt>{indexes} 
+@<tt>{cblite info }@<b>{databasepath}@<tt>{ indexes} 
 
-@<tt>{cblite info} @<b>{databasepath} @<tt>{index} @<b>{indexname}
+@<tt>{cblite info }@<b>{databasepath}@<tt>{ index }@<b>{indexname}
 
 
 //blankline
@@ -229,7 +229,7 @@ airport_1258            1-11b49ddf ---     922     0.2K
 
 @<tt>{info indexes} 
 
-@<tt>{info index} @<b>{indexname} 
+@<tt>{info index }@<b>{indexname} 
 
 //blankline
 
@@ -252,16 +252,16 @@ Collections: "_default": 2885 documents, last sequence #2885
 === logcat
 
 
-@<tt>{cblite logcat} @<b>{logfile} [@<b>{logfile} ...]
+@<tt>{cblite logcat }@<b>{logfile}@<tt>{ [}@<b>{logfile}@<tt>{ ...]}
 
-@<tt>{cblite logcat} @<b>{directory}
+@<tt>{cblite logcat }@<b>{directory}
 
 
 //blankline
 
-@<tt>{logcat} @<b>{logfile} [@<b>{logfile} ...]
+@<tt>{logcat }@<b>{logfile}@<tt>{ [}@<b>{logfile}@<tt>{ ...]}
 
-@<tt>{logcat} @<b>{directory}
+@<tt>{logcat }@<b>{directory}
 
 //blankline
 
@@ -287,11 +287,11 @@ Couchbase Liteのバイナリログファイルを読み取り、プレーンテ
 === ls
 
 
-@<tt>{cblite ls} @<b>{[flags]} @<b>{databasepath} @<b>{[PATTERN]}
+@<tt>{cblite ls [}@<b>{flags}@<tt>{] }@<b>{databasepath}@<tt>{ [}@<b>{PATTERN}@<tt>{]}
 
 //blankline
 
-@<tt>{ls} @<b>{[flags]} @<b>{[PATTERN]}
+@<tt>{ls [}@<b>{flags}@<tt>{] [}@<b>{PATTERN}@<tt>{]}
 
 //blankline
 
@@ -299,7 +299,7 @@ Couchbase Liteのバイナリログファイルを読み取り、プレーンテ
 
 
 
-@<b>{[PATTERN]}は、シェルスタイルのワイルドカード「@<tt>{*}」、「@<tt>{?}」を使用してドキュメントIDを照合するためのオプションの引数です。
+@<b>{PATTERN}は、シェルスタイルのワイルドカード「@<tt>{*}」、「@<tt>{?}」を使用してドキュメントIDを照合するためのオプションの引数です。
 
 
 //blankline
@@ -342,12 +342,13 @@ airport_1263            1-2cf49f25 ---     927     0.1K
 === put
 
 
-@<tt>{cblite put} @<b>{[flags]} @<b>{databasepath} @<b>{DOCID} "@<b>{JSON}"
+@<tt>{cblite put [}@<b>{flags}@<tt>{] }@<b>{databasepath}@<tt>{ }@<b>{DOCID}@<tt>{ "}@<b>{JSON}@<tt>{"}
 
 
 //blankline
 
-@<tt>{put} @<b>{[flags]} @<b>{DOCID} "@<b>{JSON}"
+@<tt>{put}@<tt>{ [}@<b>{flags}@<tt>{] }@<b>{DOCID}@<tt>{ "}@<b>{JSON}@<tt>{"}
+
 
 //blankline
 
@@ -371,12 +372,12 @@ JSON文字列(@<b>{JSON})を指定して、ドキュメントを作成または�
 
 //blankline
 
-@<tt>{cblite query} @<b>{[flags]} @<b>{databasepath} @<b>{query}
+@<tt>{cblite query [}@<b>{flags}@<tt>{] }@<b>{databasepath}@<tt>{ }@<b>{query}
 
 
 //blankline
 
-@<tt>{query} @<b>{[flags]} @<b>{query}
+@<tt>{query [}@<b>{flags}@<tt>{] }@<b>{query}
 
 
 //blankline
@@ -426,7 +427,7 @@ null                        420
 
 === reindex
 
-@<tt>{cblite reindex} @<b>{databasepath}
+@<tt>{cblite reindex }@<b>{databasepath}
 
 
 //blankline
@@ -448,11 +449,11 @@ null                        420
 === select
 
 
-@<tt>{cblite select} @<b>{[flags]} @<b>{databasepath} @<b>{query}
+@<tt>{cblite select [}@<b>{flags}@<tt>{] }@<b>{databasepath}@<tt>{ }@<b>{query}
 
 //blankline
 
-@<tt>{select} @<b>{[flags]} @<b>{query}
+@<tt>{select [}@<b>{flags}@<tt>{] }@<b>{query}
 
 //blankline
 

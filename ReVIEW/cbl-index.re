@@ -95,5 +95,5 @@ Couchbase Liteでは、クエリオプティマイザーによる統計情報の
 
 統計情報収集の効果として、データベースをオープンした後や、インデックスを削除して再作成した後など、それ以前と比べてクエリの実行速度が速くなる場合があります。
 
-ß
+
 //footnote[query-troubleshooting-queries-and-indexes][https://docs.couchbase.com/couchbase-lite/current/objc/query-troubleshooting.html#queries-and-indexes]

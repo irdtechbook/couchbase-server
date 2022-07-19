@@ -23,15 +23,14 @@ Couchbase LiteのFTSは、単語の区切りに空白を使用する言語で利
 
 FlutterのCouchbase Lite用パッケージcbl-dart@<fn>{github-cbl-dart}の開発者であるGabriel Terwestenによるブログ記事「How to make your Flutter app offline-first with Couchbase Lite」@<fn>{medium-flutter}では、以下のように書かれています。
 
-//quote{
-And then there is full-text search (FTS), or rather the lack thereof. The Firestore documentation basically tells you to check out Elastic, Algolia or whatever… just figure it out. Hm, ok, what about SQLite? It comes preinstalled on many systems and has multiple FTS extensions. Looking into it, I found that while possible, it's not exactly simple to make it work. Not all preinstalled versions of SQLite have the same FTS extension enabled or any at all. Of course, the versions of SQLite itself differ between platforms and platform versions, so you have to take that into account. As with any relational database, you have to manage a schema and setting up a FTS index in SQLite is not super simple, either.
-//}
+
+「And then there is full-text search (FTS), or rather the lack thereof. The Firestore documentation basically tells you to check out Elastic, Algolia or whatever… just figure it out. Hm, ok, what about SQLite? It comes preinstalled on many systems and has multiple FTS extensions. Looking into it, I found that while possible, it's not exactly simple to make it work. Not all preinstalled versions of SQLite have the same FTS extension enabled or any at all. Of course, the versions of SQLite itself differ between platforms and platform versions, so you have to take that into account. As with any relational database, you have to manage a schema and setting up a FTS index in SQLite is not super simple, either.」
+
 
 以下、上記引用を翻訳します。
 
-//quote{
-そして、全文検索(FTS)、というよりもむしろ、その欠如が問題でした。 Firestoreのドキュメントは、基本的にこんな言いぶりです。Elastic、Algolia、あるいは他の何かを使って自分でなんとかしてください。ああ、そうですか。SQLiteはどうでしょうか?多くのシステムにプリインストールされており、複数のFTS拡張機能があります。調べてみたところ、可能ではあるにしても、思ったようなことを行うのは簡単ではないことがわかりました。プリインストールされているSQLiteのすべてのバージョンで同じFTS拡張機能が使えるわけでもなければ、そもそも使えないものもあります。当然のことながら、SQLiteのバージョン自体がプラットフォームとプラットフォームのバージョンによって異なるため、それを考慮に入れる必要もあります。他のリレーショナルデータベースと同様に、スキーマを管理する必要もあります。いずれにせよ、SQLiteでFTSインデックスをセットアップするのも非常に単純というわけではありません。
-//}
+ 「そして、全文検索(FTS)、というよりもむしろ、その欠如が問題でした。 Firestoreのドキュメントは、基本的にこんな言いぶりです。Elastic、Algolia、あるいは他の何かを使って自分でなんとかしてください。ああ、そうですか。SQLiteはどうでしょうか?多くのシステムにプリインストールされており、複数のFTS拡張機能があります。調べてみたところ、可能ではあるにしても、思ったようなことを行うのは簡単ではないことがわかりました。プリインストールされているSQLiteのすべてのバージョンで同じFTS拡張機能が使えるわけでもなければ、そもそも使えないものもあります。当然のことながら、SQLiteのバージョン自体がプラットフォームとプラットフォームのバージョンによって異なるため、それを考慮に入れる必要もあります。他のリレーショナルデータベースと同様に、スキーマを管理する必要もあります。いずれにせよ、SQLiteでFTSインデックスをセットアップするのも非常に単純というわけではありません。」
+
 
 このような認識から、著者は、自身のFlutterアプリ開発のためにCouchbase Liteを選択し、Flutter用のパッケージを開発しています。
 

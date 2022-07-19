@@ -39,15 +39,11 @@ Couchbaseのエンタープライズエディションには、ライセンス�
 エンタープライズエディションは、商用目的以外ないしプリプロダクションフェーズにおいて利用することができます。
 公式のFAQ(Couchbase Licensing and Support Frequently Asked Questions@<fn>{licensing-and-support-faq})から、この点について触れている該当部分を引用します。@<fn>{faq-question}
 
-//quote{
-Customers can use Enterprise Edition free-of-charge for unlimited pre-production development and testing with forum support.@<fn>{faq-full}
-//}
+「Customers can use Enterprise Edition free-of-charge for unlimited pre-production development and testing with forum support.@<fn>{faq-full}」
 
 以下に翻訳を示します。
 
-//quote{
-顧客はエンタープライズエディションを、プリプロダクションの開発とテストのために、制限なく、フォーラムのサポートを利用しながら、無料で使用することができます。
-//}
+「顧客はエンタープライズエディションを、プリプロダクションの開発とテストのために、制限なく、フォーラムのサポートを利用しながら、無料で使用することができます。」
 
 
 コミュニティーエディションユーザーや、エンタープライズエディションをサブスクリプションを購入せずに利用しているユーザーは、フォーラム@<fn>{forums-couchbase-com}で、質問を投稿して有志からの回答を受けたり、過去の質問への回答を検索したりすることができます。

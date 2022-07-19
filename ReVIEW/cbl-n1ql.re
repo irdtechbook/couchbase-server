@@ -772,7 +772,7 @@ REGEXP_REPLACE(expr, pattern, repl [, n])	@<tt>{pattern}が@<tt>{repl}に置き�
 //blankline
 
 
-@<tt>{ISARRAY} @<tt>{ISATOM} @<tt>{ISBOOLEAN} @<tt>{ISNUMBER} @<tt>{ISOBJECT} @<tt>{ISSTRING}
+@<tt>{ISARRAY}, @<tt>{ISATOM}, @<tt>{ISBOOLEAN}, @<tt>{ISNUMBER}, @<tt>{ISOBJECT}, @<tt>{ISSTRING}
 
 //blankline
 
@@ -786,7 +786,7 @@ REGEXP_REPLACE(expr, pattern, repl [, n])	@<tt>{pattern}が@<tt>{repl}に置き�
 
 //blankline
 
-@<tt>{"missing"},@<tt>{"null"},@<tt>{"boolean"},@<tt>{"number"},@<tt>{"string"},@<tt>{"array"},@<tt>{"object"},@<tt>{"binary"}
+@<tt>{"missing"}, @<tt>{"null"}, @<tt>{"boolean"}, @<tt>{"number"}, @<tt>{"string"}, @<tt>{"array"}, @<tt>{"object"}, @<tt>{"binary"}
 
 === データ型変換関数
 
@@ -795,7 +795,7 @@ REGEXP_REPLACE(expr, pattern, repl [, n])	@<tt>{pattern}が@<tt>{repl}に置き�
 
 //blankline
 
-@<tt>{TOARRAY} @<tt>{TOATOM} @<tt>{TOBOOLEAN} @<tt>{TONUMBER} @<tt>{TOOBJECT} @<tt>{TOSTRING}
+@<tt>{TOARRAY}, @<tt>{TOATOM}, @<tt>{TOBOOLEAN}, @<tt>{TONUMBER}, @<tt>{TOOBJECT}, @<tt>{TOSTRING}
 
 === 算術関数
 
@@ -803,7 +803,7 @@ REGEXP_REPLACE(expr, pattern, repl [, n])	@<tt>{pattern}が@<tt>{repl}に置き�
 
 //blankline
 
-@<tt>{ABS} @<tt>{ACOS} @<tt>{ASIN} @<tt>{ATAN} @<tt>{ATAN2} @<tt>{CEIL} @<tt>{COS} @<tt>{DIV} @<tt>{DEGREES} @<tt>{E} @<tt>{EXP} @<tt>{FLOOR} @<tt>{LN} @<tt>{LOG} @<tt>{PI} @<tt>{POWER} @<tt>{RADIANS} @<tt>{ROUND} @<tt>{ROUND_EVEN} @<tt>{SIGN} @<tt>{SIN} @<tt>{SQRT} @<tt>{TAN} @<tt>{TRUNC}
+@<tt>{ABS}, @<tt>{ACOS}, @<tt>{ASIN}, @<tt>{ATAN}, @<tt>{ATAN2}, @<tt>{CEIL}, @<tt>{COS}, @<tt>{DIV}, @<tt>{DEGREES}, @<tt>{E}, @<tt>{EXP}, @<tt>{FLOOR}, @<tt>{LN}, @<tt>{LOG}, @<tt>{PI}, @<tt>{POWER}, @<tt>{RADIANS}, @<tt>{ROUND}, @<tt>{ROUND_EVEN}, @<tt>{SIGN}, @<tt>{SIN}, @<tt>{SQRT}, @<tt>{TAN}, @<tt>{TRUNC}
 
 === 文字列関数
 
@@ -811,7 +811,7 @@ REGEXP_REPLACE(expr, pattern, repl [, n])	@<tt>{pattern}が@<tt>{repl}に置き�
 
 //blankline
 
-@<tt>{CONTAINS} @<tt>{LENGTH} @<tt>{LOWER} @<tt>{LTRIM} @<tt>{RTRIM} @<tt>{TRIM} @<tt>{UPPER}
+@<tt>{CONTAINS}, @<tt>{LENGTH}, @<tt>{LOWER}, @<tt>{LTRIM}, @<tt>{RTRIM}, @<tt>{TRIM}, @<tt>{UPPER}
 
 
 === 集計関数
@@ -820,5 +820,5 @@ REGEXP_REPLACE(expr, pattern, repl [, n])	@<tt>{pattern}が@<tt>{repl}に置き�
 
 //blankline
 
-@<tt>{AVG} @<tt>{COUNT} @<tt>{MIN} @<tt>{MAX} @<tt>{SUM}
+@<tt>{AVG}, @<tt>{COUNT}, @<tt>{MIN}, @<tt>{MAX}, @<tt>{SUM}
 

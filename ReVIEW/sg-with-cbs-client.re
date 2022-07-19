@@ -99,6 +99,8 @@ $ curl -X PUT "http://localhost:4985/mybucket/_config/import_filter" \
   -d 'function(doc) { if (doc.type != "mobile") { return false; } return true; }'
 //}
 
+//blankline
+
 ====[column]@<tt>{import_docs}デフォルト設定
 
 コミュニティーエディションでは、@<tt>{import_docs}プロパティーのデフォルトは@<tt>{false}です。
